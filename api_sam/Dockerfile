@@ -11,6 +11,7 @@ RUN apt-get update --allow-releaseinfo-change && apt-get install -y \
     unzip \
     git \
     curl \
+    netcat-openbsd \
     && docker-php-ext-install pdo pdo_pgsql
 
 # Instalar Composer
@@ -28,8 +29,5 @@ RUN composer install --optimize-autoloader --no-dev
 # Definir permissões para a pasta de cache do Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Expor a porta padrão do PHP-FPM
-EXPOSE 9000
+CMD php artisan serve --host=0.0.0.0 --port=8000 & php artisan serve --host=0.0.0.0 --port=8001
 
-# Comando inicial
-CMD ["php-fpm"]

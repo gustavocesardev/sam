@@ -1,8 +1,15 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CursoController;
 use App\Http\Controllers\Api\InstituicaoController;
 use Illuminate\Support\Facades\Route;
+
+// Rotas de login e verificação de e-mail
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verify'])->name('verification.verify');
+Route::post('/refresh-token', [AuthController::class, 'refreshToken']);
 
 Route::prefix('instituicao')->group(function () {
     Route::get('/', [InstituicaoController::class, 'index'])->name('instituicao.index');

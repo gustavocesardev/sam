@@ -12,6 +12,11 @@ class InstituicaoService
 {
     public function __construct(private InstituicaoRepositoryInterface $instituicaoRepository) {}
 
+    /**
+     * TODO: Adicionar paginação
+     * Summary of listAll
+     * @return Collection
+     */
     public function listAll(): Collection
     {
         return $this->instituicaoRepository->findAll();

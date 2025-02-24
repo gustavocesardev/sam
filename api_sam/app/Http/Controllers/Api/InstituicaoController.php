@@ -10,8 +10,8 @@ use App\Http\Utils\ApiResponse;
 use App\Http\Requests\InstituicaoRequest;
 use App\Http\Controllers\Controller;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class InstituicaoController extends Controller
 {

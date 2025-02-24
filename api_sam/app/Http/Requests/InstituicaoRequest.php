@@ -4,8 +4,6 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-use App\Domain\Enums\UF;
-
 class InstituicaoRequest extends FormRequest
 {
     public function authorize(): bool

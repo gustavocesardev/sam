@@ -10,8 +10,8 @@ use App\Http\Requests\CursoRequest;
 use App\Http\Resources\CursoResource;
 use App\Http\Utils\ApiResponse;
 
-use Illuminate\Http\Response;
-use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CursoController extends Controller
 {
