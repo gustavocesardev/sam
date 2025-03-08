@@ -1,2 +1,2 @@
 # api-sam
-SAM (Social Academic Media). API da rede social acadêmica desenvolvida em Laravel para TCC da faculdade.
+SAM (Social Academic Media). API referente à uma rede social acadêmica desenvolvida em Laravel para TCC da faculdade.
