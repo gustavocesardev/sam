@@ -29,7 +29,7 @@ class CursoRepository implements CursoRepositoryInterface
 
     public function update(int $id, array $data): Curso
     {
-        $curso = Curso::findOrFail($id);
+        $curso = $this->find($id);
         $curso->fill($data)->save();
         $curso->refresh();
 
@@ -38,7 +38,7 @@ class CursoRepository implements CursoRepositoryInterface
 
     public function delete(int $id): bool
     {
-        $curso = Curso::findOrFail($id);
+        $curso = $this->find($id);
         return $curso->excluir();
     }
 }

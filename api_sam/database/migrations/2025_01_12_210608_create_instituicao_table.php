@@ -23,7 +23,7 @@ return new class extends Migration
             $table->char('uf', 2);
             $table->string('dominio_email_institucional', 100);
             $table->string('imagem', 150)->nullable();
-            $table->enum('excluido', ['S', 'N'])->default('N');
+            $table->boolean('excluido')->default(false);
             $table->date('excluido_data')->nullable();
             $table->timestamps();
         });

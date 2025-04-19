@@ -2,49 +2,47 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Application\Services\CursoService;
+use App\Application\Services\UserService;
 use App\Domain\Exceptions\AppException;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Store\CursoRequest;
-use App\Http\Resources\CursoResource;
+use App\Http\Requests\Store\UserRequest;
+use App\Http\Resources\UserResource;
 use App\Http\Utils\ApiResponse;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class CursoController extends Controller
+class UserController extends Controller
 {
-    public function __construct(private CursoService $cursoService) {}
+    public function __construct(private UserService $userService) {}
 
     public function index(): JsonResponse
     {
         try {
+            $users = $this->userService->listAll();
 
-            $cursos = $this->cursoService->listAll();
             return ApiResponse::success(
-                CursoResource::collection($cursos), 
-                'Listagem de cursos ativos.', 
+                UserResource::collection($users),
+                'Listagem de usuários.',
                 Response::HTTP_OK
             );
-
-        } catch(AppException $exception) {
+        } catch (AppException $exception) {
             return ApiResponse::error($exception);
         }
     }
 
-    public function store(CursoRequest $request): JsonResponse
+    public function store(UserRequest $request): JsonResponse
     {
         try {
+            $user = $this->userService->store($request->validated());
 
-            $curso = $this->cursoService->store($request->validated());
             return ApiResponse::success(
-                new CursoResource($curso), 
-                'Curso criado com sucesso.', 
+                new UserResource($user),
+                'Usuário criado com sucesso.',
                 Response::HTTP_CREATED
             );
-
-        } catch(AppException $exception) {
+        } catch (AppException $exception) {
             return ApiResponse::error($exception);
         }
     }
@@ -52,31 +50,28 @@ class CursoController extends Controller
     public function show(string $id): JsonResponse
     {
         try {
+            $user = $this->userService->find($id);
 
-            $curso = $this->cursoService->find($id);
             return ApiResponse::success(
-                new CursoResource($curso), 
-                'Detalhes do curso.', 
+                new UserResource($user),
+                'Detalhes do usuário.',
                 Response::HTTP_OK
             );
-
-        } catch(AppException $exception) {
+        } catch (AppException $exception) {
             return ApiResponse::error($exception);
         }
     }
 
-    public function update(CursoRequest $request, string $id)
+    public function update(UserRequest $request, string $id): JsonResponse
     {
         try {
-
-            $curso = $this->cursoService->update($id, $request->validated());
+            $user = $this->userService->update($id, $request->validated());
 
             return ApiResponse::success(
-                new CursoResource($curso), 
-                'Curso atualizado com sucesso.', 
+                new UserResource($user),
+                'Usuário atualizado com sucesso.',
                 Response::HTTP_OK
             );
-            
         } catch (AppException $exception) {
             return ApiResponse::error($exception);
         }
@@ -85,16 +80,14 @@ class CursoController extends Controller
     public function destroy(string $id): JsonResponse
     {
         try {
-
-            $this->cursoService->delete($id);
+            $this->userService->delete($id);
 
             return ApiResponse::success(
-                null, 
-                'Curso excluido com sucesso.', 
+                null,
+                'Usuário excluído com sucesso.',
                 Response::HTTP_OK
             );
-
-        } catch(AppException $exception) {
+        } catch (AppException $exception) {
             return ApiResponse::error($exception);
         }
     }

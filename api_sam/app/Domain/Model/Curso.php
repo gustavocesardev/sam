@@ -20,13 +20,23 @@ class Curso extends Model
         'excluido_data'
     ];
 
+    protected $casts = [
+        'excluido' => 'boolean',
+        'excluido_data' => 'date'
+    ];
+
     protected static function boot()
     {
         parent::boot();
         
         static::addGlobalScope('nao_excluido', function (Builder $builder) {
-            $builder->where('excluido', 'N');
+            $builder->where('excluido', false);
         });
+    }
+
+    public function instituicao()
+    {
+        return $this->belongsTo(Instituicao::class, 'id_instituicao');
     }
 
     public function setNomeCursoAttribute($value)
@@ -36,7 +46,7 @@ class Curso extends Model
 
     public function excluir(): bool
     {
-        $this->excluido = 'S';
+        $this->excluido = true;
         $this->excluido_data = Carbon::now();
 
         return $this->save();

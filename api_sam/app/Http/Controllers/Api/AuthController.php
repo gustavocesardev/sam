@@ -7,7 +7,7 @@ use App\Domain\Exceptions\AppException;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Http\Utils\ApiResponse;
 
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ class AuthController extends Controller
 {
     public function __construct(private AuthService $authService) {}
 
-    public function register(UserRequest $request)
+    public function register(RegisterRequest $request)
     {
         $this->authService->register($request->validated());
 

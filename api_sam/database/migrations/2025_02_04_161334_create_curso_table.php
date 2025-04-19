@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('curso', function (Blueprint $table) {
@@ -18,17 +15,14 @@ return new class extends Migration
                   ->restrictOnDelete();
             $table->string('nome_curso', 150);
             $table->enum('situacao', ['A', 'I'])->default('A');
-            $table->integer('duracao_minima', unsigned: true)->unsigned()->comment('Duração mínima do curso, em anos');
-            $table->integer('duracao_maxima', unsigned: true)->unsigned()->comment('Duração máxima do curso, em anos');
-            $table->enum('excluido', ['S', 'N'])->default('N');
+            $table->unsignedInteger('duracao_minima')->comment('Duração mínima do curso, em anos');
+            $table->unsignedInteger('duracao_maxima')->comment('Duração máxima do curso, em anos');
+            $table->boolean('excluido')->default(false);
             $table->date('excluido_data')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('curso');

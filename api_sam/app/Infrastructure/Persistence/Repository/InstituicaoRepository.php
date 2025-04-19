@@ -31,15 +31,16 @@ class InstituicaoRepository implements InstituicaoRepositoryInterface
 
     public function update(int $id, array $data): Instituicao
     {
-        $instituicao = Instituicao::findOrFail($id);
+        $instituicao = $this->find($id);
         $instituicao->fill($data)->save();
+        $instituicao->refresh();
 
         return $instituicao;
     }
 
     public function delete(int $id): bool
     {
-        $instituicao = Instituicao::findOrFail($id);
+        $instituicao = $this->find($id);
         return $instituicao->excluir();
     }
 }

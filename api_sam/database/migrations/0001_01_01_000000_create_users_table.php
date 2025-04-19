@@ -17,7 +17,13 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('biografia', 255);
+            $table->integer('ano_inicio_curso', false, true)->length(4);
+            $table->integer('ano_fim_curso', false, true)->length(4);
             $table->rememberToken();
+            $table->enum('situacao', ['A', 'I'])->default('A');
+            $table->boolean('excluido')->default(false); 
+            $table->date('excluido_data')->nullable();
             $table->timestamps();
         });
 

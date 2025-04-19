@@ -5,7 +5,6 @@ namespace App\Application\Services;
 use App\Domain\Enums\ErrorContext;
 use App\Domain\Exceptions\LoginException;
 use App\Domain\Exceptions\TokenException;
-use App\Domain\Repository\UserRepositoryInterface;
 
 use App\Domain\Utils\Status;
 use App\Domain\VO\Email;
@@ -19,19 +18,19 @@ use URL;
 
 class AuthService
 {
-    public function __construct(private UserRepositoryInterface $userRepository) {}
+    public function __construct(private UserService $userService) {}
 
     public function register(array $data)
     {
-        $user = $this->userRepository->store($data);
+        $this->userService->validarEmail($data['id_instituicao'], $data['email']);
+
+        $user = $this->userService->store($data);
         $email = new Email($user->getEmailForVerification());
 
         $verifyEmail = URL::signedRoute('verification.verify', [
             'id' => $user->id,
             'hash' => $email->getHash(),
         ]);
-
-        
         
         /**
          * TODO : Verificar por que retorna um response sem o data
@@ -51,7 +50,7 @@ class AuthService
      */
     public function verifyEmail(array $data): Status
     {
-        $user = $this->userRepository->find($data['id']);
+        $user = $this->userService->find($data['id']);
 
         if (!hash_equals((string) $data['hash'], sha1($user->getEmailForVerification())))
         {
@@ -70,7 +69,7 @@ class AuthService
 
     public function login(array $data)
     {
-        $user = $this->userRepository->findByEmail($data['email']);
+        $user = $this->userService->findByEmail($data['email']);
         
         if (!$user || !Hash::check($data['password'], $user->password))
         {

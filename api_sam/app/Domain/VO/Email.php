@@ -27,4 +27,9 @@ class Email
     {
         return sha1($this->email);
     }
+
+    public function getDominio(): string
+    {
+        return substr(strrchr($this->email, "@"), 1);
+    }
 }

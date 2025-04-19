@@ -6,12 +6,12 @@ use Illuminate\Http\Response;
 
 use Exception;
 
-class LoginException extends AppException
+class RegisterException extends AppException
 {
     public function __construct(
         string $context,
-        string $message = 'Erro ao efetuar o login. Verifique as informações da Request.',
-        int $code = Response::HTTP_UNAUTHORIZED,
+        string $message = 'Erro ao efetuar o registro de usuário. Verifique as informações da Request.',
+        int $code = Response::HTTP_UNPROCESSABLE_ENTITY,
         Exception $previous = null
     )
     {

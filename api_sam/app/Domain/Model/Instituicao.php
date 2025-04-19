@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Domain\Model;
 
 use Carbon\Carbon;
@@ -9,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Instituicao extends Model
 {
     protected $table = 'instituicao';
+
     protected $fillable = [
         'razao_social',
         'tipo_instituicao',
@@ -24,19 +24,23 @@ class Instituicao extends Model
         'excluido_data'
     ];
 
-    /**
-     * Summary of boot
-     * Definindo de forma global a cláusula de excluido, para não precisar definir
-     * em cada repository
-     * @return void
-     */
+    protected $casts = [
+        'excluido' => 'boolean',
+        'excluido_data' => 'date',
+    ];
+
     protected static function boot()
     {
         parent::boot();
         
         static::addGlobalScope('nao_excluido', function (Builder $builder) {
-            $builder->where('excluido', 'N');
+            $builder->where('excluido', false);
         });
+    }
+
+    public function cursos()
+    {
+        return $this->hasMany(Curso::class, 'id_instituicao');
     }
 
     public function setRazaoSocialAttribute($value)
@@ -49,14 +53,9 @@ class Instituicao extends Model
         $this->attributes['tipo_logradouro'] = strtoupper($value); 
     }
 
-    /**
-     * Summary of excluir
-     * Excluindo, de forma lógica, o registro
-     * @return bool
-     */
     public function excluir(): bool
     {
-        $this->excluido = 'S';
+        $this->excluido = true;
         $this->excluido_data = Carbon::now();
 
         return $this->save();

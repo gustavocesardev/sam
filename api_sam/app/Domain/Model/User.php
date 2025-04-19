@@ -2,8 +2,9 @@
 
 namespace App\Domain\Model;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,40 +12,67 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
+        'id_curso',
         'name',
         'email',
+        'email_verified_at',
         'password',
+        'foto_perfil',
+        'biografia',
+        'ano_inicio_curso',
+        'ano_fim_curso',
+        'situacao',
+        'excluido',
+        'excluido_data'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
+        'email_verified_at',
         'password',
         'remember_token',
+        'excluido',
+        'excluido_data'
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'excluido' => 'boolean',
+            'excluido_data' => 'date',
         ];
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::addGlobalScope('nao_excluido', function (Builder $builder) {
+            $builder->where('excluido', false);
+        });
+    }
+
+    public function excluir(): bool
+    {
+        $this->excluido = true;
+        $this->excluido_data = Carbon::now();
+
+        return $this->save();
+    }
+
+    public function inativar(): bool
+    {
+        $this->situacao = 'I';
+        return $this->save();
+    }
+
+    public function ativar(): bool
+    {
+        $this->situacao = 'A';
+        return $this->save();
     }
 }

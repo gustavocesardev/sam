@@ -7,7 +7,7 @@ use App\Domain\Exceptions\AppException;
 
 use App\Http\Resources\InstituicaoResource;
 use App\Http\Utils\ApiResponse;
-use App\Http\Requests\InstituicaoRequest;
+use App\Http\Requests\Store\InstituicaoRequest;
 use App\Http\Controllers\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
