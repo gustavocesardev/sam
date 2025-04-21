@@ -42,4 +42,9 @@ class UserRepository implements UserRepositoryInterface
         $user = $this->find($id);
         return $user->excluir();
     }
+
+    public function save(User $user): void
+    {
+        $user->save();
+    }
 }

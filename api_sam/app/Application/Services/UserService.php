@@ -2,35 +2,34 @@
 
 namespace App\Application\Services;
 
+use App\Application\Contracts\ImageProcessorInterface;
 use App\Domain\Enums\ErrorContext;
 
 use App\Domain\Exceptions\AnoMaximoException;
-use App\Domain\Exceptions\DuplicateEntryException;
 use App\Domain\Exceptions\EmailException;
 
 use App\Domain\Model\User;
 
-use App\Domain\Repository\CursoRepositoryInterface;
-use App\Domain\Repository\InstituicaoRepositoryInterface;
+use App\Domain\Policies\CursoPolicy;
+use App\Domain\Policies\EmailPolicy;
+
 use App\Domain\Repository\UserRepositoryInterface;
 
 use App\Domain\VO\Email;
 
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
 
 class UserService
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,
-        private InstituicaoRepositoryInterface $instituicaoRepository,
-        private CursoRepositoryInterface $cursoRepository
+        private InstituicaoService $instituicaoService,
+        private CursoService $cursoService,
+        private ImageProcessorInterface $imageProcessor
     ) {}
     
-    /**
-     * TODO: Adicionar paginação
-     * Summary of listAll
-     * @return Collection
-     */
     public function listAll(): Collection
     {
         return $this->userRepository->findAll();
@@ -41,9 +40,14 @@ class UserService
         return $this->userRepository->find($id);
     }
 
+    public function findByEmail(string $email): User | null
+    {
+        return $this->userRepository->findByEmail($email);
+    }
+
     public function store(array $data): User
     {
-        $this->validarDuplicidade(null, $data);
+        $this->validarEmail($data['id_instituicao'], $data['email']);
         return $this->userRepository->store($data);
     }
 
@@ -57,30 +61,29 @@ class UserService
             $data['ano_fim_curso']
         );
 
-        return $this->userRepository->update($id, $data);
+        $this->userRepository->update($id, $data);
+
+        if ($data['foto_perfil'] != $user->foto_perfil && $data['foto_perfil'] instanceof UploadedFile)
+        {
+            $this->atualizarFotoDePerfil($user, $data['foto_perfil'] );
+        }
+
+        return $user->refresh();
+    }
+
+    public function atualizarFotoDePerfil(User $user, UploadedFile $imagem): void
+    {
+        Storage::disk('public')->delete($user->foto_perfil);
+
+        $path = $this->imageProcessor->storeUserProfileImage($imagem, "users/{$user->id}");
+
+        $user->updateFotoPerfil($path);
+        $this->userRepository->save($user);
     }
 
     public function delete(int $id): bool
     {
         return $this->userRepository->delete($id);
-    }
-
-    public function findByEmail(string $email): User | null
-    {
-        return $this->userRepository->findByEmail($email);
-    }
-
-    private function validarDuplicidade(?int $id = null, array $data): void
-    {
-        $user = $this->userRepository->findByEmail($data['email']);
-
-        if ($user && $user->id != $id)
-        {
-            throw new DuplicateEntryException(
-                'email',
-                ErrorContext::CADASTRO_USER
-            );
-        }
     }
 
     public function validarEmail(int $id_instituicao, string $email): void
@@ -91,13 +94,12 @@ class UserService
 
     private function verificarEmailEmUso(string $email): void
     {
-        $emailExist = $this->userRepository->findByEmail($email);
+        $user = $this->userRepository->findByEmail($email);
 
-        if (!is_null($emailExist))
-        {
+        if (EmailPolicy::emailEmUso($user)) {
             throw new EmailException(
                 ErrorContext::REGISTER, 
-                'O E-mail informado para registro já está em uso.', 
+                'O E-mail informado para registro já está em uso.'
             );
         }
     }
@@ -105,15 +107,13 @@ class UserService
     private function verificarDominioEmail(int $id_instituicao, string $emailValue): void
     {
         $email = new Email($emailValue);
+        $instituicao = $this->instituicaoService->find($id_instituicao);
 
-        $instituicao = $this->instituicaoRepository->find($id_instituicao);
-        $emailDomain = $email->getDominio();
-
-        if ($emailDomain !== $instituicao->dominio_email_institucional)
+        if (!EmailPolicy::pertenceDominioInstitucional($email->getDominio(), $instituicao))
         {
             throw new EmailException(
                 ErrorContext::REGISTER,
-                "O E-mail deve ser do mesmo domínio definido pela instituição: {$instituicao->dominio_email_institucional}.",
+                "O E-mail deve ser do mesmo domínio definido pela instituição: {$instituicao->dominio_email_institucional}."
             );
         }
     }
@@ -122,10 +122,9 @@ class UserService
     {
         if (is_null($anoMin) || is_null($anoMax)) return; 
         
-        $curso = $this->cursoRepository->find($id_curso);
-        $intervalo = $anoMax - $anoMin;
+        $curso = $this->cursoService->find($id_curso);
 
-        if ($intervalo > $curso->duracao_maxima)
+        if (!CursoPolicy::anoFimCursoValido($anoMin, $anoMax, $curso->duracao_maxima))
         {
             throw new AnoMaximoException(
                 ErrorContext::CADASTRO_USER,

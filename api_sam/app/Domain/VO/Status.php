@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Utils;
+namespace App\Domain\VO;
 
 class Status
 {

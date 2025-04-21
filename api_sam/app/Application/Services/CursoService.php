@@ -10,11 +10,6 @@ class CursoService
 {
     public function __construct(private CursoRepositoryInterface $cursoRepository) {}
     
-    /**
-     * TODO: Adicionar paginação
-     * Summary of listAll
-     * @return Collection
-     */
     public function listAll(): Collection
     {
         return $this->cursoRepository->findAll();

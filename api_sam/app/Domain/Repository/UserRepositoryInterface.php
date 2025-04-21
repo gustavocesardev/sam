@@ -18,4 +18,6 @@ interface UserRepositoryInterface
     public function update(int $id, array $data): User;
 
     public function delete(int $id): bool;
+    
+    public function save(User $user): void;
 }

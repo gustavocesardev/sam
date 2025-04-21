@@ -1,13 +1,17 @@
 # Use a imagem oficial do PHP com extensões necessárias para o Laravel
 FROM php:8.2-fpm
 
-# Instalar dependências necessárias
+# Instalar dependências do sistema e da GD
 RUN apt-get update && apt-get install -y \
     libpq-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libfreetype6-dev \
     unzip \
     git \
     curl \
-    && docker-php-ext-install pdo pdo_pgsql
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd pdo pdo_pgsql
 
 # Instalar Composer
 COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer

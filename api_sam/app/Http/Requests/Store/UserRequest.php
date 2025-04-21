@@ -15,12 +15,12 @@ class UserRequest extends FormRequest
     {
         return [
             'name'        => ['required', 'string', 'max:255'],
-            'foto_perfil' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'biografia'   => ['required', 'string', 'max:500'],
+            
+            'ano_inicio_curso' => ['required', 'integer', 'min:1', 'digits:4'],
+            'ano_fim_curso'    => ['required', 'integer', 'min:1', 'digits:4'],
 
-            'ano_inicio_curso' => ['nullable', 'integer', 'min:1', 'digits:4'],
-            'ano_fim_curso'    => ['nullable', 'integer', 'min:1', 'digits:4'],
-
+            'foto_perfil' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'situacao'    => ['nullable', 'in:A,I'],
         ];
     }
@@ -38,10 +38,12 @@ class UserRequest extends FormRequest
             'biografia.required' => 'A biografia é um atributo obrigatório.',
             'biografia.max'      => 'A biografia deve ter no máximo 255 caracteres.',
 
-            'ano_inicio_curso.integer' => 'O ano de início do curso deve ser um número inteiro.',
-            'ano_inicio_curso.min'     => 'O ano de início do curso deve ser um valor positivo.',
-            'ano_inicio_curso.max'     => 'O ano de início do curso não pode ter mais que 4 dígitos.',
+            'ano_inicio_curso.required' => 'O ano de início do curso é obrigatório.',
+            'ano_inicio_curso.integer'  => 'O ano de início do curso deve ser um número inteiro.',
+            'ano_inicio_curso.min'      => 'O ano de início do curso deve ser um valor positivo.',
+            'ano_inicio_curso.max'      => 'O ano de início do curso não pode ter mais que 4 dígitos.',
 
+            'ano_fim_curso.required' => 'O ano de fim do cruso é obrigatório.',
             'ano_fim_curso.integer' => 'O ano de término do curso deve ser um número inteiro.',
             'ano_fim_curso.min'     => 'O ano de término do curso deve ser um valor positivo.',
             'ano_fim_curso.max'     => 'O ano de término do curso não pode ter mais que 4 dígitos.',

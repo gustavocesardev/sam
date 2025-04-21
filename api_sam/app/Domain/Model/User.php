@@ -75,4 +75,9 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->situacao = 'A';
         return $this->save();
     }
+
+    public function updateFotoPerfil(string $newPath): void
+    {
+        $this->foto_perfil = $newPath;
+    }
 }

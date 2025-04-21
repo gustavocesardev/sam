@@ -6,17 +6,13 @@ use App\Domain\Enums\ErrorContext;
 use App\Domain\Exceptions\DuplicateEntryException;
 use App\Domain\Model\Instituicao;
 use App\Domain\Repository\InstituicaoRepositoryInterface;
+
 use Illuminate\Support\Collection;
 
 class InstituicaoService
 {
     public function __construct(private InstituicaoRepositoryInterface $instituicaoRepository) {}
 
-    /**
-     * TODO: Adicionar paginação
-     * Summary of listAll
-     * @return Collection
-     */
     public function listAll(): Collection
     {
         return $this->instituicaoRepository->findAll();
