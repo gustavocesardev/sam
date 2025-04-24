@@ -13,6 +13,6 @@ class EmailPolicy
 
     public static function pertenceDominioInstitucional(string $email, string $dominioInstitucional): bool
     {
-        return str_contains($email, "@{$dominioInstitucional}");
+        return str_contains($email, $dominioInstitucional);
     }
 }

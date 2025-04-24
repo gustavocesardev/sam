@@ -63,7 +63,7 @@ class UserService
 
         $this->userRepository->update($id, $data);
 
-        if ($data['foto_perfil'] != $user->foto_perfil && $data['foto_perfil'] instanceof UploadedFile)
+        if (!empty($data['foto_perfil']) && $data['foto_perfil'] != $user->foto_perfil)
         {
             $this->atualizarFotoDePerfil($user, $data['foto_perfil'] );
         }
@@ -109,7 +109,7 @@ class UserService
         $email = new Email($emailValue);
         $instituicao = $this->instituicaoService->find($id_instituicao);
 
-        if (!EmailPolicy::pertenceDominioInstitucional($email->getDominio(), $instituicao))
+        if (!EmailPolicy::pertenceDominioInstitucional($email->getDominio(), $instituicao->dominio_email_institucional))
         {
             throw new EmailException(
                 ErrorContext::REGISTER,

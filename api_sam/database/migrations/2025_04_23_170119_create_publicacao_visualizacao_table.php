@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('id_publicacao')
                   ->constrained('publicacao')
                   ->restrictOnDelete();
-            $table->foreign('id_usuario')
+            $table->foreignId('id_usuario')
                   ->constrained('users')
                   ->restrictOnDelete();
             $table->timestamps();
