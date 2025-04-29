@@ -21,11 +21,28 @@ class ImageProcessor implements ImageProcessorInterface
     {
         $filename = $this->gerarFilename($image);
         $path = $this->resolvePath($basePath, $filename);
-        $content = $this->redimensionarImagem($image, 300);
+        $content = $this->prepararImagemPerfil($image);
 
         Storage::disk('public')->put($path, $content);
 
         return $path;
+    }
+
+    public function storePublicacaoImages(array $imagens, string $basePath): array
+    {
+        return collect($imagens)
+            ->filter(fn ($imagem) => $imagem instanceof UploadedFile)
+            ->map(function (UploadedFile $imagem) use ($basePath) {
+                $filename = $this->gerarFilename($imagem);
+                $path = $this->resolvePath($basePath, $filename);
+                $content = $this->prepararImagemPublicacao($imagem);
+
+                Storage::disk('public')->put($path, $content);
+
+                return $path;
+            })
+            ->values()
+            ->all();
     }
 
     private function gerarFilename(UploadedFile $image): string
@@ -33,12 +50,23 @@ class ImageProcessor implements ImageProcessorInterface
         return uniqid() . '.' . $image->getClientOriginalExtension();
     }
 
-    private function redimensionarImagem(UploadedFile $image, int $width): string
+    private function prepararImagemPerfil(UploadedFile $image): string
     {
         $img = $this->manager->read($image);
-        $img->scale(width: $width);
+        $img->scale(width: 300);
+        return (string) $img->toJpeg(90);
+    }
 
-        return (string) $img->toJpeg();
+    private function prepararImagemPublicacao(UploadedFile $image): string
+    {
+        $img = $this->manager->read($image);
+
+        if ($image->getSize() > 2 * 1024 * 1024)
+        {
+            $img->scale(width: 1200);
+        }
+
+        return (string) $img->toJpeg(80);
     }
 
     private function resolvePath(string $basePath, string $filename): string

@@ -30,44 +30,44 @@ class InstituicaoRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'razao_social.required' => 'O atributo razão social é obrigatório.',
-            'razao_social.string'   => 'O atributo razão social deve ser um texto.',
-            'razao_social.max'      => 'O atributo razão social deve ter no máximo 70 caracteres.',
+            'razao_social.required' => 'O atributo razao_social é obrigatório.',
+            'razao_social.string'   => 'O atributo razao_social deve ser um texto.',
+            'razao_social.max'      => 'O atributo razao_social deve ter no máximo 70 caracteres.',
 
-            'tipo_instituicao.required' => 'O tipo de instituição é obrigatório.',
-            'tipo_instituicao.string'   => 'O tipo de instituição deve ser um texto.',
-            'tipo_instituicao.in'       => 'O tipo de instituição deve ser "PUB" (Pública) ou "PRI" (Privada).',
+            'tipo_instituicao.required' => 'O atributo tipo_instituicao é obrigatório.',
+            'tipo_instituicao.string'   => 'O atributo tipo_instituicao deve ser um texto.',
+            'tipo_instituicao.in'       => 'O atributo tipo_instituicao deve ser "PUB" (Pública) ou "PRI" (Privada).',
 
-            'tipo_logradouro.required' => 'O tipo de logradouro é obrigatório.',
-            'tipo_logradouro.string'   => 'O tipo de logradouro deve ser um texto.',
-            'tipo_logradouro.max'      => 'O tipo de logradouro deve ter no máximo 100 caracteres.',
+            'tipo_logradouro.required' => 'O atributo tipo_logradouro é obrigatório.',
+            'tipo_logradouro.string'   => 'O atributo tipo_logradouro deve ser um texto.',
+            'tipo_logradouro.max'      => 'O atributo tipo_logradouro deve ter no máximo 100 caracteres.',
 
-            'logradouro.required' => 'O logradouro é obrigatório.',
-            'logradouro.string'   => 'O logradouro deve ser um texto.',
-            'logradouro.max'      => 'O logradouro deve ter no máximo 100 caracteres.',
+            'logradouro.required' => 'O atributo logradouro é obrigatório.',
+            'logradouro.string'   => 'O atributo logradouro deve ser um texto.',
+            'logradouro.max'      => 'O atributo logradouro deve ter no máximo 100 caracteres.',
 
-            'numero.required' => 'O número é obrigatório.',
-            'numero.integer'  => 'O número deve ser um inteiro.',
-            'numero.min'      => 'O número deve ser um valor positivo.',
+            'numero.required' => 'O atributo numero é obrigatório.',
+            'numero.integer'  => 'O atributo numero deve ser um inteiro.',
+            'numero.min'      => 'O atributo numero deve ser um valor positivo.',
 
-            'cidade.required' => 'A cidade é obrigatória.',
-            'cidade.string'   => 'A cidade deve ser um texto.',
-            'cidade.max'      => 'A cidade deve ter no máximo 70 caracteres.',
+            'cidade.required' => 'O atributo cidade é obrigatório.',
+            'cidade.string'   => 'O atributo cidade deve ser um texto.',
+            'cidade.max'      => 'O atributo cidade deve ter no máximo 70 caracteres.',
 
-            'codigo_municipio.required' => 'O código do município é obrigatório.',
-            'codigo_municipio.integer'  => 'O código do município deve ser um inteiro.',
-            'codigo_municipio.min'      => 'O código do município deve ser um valor positivo.',
+            'codigo_municipio.required' => 'O atributo codigo_municipio é obrigatório.',
+            'codigo_municipio.integer'  => 'O atributo codigo_municipio deve ser um inteiro.',
+            'codigo_municipio.min'      => 'O atributo codigo_municipio deve ser um valor positivo.',
 
-            'uf.required' => 'A unidade federativa (UF) é obrigatória.',
-            'uf.string'   => 'A unidade federativa (UF) deve ser um texto.',
-            'uf.size'     => 'A unidade federativa (UF) deve ter exatamente 2 caracteres.',
+            'uf.required' => 'O atributo uf é obrigatório.',
+            'uf.string'   => 'O atributo uf deve ser um texto.',
+            'uf.size'     => 'O atributo uf deve ter exatamente 2 caracteres.',
 
-            'dominio_email_institucional.required' => 'O domínio de e-mail institucional é obrigatório.',
-            'dominio_email_institucional.string'   => 'O domínio de e-mail institucional deve ser um texto.',
-            'dominio_email_institucional.max'      => 'O domínio de e-mail institucional deve ter no máximo 100 caracteres.',
+            'dominio_email_institucional.required' => 'O atributo dominio_email_institucional é obrigatório.',
+            'dominio_email_institucional.string'   => 'O atributo dominio_email_institucional deve ser um texto.',
+            'dominio_email_institucional.max'      => 'O atributo dominio_email_institucional deve ter no máximo 100 caracteres.',
 
-            'imagem.string' => 'A imagem deve ser um texto.',
-            'imagem.max'    => 'A imagem deve ter no máximo 150 caracteres.',
+            'imagem.string' => 'O atributo imagem deve ser um texto.',
+            'imagem.max'    => 'O atributo imagem deve ter no máximo 150 caracteres.',
         ];
     }
 }

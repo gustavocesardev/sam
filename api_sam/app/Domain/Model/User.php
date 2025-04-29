@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
@@ -54,6 +55,11 @@ class User extends Authenticatable implements MustVerifyEmail
         static::addGlobalScope('nao_excluido', function (Builder $builder) {
             $builder->where('excluido', false);
         });
+    }
+
+    public function curso(): BelongsTo
+    {
+        return $this->belongsTo(Curso::class, 'id_curso');
     }
 
     public function excluir(): bool

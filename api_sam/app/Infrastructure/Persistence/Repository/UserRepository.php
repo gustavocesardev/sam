@@ -13,6 +13,11 @@ class UserRepository implements UserRepositoryInterface
         return User::findOrFail($id);
     }
 
+    public function findWithCurso(int $id): User
+    {
+        return User::with('curso')->findOrFail($id);
+    }
+
     public function findAll(): Collection
     {
         return User::all();

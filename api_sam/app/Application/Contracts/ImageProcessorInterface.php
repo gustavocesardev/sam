@@ -7,4 +7,5 @@ use Illuminate\Http\UploadedFile;
 interface ImageProcessorInterface
 {
     public function storeUserProfileImage(UploadedFile $image, string $basePath): string;
+    public function storePublicacaoImages(array $imagens, string $basePath): array;
 }

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -63,6 +64,15 @@ return Application::configure(basePath: dirname(__DIR__))
                         'code'      => 404
                     ], 404);
                 
+                } else if($e instanceof AuthenticationException) {
+
+                    return response()->json([
+                        'error'     => true,
+                        'message'   => 'Acesso negado ao recurso: '.$e->getMessage(),
+                        'context'   => 'app.error',
+                        'code'      => 401
+                    ], 401);
+
                 } else {
 
                     return response()->json([

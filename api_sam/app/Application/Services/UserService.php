@@ -63,6 +63,7 @@ class UserService
 
         $this->userRepository->update($id, $data);
 
+        // TODO: Caso não mandar nenhuma imagem, tratar como se tivesse excluindo a antiga
         if (!empty($data['foto_perfil']) && $data['foto_perfil'] != $user->foto_perfil)
         {
             $this->atualizarFotoDePerfil($user, $data['foto_perfil'] );
@@ -73,9 +74,12 @@ class UserService
 
     public function atualizarFotoDePerfil(User $user, UploadedFile $imagem): void
     {
+        $idInstituicao = $user->curso->id_instituicao;
+        $idCurso = $user->curso->id;
+
         Storage::disk('public')->delete($user->foto_perfil);
 
-        $path = $this->imageProcessor->storeUserProfileImage($imagem, "users/{$user->id}");
+        $path = $this->imageProcessor->storeUserProfileImage($imagem, "instituicoes/{$idInstituicao}/cursos/{$idCurso}/users/{$user->id}/profile");
 
         $user->updateFotoPerfil($path);
         $this->userRepository->save($user);
@@ -96,7 +100,8 @@ class UserService
     {
         $user = $this->userRepository->findByEmail($email);
 
-        if (EmailPolicy::emailEmUso($user)) {
+        if (!empty($user))
+        {
             throw new EmailException(
                 ErrorContext::REGISTER, 
                 'O E-mail informado para registro já está em uso.'

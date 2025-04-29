@@ -65,4 +65,9 @@ class Publicacao extends Model
 
         return $this->save();
     }
+
+    public function updateImagens(array $newPaths): void
+    {
+        $this->imagens = $newPaths;
+    }
 }

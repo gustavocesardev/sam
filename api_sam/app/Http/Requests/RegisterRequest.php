@@ -21,25 +21,25 @@ class RegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'id_instituicao.required' => 'O id_instituicao é obrigatório.',
-            'id_instituicao.integer' => 'O id_instituicao deve ser um valor inteiro',
+            'id_instituicao.required' => 'O atributo id_instituicao é obrigatório.',
+            'id_instituicao.integer' => 'O atributo id_instituicao deve ser um valor inteiro',
 
-            'id_curso.required' => 'O id_curso é obrigatório.',
-            'id_curso.integer' => 'O id_curso deve ser um valor inteiro',
+            'id_curso.required' => 'O atributo id_curso é obrigatório.',
+            'id_curso.integer' => 'O atributo id_curso deve ser um valor inteiro',
 
-            'name.required' => 'O nome é obrigatório.',
-            'name.string' => 'O nome deve ser uma string.',
-            'name.max' => 'O nome deve conter no máximo 255 caracteres',
+            'name.required' => 'O atributo nome é obrigatório.',
+            'name.string' => 'O atributo nome deve ser uma string.',
+            'name.max' => 'O atributo nome deve conter no máximo 255 caracteres',
 
-            'email.required' => 'O e-mail é obrigatório.',
-            'email.email' => 'Insira um e-mail válido.',
+            'email.required' => 'O atributo email é obrigatório.',
+            'email.email' => 'O atributo email é inválido.',
 
-            'password.required' => 'A senha é obrigatória.',
-            'password.min' => 'A senha deve ter no mínimo 6 caracteres.',
-            'password.confirmed' => 'As senhas não coincidem.',
+            'password.required' => 'O atributo password é obrigatório.',
+            'password.min' => 'O atributo password deve ter no mínimo 6 caracteres.',
+            'password.confirmed' => 'As senhas (password e password_confirmation) não coincidem.',
             
-            'password_confirmation.required' => 'A confirmação de senha é obrigatória.',
-            'password_confirmation.min' => 'A confirmação de senha deve ter no mínimo 6 caracteres.',
+            'password_confirmation.required' => 'O atributo password_confirmation obrigatório.',
+            'password_confirmation.min' => 'O atributo password_confirmation deve ter no mínimo 6 caracteres.',
         ];
     }
 }

@@ -20,7 +20,7 @@ class UserRequest extends FormRequest
             'ano_inicio_curso' => ['required', 'integer', 'min:1', 'digits:4'],
             'ano_fim_curso'    => ['required', 'integer', 'min:1', 'digits:4'],
 
-            'foto_perfil' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'foto_perfil' => ['nullable', 'image', 'mimes:jpg,jpeg,png'],
             'situacao'    => ['nullable', 'in:A,I'],
         ];
     }
@@ -28,27 +28,26 @@ class UserRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'O nome é uma atributo obrigatório.',
-            'name.max' => 'O nome deve ter no máximo 255 caracteres.',
+            'name.required' => 'O atributo nome é obrigatório.',
+            'name.max' => 'O atributo nome deve ter no máximo 255 caracteres.',
 
-            'foto_perfil.image' => 'O arquivo enviado deve ser uma imagem.',
+            'foto_perfil.image' => 'O atributo foto_perfil enviado deve ser uma imagem.',
             'foto_perfil.mimes' => 'A imagem deve estar no formato JPG, JPEG ou PNG.',
-            'foto_perfil.max'   => 'A imagem não pode ter mais que 2MB.',
 
-            'biografia.required' => 'A biografia é um atributo obrigatório.',
-            'biografia.max'      => 'A biografia deve ter no máximo 255 caracteres.',
+            'biografia.required' => 'O atributo biografia é obrigatório.',
+            'biografia.max'      => 'O atributo biografia deve ter no máximo 255 caracteres.',
 
-            'ano_inicio_curso.required' => 'O ano de início do curso é obrigatório.',
-            'ano_inicio_curso.integer'  => 'O ano de início do curso deve ser um número inteiro.',
-            'ano_inicio_curso.min'      => 'O ano de início do curso deve ser um valor positivo.',
-            'ano_inicio_curso.max'      => 'O ano de início do curso não pode ter mais que 4 dígitos.',
+            'ano_inicio_curso.required' => 'O atributo ano_inicio_curso é obrigatório.',
+            'ano_inicio_curso.integer'  => 'O atributo ano_inicio_curso deve ser um número inteiro.',
+            'ano_inicio_curso.min'      => 'O atributo ano_inicio_curso deve ser um valor positivo.',
+            'ano_inicio_curso.max'      => 'O atributo ano_inicio_curso não pode ter mais que 4 dígitos.',
 
-            'ano_fim_curso.required' => 'O ano de fim do cruso é obrigatório.',
-            'ano_fim_curso.integer' => 'O ano de término do curso deve ser um número inteiro.',
-            'ano_fim_curso.min'     => 'O ano de término do curso deve ser um valor positivo.',
-            'ano_fim_curso.max'     => 'O ano de término do curso não pode ter mais que 4 dígitos.',
+            'ano_fim_curso.required' => 'O atributo ano_fim_curso é obrigatório.',
+            'ano_fim_curso.integer'  => 'O atributo ano_fim_curso deve ser um número inteiro.',
+            'ano_fim_curso.min'      => 'O atributo ano_fim_curso deve ser um valor positivo.',
+            'ano_fim_curso.max'      => 'O atributo ano_fim_curso não pode ter mais que 4 dígitos.',
             
-            'situacao.in'   => 'A situação deve ser A (Ativo) ou I (Inativo).',
+            'situacao.in'   => 'O atributo situacao deve ser A (Ativo) ou I (Inativo).',
         ];
     }
 }

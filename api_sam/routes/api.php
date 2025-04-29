@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CursoController;
 use App\Http\Controllers\Api\InstituicaoController;
+use App\Http\Controllers\Api\PublicacaoController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,4 +37,13 @@ Route::middleware('auth:api')->prefix('user')->group(function () {
     Route::get('{id}', [UserController::class, 'show']);
     Route::put('{id}', [UserController::class, 'update']);
     Route::delete('{id}', [UserController::class, 'destroy']);
+});
+
+// Rotas referentes à publicação
+Route::middleware('auth:api')->prefix('publicacao')->group(function () {
+
+    Route::post('/', [PublicacaoController::class, 'store']);
+    Route::get('{id}', [PublicacaoController::class, 'show']);
+    Route::put('{id}', [PublicacaoController::class, 'update']);
+    Route::delete('{id}', [PublicacaoController::class, 'destroy']);
 });
