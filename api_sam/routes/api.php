@@ -41,7 +41,6 @@ Route::middleware('auth:api')->prefix('user')->group(function () {
 
 // Rotas referentes à publicação
 Route::middleware('auth:api')->prefix('publicacao')->group(function () {
-
     Route::post('/', [PublicacaoController::class, 'store']);
     Route::get('{id}', [PublicacaoController::class, 'show']);
     Route::put('{id}', [PublicacaoController::class, 'update']);

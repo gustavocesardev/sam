@@ -32,14 +32,21 @@ class PublicacaoController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
-    }
+        try {
 
+            $curso = $this->publicacaoService->find($id);
+            return ApiResponse::success(
+                new PublicacaoResource($curso), 
+                'Detalhes da publicação.', 
+                Response::HTTP_OK
+            );
+
+        } catch(AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
 
     /**
      * Update the specified resource in storage.

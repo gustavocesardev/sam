@@ -13,5 +13,5 @@ interface PublicacaoRepositoryInterface
     public function update(int $id, array $data): Publicacao;
 
     public function delete(int $id): bool;
-    public function save(Publicacao $user): void;
+    public function save(Publicacao $publicacao): void;
 }

@@ -5,16 +5,20 @@ namespace App\Providers;
 use App\Application\Contracts\ImageProcessorInterface;
 use App\Application\Contracts\OAuthClientInterface;
 use App\Domain\Repository\CursoRepositoryInterface;
+use App\Domain\Repository\KeywordRepositoryInterface;
 use App\Domain\Repository\PublicacaoRepositoryInterface;
 use App\Domain\Repository\UserRepositoryInterface;
 
+use App\Domain\Repository\VisualizacaoRepositoryInterface;
 use App\Infrastructure\Auth\OAuthPassportClient;
 use App\Infrastructure\Persistence\Repository\CursoRepository;
 use App\Infrastructure\Persistence\Repository\InstituicaoRepository;
+use App\Infrastructure\Persistence\Repository\KeywordRepository;
 use App\Infrastructure\Persistence\Repository\PublicacaoRepository;
 use App\Infrastructure\Persistence\Repository\UserRepository;
 
 use App\Domain\Repository\InstituicaoRepositoryInterface;
+use App\Infrastructure\Persistence\Repository\VisualizacaoRepository;
 use App\Infrastructure\Services\ImageProcessor;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,6 +37,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(OAuthClientInterface::class, OAuthPassportClient::class);
         $this->app->bind(ImageProcessorInterface::class, ImageProcessor::class);
         $this->app->bind(PublicacaoRepositoryInterface::class, PublicacaoRepository::class);
+        $this->app->bind(KeywordRepositoryInterface::class, KeywordRepository::class);
+        $this->app->bind(VisualizacaoRepositoryInterface::class, VisualizacaoRepository::class);
     }
 
     /**
