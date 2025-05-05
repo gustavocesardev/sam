@@ -1,14 +1,17 @@
 <?php
 
-namespace App\Domain\Model;
+namespace App\Domain\Model\Publicacao;
 
-use Carbon\Carbon;
+use App\Domain\Model\Abstract\AbstractPublicacao;
+
+use App\Domain\Model\Publicacao\PublicacaoReacao;
+use App\Domain\Model\User;
+
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Publicacao extends Model
+class Publicacao extends AbstractPublicacao
 {
     protected $table = 'publicacao';
     
@@ -29,7 +32,17 @@ class Publicacao extends Model
         'excluido_data' => 'date',
     ];
 
-    protected static function boot()
+    public function getBaseImagePath(User $user): string
+    {
+        return "instituicoes/{$user->curso->id_instituicao}/cursos/{$user->curso->id}/users/{$user->id}/publicacoes/{$this->id}";
+    }
+
+    public function getIdUsuario(): int
+    {
+        return $this->id_usuario;
+    }
+
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -56,18 +69,5 @@ class Publicacao extends Model
     public function reacoes(): HasMany
     {
         return $this->hasMany(PublicacaoReacao::class, 'id_publicacao');
-    }
-
-    public function excluir(): bool
-    {
-        $this->excluido = true;
-        $this->excluido_data = Carbon::now();
-
-        return $this->save();
-    }
-
-    public function updateImagens(array $newPaths): void
-    {
-        $this->imagens = $newPaths;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Application\Services;
 
 use App\Domain\Model\Curso;
 use App\Domain\Repository\CursoRepositoryInterface;
+
 use Illuminate\Support\Collection;
 
 class CursoService

@@ -40,12 +40,7 @@ class AuthService
         ]));
     }
 
-    /**
-     * TODO : Criar VIEW para exibir as mensagens de forma mais amigável
-     * Summary of verifyEmail
-     * @param array $data
-     * @return Status
-     */
+    // TODO : Criar VIEW para exibir as mensagens de forma mais amigável
     public function verifyEmail(array $data): Status
     {
         $user = $this->userService->find($data['id']);

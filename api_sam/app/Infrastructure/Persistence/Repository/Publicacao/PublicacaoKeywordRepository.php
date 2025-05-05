@@ -1,25 +1,20 @@
 <?php
 
-namespace App\Infrastructure\Persistence\Repository;
+namespace App\Infrastructure\Persistence\Repository\Publicacao;
 
-use App\Domain\Model\PublicacaoKeyword;
+use App\Domain\Model\Publicacao\PublicacaoKeyword;
 use App\Domain\Repository\KeywordRepositoryInterface;
 
-class KeywordRepository implements KeywordRepositoryInterface
+class PublicacaoKeywordRepository implements KeywordRepositoryInterface
 {
     public function saveMany(int $idPublicacao, array $keywords): void
     {
-        $data = [];
-
         foreach ($keywords as $word => $count) {
-
-            $data[] = [
+            PublicacaoKeyword::create([
                 'id_publicacao' => $idPublicacao,
                 'keyword' => $word,
                 'frequencia' => $count,
-            ];
+            ]);
         }
-
-        PublicacaoKeyword::create($data);
     }
 }

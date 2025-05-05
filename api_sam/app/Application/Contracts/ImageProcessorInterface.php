@@ -8,4 +8,5 @@ interface ImageProcessorInterface
 {
     public function storeUserProfileImage(UploadedFile $image, string $basePath): string;
     public function storePublicacaoImages(array $imagens, string $basePath): array;
+    public function excluirDiretorio(string $path): void;
 }

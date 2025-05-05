@@ -18,6 +18,7 @@ class InstituicaoService
         return $this->instituicaoRepository->findAll();
     }
 
+    // TODO: Possiblitar inclusão de imagens na instituicao
     public function store(array $data): Instituicao
     {
         $this->validarDuplicidade(null, $data);
@@ -48,7 +49,7 @@ class InstituicaoService
         {
             throw new DuplicateEntryException(
                 'dominio_email_institucional',
-                ErrorContext::CADASTRO_INSTITUICAO
+                ErrorContext::INSTITUICAO
             );
         }
     }

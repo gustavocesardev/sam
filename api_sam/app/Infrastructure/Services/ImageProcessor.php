@@ -32,17 +32,38 @@ class ImageProcessor implements ImageProcessorInterface
     {
         return collect($imagens)
             ->filter(fn ($imagem) => $imagem instanceof UploadedFile)
-            ->map(function (UploadedFile $imagem) use ($basePath) {
-                $filename = $this->gerarFilename($imagem);
-                $path = $this->resolvePath($basePath, $filename);
-                $content = $this->prepararImagemPublicacao($imagem);
-
-                Storage::disk('public')->put($path, $content);
-
-                return $path;
-            })
+            ->map(fn (UploadedFile $imagem) => $this->armazenarImagem($imagem, $basePath))
             ->values()
             ->all();
+    }
+
+    public function excluirDiretorio(string $path): void
+    {
+        if (Storage::disk('public')->exists($path))
+        {
+            $arquivos = Storage::disk('public')->files($path);
+            foreach ($arquivos as $arquivo) {
+                Storage::disk('public')->delete($arquivo);
+            }
+
+            $subDiretorios = Storage::disk('public')->directories($path);
+            foreach ($subDiretorios as $subDiretorio) {
+                $this->excluirDiretorio($subDiretorio); // Chama recursivamente
+            }
+ 
+            Storage::disk('public')->deleteDirectory($path);
+        }
+    }
+
+    private function armazenarImagem(UploadedFile $imagem, string $basePath): string
+    {
+        $filename = $this->gerarFilename($imagem);
+        $path = $this->resolvePath($basePath, $filename);
+        $conteudo = $this->prepararImagemPublicacao($imagem);
+
+        Storage::disk('public')->put($path, $conteudo);
+
+        return $path;
     }
 
     private function gerarFilename(UploadedFile $image): string

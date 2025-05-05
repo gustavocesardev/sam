@@ -1,19 +1,15 @@
 <?php
 
-namespace App\Domain\Model;
+namespace App\Domain\Model\Publicacao;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Domain\Model\Abstract\AbstractPublicacaoKeyword;
+use App\Domain\Model\Publicacao\Publicacao;
+
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PublicacaoKeyword extends Model
+class PublicacaoKeyword extends AbstractPublicacaoKeyword
 {
     protected $table = 'publicacao_keyword';
-
-    protected $fillable = [
-        'id_publicacao',
-        'keyword',
-        'frequencia'
-    ];
 
     public function publicacao(): BelongsTo
     {

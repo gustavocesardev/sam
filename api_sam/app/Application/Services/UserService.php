@@ -2,6 +2,7 @@
 
 namespace App\Application\Services;
 
+use App\Application\Contracts\CryptoServiceInterface;
 use App\Application\Contracts\ImageProcessorInterface;
 use App\Domain\Enums\ErrorContext;
 
@@ -27,7 +28,8 @@ class UserService
         private UserRepositoryInterface $userRepository,
         private InstituicaoService $instituicaoService,
         private CursoService $cursoService,
-        private ImageProcessorInterface $imageProcessor
+        private ImageProcessorInterface $imageProcessor,
+        private CryptoServiceInterface $cryptoService
     ) {}
     
     public function listAll(): Collection
@@ -64,24 +66,19 @@ class UserService
         $this->userRepository->update($id, $data);
 
         // TODO: Caso não mandar nenhuma imagem, tratar como se tivesse excluindo a antiga
-        if (!empty($data['foto_perfil']) && $data['foto_perfil'] != $user->foto_perfil)
-        {
-            $this->atualizarFotoDePerfil($user, $data['foto_perfil'] );
-        }
-
+        $this->atualizarFotoDePerfil($user, $data['foto_perfil']);
+        
         return $user->refresh();
     }
 
     public function atualizarFotoDePerfil(User $user, UploadedFile $imagem): void
     {
-        $idInstituicao = $user->curso->id_instituicao;
-        $idCurso = $user->curso->id;
-
         Storage::disk('public')->delete($user->foto_perfil);
 
-        $path = $this->imageProcessor->storeUserProfileImage($imagem, "instituicoes/{$idInstituicao}/cursos/{$idCurso}/users/{$user->id}/profile");
+        $path = $this->imageProcessor->storeUserProfileImage($imagem, $user->getBaseImagePath());
+        $hashPath = $this->cryptoService->encryptUrl($path);
 
-        $user->updateFotoPerfil($path);
+        $user->updateFotoPerfil($hashPath);
         $this->userRepository->save($user);
     }
 
@@ -132,7 +129,7 @@ class UserService
         if (!CursoPolicy::anoFimCursoValido($anoMin, $anoMax, $curso->duracao_maxima))
         {
             throw new AnoMaximoException(
-                ErrorContext::CADASTRO_USER,
+                ErrorContext::USER,
                 "O total de anos informado excede o máximo de {$curso->duracao_maxima} anos definido pelo curso.",
             );
         }

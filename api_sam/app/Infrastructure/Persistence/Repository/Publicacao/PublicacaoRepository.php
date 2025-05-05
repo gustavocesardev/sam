@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Infrastructure\Persistence\Repository;
+namespace App\Infrastructure\Persistence\Repository\Publicacao;
 
-use App\Domain\Model\Publicacao;
-use App\Domain\Model\User;
+use App\Domain\Model\Abstract\AbstractPublicacao;
+use App\Domain\Model\Publicacao\Publicacao;
 use App\Domain\Repository\PublicacaoRepositoryInterface;
 
 class PublicacaoRepository implements PublicacaoRepositoryInterface
@@ -33,7 +33,7 @@ class PublicacaoRepository implements PublicacaoRepositoryInterface
         return $publicacao->excluir();
     }
 
-    public function save(Publicacao $publicacao): void
+    public function save(AbstractPublicacao $publicacao): void
     {
         $publicacao->save();
     }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CursoController;
+use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\InstituicaoController;
 use App\Http\Controllers\Api\PublicacaoController;
 use App\Http\Controllers\Api\UserController;
@@ -31,6 +32,11 @@ Route::prefix('curso')->group(function () {
     Route::delete('{id}', [CursoController::class, 'destroy'])->name('curso.destroy');
 });
 
+// Rotas referentes à imagens
+Route::prefix('image')->group(function () {
+    Route::get('/{hash}', [ImageController::class, 'show']);
+});
+
 // Rotas referentes ao usuário
 Route::middleware('auth:api')->prefix('user')->group(function () {
     Route::get('/', [UserController::class, 'index']);
@@ -43,6 +49,7 @@ Route::middleware('auth:api')->prefix('user')->group(function () {
 Route::middleware('auth:api')->prefix('publicacao')->group(function () {
     Route::post('/', [PublicacaoController::class, 'store']);
     Route::get('{id}', [PublicacaoController::class, 'show']);
-    Route::put('{id}', [PublicacaoController::class, 'update']);
+    Route::post('/reacao/insert/{id}', [PublicacaoController::class, 'adicionarReacao']);
+    Route::post('/reacao/remove/{id}', [PublicacaoController::class, 'removerReacao']);
     Route::delete('{id}', [PublicacaoController::class, 'destroy']);
 });

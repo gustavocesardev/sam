@@ -1,17 +1,19 @@
 <?php
 
-namespace App\Domain\Model;
+namespace App\Domain\Model\Publicacao;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Domain\Model\Abstract\AbstractPublicacaoVisualizacao;
+use App\Domain\Model\User;
+
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PublicacaoVisualizacao extends Model
+class PublicacaoVisualizacao extends AbstractPublicacaoVisualizacao
 {
     protected $table = 'publicacao_visualizacao';
     
     protected $fillable = [
-        'id_publicacao',
-        'id_usuario',
+        'id_usuario', 
+        ...self::FIELDS
     ];
 
     public function publicacao(): BelongsTo

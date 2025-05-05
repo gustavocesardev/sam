@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Infrastructure\Persistence\Repository;
+namespace App\Infrastructure\Persistence\Repository\Publicacao;
 
-use App\Domain\Model\PublicacaoVisualizacao;
+use App\Domain\Model\Publicacao\PublicacaoVisualizacao;
 use App\Domain\Repository\VisualizacaoRepositoryInterface;
 
-class VisualizacaoRepository implements VisualizacaoRepositoryInterface
+class PublicacaoVisualizacaoRepository implements VisualizacaoRepositoryInterface
 {
     public function store(int $idPublicacao, int $idUsuario): void
     {
