@@ -1,12 +1,19 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\CursoController;
-use App\Http\Controllers\Api\ImageController;
-use App\Http\Controllers\Api\InstituicaoController;
-use App\Http\Controllers\Api\PublicacaoController;
-use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ImageController;
+
+use App\Http\Controllers\Api\CursoController;
+use App\Http\Controllers\Api\InstituicaoController;
+use App\Http\Controllers\Api\UserController;
+
+use App\Http\Controllers\Api\GrupoEstudo\GrupoEstudoController;
+use App\Http\Controllers\Api\GrupoEstudo\MembroController;
+use App\Http\Controllers\Api\GrupoEstudo\PublicacaoController as GrupoEstudoPublicacaoController;
+
+use App\Http\Controllers\Api\PublicacaoController as PublicacaoController;
 
 // Rotas de login e verificação de e-mail
 Route::post('/register', [AuthController::class, 'register']);
@@ -52,4 +59,30 @@ Route::middleware('auth:api')->prefix('publicacao')->group(function () {
     Route::post('/reacao/insert/{id}', [PublicacaoController::class, 'adicionarReacao']);
     Route::post('/reacao/remove/{id}', [PublicacaoController::class, 'removerReacao']);
     Route::delete('{id}', [PublicacaoController::class, 'destroy']);
+});
+
+// Rotas referentes ao grupo de estudo
+Route::middleware('auth:api')->prefix('grupo-estudo')->group(function () {
+    
+    Route::post('/', [GrupoEstudoController::class, 'store']);
+    Route::put('{id}', [GrupoEstudoController::class, 'update']);
+    Route::get('{id}', [GrupoEstudoController::class, 'show']);
+    Route::delete('{id}', [GrupoEstudoController::class, 'destroy']);
+});
+
+Route::middleware('auth:api')->prefix('grupo-estudo/membro')->group(function () {
+    
+    Route::post('/', [MembroController::class, 'store']);
+    Route::get('{id}', [MembroController::class, 'show']);
+    Route::get('/ativar/{id}', [MembroController::class, 'ativar']);
+    Route::get('/inativar/{id}', [MembroController::class, 'inativar']);
+});
+
+Route::middleware('auth:api')->prefix('grupo-estudo/publicacao')->group(function () {
+    
+    Route::post('/', [GrupoEstudoPublicacaoController::class, 'store']);
+    Route::get('{id}', [GrupoEstudoPublicacaoController::class, 'show']);
+    Route::post('/reacao/insert/{id}', [GrupoEstudoPublicacaoController::class, 'adicionarReacao']);
+    Route::post('/reacao/remove/{id}', [GrupoEstudoPublicacaoController::class, 'removerReacao']);
+    Route::delete('{id}', [GrupoEstudoPublicacaoController::class, 'destroy']);
 });

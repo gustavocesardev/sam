@@ -2,12 +2,12 @@
 
 namespace App\Domain\Model\Publicacao;
 
-use App\Domain\Model\Abstract\AbstractPublicacaoVisualizacao;
+use App\Domain\Model\Abstract\PublicacaoVisualizacaoAbstract;
 use App\Domain\Model\User;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PublicacaoVisualizacao extends AbstractPublicacaoVisualizacao
+class PublicacaoVisualizacao extends PublicacaoVisualizacaoAbstract
 {
     protected $table = 'publicacao_visualizacao';
     

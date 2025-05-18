@@ -20,7 +20,6 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $this->authService->register($request->validated());
-
         return ApiResponse::success(
             null, 
             'Verifique seu e-mail para ativar a conta', 
@@ -50,7 +49,6 @@ class AuthController extends Controller
         try {
 
             $tokenData = $this->authService->login($request->validated());
-    
             return ApiResponse::success(
                 $tokenData, 
                 'Login efetuado com sucesso.', 
@@ -67,7 +65,6 @@ class AuthController extends Controller
 
             $validated = $request->validate(['refresh_token' => 'required']);
             $tokenData = $this->authService->refreshToken($validated['refresh_token']);
-
             return ApiResponse::success(
                 $tokenData,
                 'Refresh do token efetuado com sucesso.'

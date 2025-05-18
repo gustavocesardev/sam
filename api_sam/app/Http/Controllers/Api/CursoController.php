@@ -70,7 +70,6 @@ class CursoController extends Controller
         try {
 
             $curso = $this->cursoService->update($id, $request->validated());
-
             return ApiResponse::success(
                 new CursoResource($curso), 
                 'Curso atualizado com sucesso.', 
@@ -87,7 +86,6 @@ class CursoController extends Controller
         try {
 
             $this->cursoService->delete($id);
-
             return ApiResponse::success(
                 null, 
                 'Curso excluido com sucesso.', 

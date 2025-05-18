@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Persistence\Repository\Publicacao;
 
-use App\Domain\Model\Abstract\AbstractPublicacao;
+use App\Domain\Model\Abstract\PublicacaoAbstract;
 use App\Domain\Model\Publicacao\Publicacao;
 use App\Domain\Repository\PublicacaoRepositoryInterface;
 
@@ -33,7 +33,7 @@ class PublicacaoRepository implements PublicacaoRepositoryInterface
         return $publicacao->excluir();
     }
 
-    public function save(AbstractPublicacao $publicacao): void
+    public function save(PublicacaoAbstract $publicacao): void
     {
         $publicacao->save();
     }

@@ -20,13 +20,14 @@ class UserController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $users = $this->userService->listAll();
 
+            $users = $this->userService->listAll();
             return ApiResponse::success(
                 UserResource::collection($users),
                 'Listagem de usuários.',
                 Response::HTTP_OK
             );
+
         } catch (AppException $exception) {
             return ApiResponse::error($exception);
         }
@@ -35,13 +36,14 @@ class UserController extends Controller
     public function store(UserRequest $request): JsonResponse
     {
         try {
-            $user = $this->userService->store($request->validated());
 
+            $user = $this->userService->store($request->validated());
             return ApiResponse::success(
                 new UserResource($user),
                 'Usuário criado com sucesso.',
                 Response::HTTP_CREATED
             );
+
         } catch (AppException $exception) {
             return ApiResponse::error($exception);
         }
@@ -50,13 +52,14 @@ class UserController extends Controller
     public function show(string $id): JsonResponse
     {
         try {
-            $user = $this->userService->find($id);
 
+            $user = $this->userService->find($id);
             return ApiResponse::success(
                 new UserResource($user),
                 'Detalhes do usuário.',
                 Response::HTTP_OK
             );
+
         } catch (AppException $exception) {
             return ApiResponse::error($exception);
         }
@@ -65,13 +68,14 @@ class UserController extends Controller
     public function update(UserRequest $request, string $id): JsonResponse
     {
         try {
-            $user = $this->userService->update($id, $request->validated());
 
+            $user = $this->userService->update($id, $request->validated());
             return ApiResponse::success(
                 new UserResource($user),
                 'Usuário atualizado com sucesso.',
                 Response::HTTP_OK
             );
+
         } catch (AppException $exception) {
             return ApiResponse::error($exception);
         }
@@ -80,13 +84,14 @@ class UserController extends Controller
     public function destroy(string $id): JsonResponse
     {
         try {
-            $this->userService->delete($id);
 
+            $this->userService->delete($id);
             return ApiResponse::success(
                 null,
                 'Usuário excluído com sucesso.',
                 Response::HTTP_OK
             );
+            
         } catch (AppException $exception) {
             return ApiResponse::error($exception);
         }

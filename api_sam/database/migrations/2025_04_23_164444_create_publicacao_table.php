@@ -26,7 +26,7 @@ return new class extends Migration
             $table->boolean('excluido')->default(false);
             $table->date('excluido_data')->nullable();
             $table->timestamps();
-        });        
+        });      
     }
 
     /**

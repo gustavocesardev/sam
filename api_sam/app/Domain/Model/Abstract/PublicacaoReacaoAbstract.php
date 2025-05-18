@@ -4,7 +4,7 @@ namespace App\Domain\Model\Abstract;
 
 use Illuminate\Database\Eloquent\Model;
 
-abstract class AbstractPublicacaoReacao extends Model
+abstract class PublicacaoReacaoAbstract extends Model
 {
     public const FIELDS = [
         'id_publicacao',

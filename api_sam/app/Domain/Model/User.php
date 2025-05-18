@@ -2,7 +2,8 @@
 
 namespace App\Domain\Model;
 
-use Carbon\Carbon;
+use App\Domain\Model\GrupoEstudo\GrupoEstudo;
+use App\Domain\Model\GrupoEstudo\Membro;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,6 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 use Laravel\Passport\HasApiTokens;
+use Carbon\Carbon;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -65,7 +67,17 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Curso::class, 'id_curso');
     }
 
-    public function getBaseImagePath(): string
+    public function gruposEstudo()
+    {
+        return $this->hasMany(GrupoEstudo::class, 'id_usuario');
+    }
+
+    public function membrosGrupoEstudo()
+    {
+        return $this->hasMany(Membro::class, 'id_usuario');
+    }
+
+    public function getBasePath(): string
     {
         return "instituicoes/{$this->curso->id_instituicao}/cursos/{$this->curso->id}/users/{$this->id}/profile";
     }
@@ -93,5 +105,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function updateFotoPerfil(string $newPath): void
     {
         $this->foto_perfil = $newPath;
+        $this->save();
+    }
+
+    public function atualizar()
+    {
+        return $this->refresh();
     }
 }

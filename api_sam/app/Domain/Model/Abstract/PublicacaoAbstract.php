@@ -2,13 +2,29 @@
 
 namespace App\Domain\Model\Abstract;
 
-use App\Domain\Model\User;
 use Illuminate\Database\Eloquent\Model;
 
 use Carbon\Carbon;
 
-abstract class AbstractPublicacao extends Model
+abstract class PublicacaoAbstract extends Model
 {
+    public const FIELDS = [
+        'id_publicacao_vinculada',
+        'texto',
+        'imagens',
+        'qtde_curtidas',
+        'qtde_visualizacoes',
+        'excluido',
+        'excluido_data'
+    ];
+    protected $fillable = self::FIELDS;
+
+    protected $casts = [
+        'imagens' => 'array',
+        'excluido' => 'boolean',
+        'excluido_data' => 'date',
+    ];
+
     public function updateImagens(array $newPaths): void
     {
         $this->imagens = $newPaths;
@@ -20,6 +36,11 @@ abstract class AbstractPublicacao extends Model
         $this->excluido_data = Carbon::now();
 
         return $this->save();
+    }
+
+    public function atualizar(): PublicacaoAbstract
+    {
+        return $this->refresh();
     }
 
     public function adicionarReacao(): void
@@ -37,6 +58,11 @@ abstract class AbstractPublicacao extends Model
         }
     }
 
-    public abstract function getBaseImagePath(User $user): string;
+    public function adicionarVisualizacao(): void
+    {
+        $this->qtde_visualizacoes += 1;
+    }
+
+    public abstract function getBasePath(): string;
     public abstract function getIdUsuario(): int;
 }

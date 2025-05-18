@@ -2,7 +2,7 @@
 
 namespace App\Application\Services;
 
-use App\Domain\Model\Abstract\AbstractPublicacao;
+use App\Domain\Model\Abstract\PublicacaoAbstract;
 use App\Domain\Repository\KeywordRepositoryInterface;
 
 use TextAnalysis\Tokenizers\GeneralTokenizer;
@@ -12,7 +12,7 @@ class KeywordService
 {
     public function __construct(private KeywordRepositoryInterface $repository) {}
 
-    public function publicacaoExtractAndStore(AbstractPublicacao $publicacao)
+    public function publicacaoExtractAndStore(PublicacaoAbstract $publicacao)
     {
         $keywords = $this->extractWithFrequency($publicacao->texto);
 

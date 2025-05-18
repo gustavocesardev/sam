@@ -36,9 +36,9 @@ class PublicacaoController extends Controller
     {
         try {
 
-            $curso = $this->publicacaoService->find($id);
+            $publicacao = $this->publicacaoService->find($id);
             return ApiResponse::success(
-                new PublicacaoResource($curso), 
+                new PublicacaoResource($publicacao), 
                 'Detalhes da publicação.', 
                 Response::HTTP_OK
             );
@@ -52,8 +52,7 @@ class PublicacaoController extends Controller
     {
         try {
 
-            $publicacao = $this->publicacaoService->find($id);
-            $this->publicacaoService->adicionarReacao($publicacao, auth()->user());
+            $this->publicacaoService->adicionarReacao($id, auth()->user());
             return ApiResponse::success(
                 null, 
                 'Publicação curtida com sucesso.', 
@@ -68,9 +67,7 @@ class PublicacaoController extends Controller
     public function removerReacao(string $id)
     {
         try {
-
-            $publicacao = $this->publicacaoService->find($id);
-            $this->publicacaoService->removerReacao($publicacao, auth()->user());
+            $this->publicacaoService->removerReacao($id, auth()->user());
             return ApiResponse::success(
                 null, 
                 'Curtida removida com sucesso.', 

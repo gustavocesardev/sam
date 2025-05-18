@@ -2,12 +2,12 @@
 
 namespace App\Domain\Model\Publicacao;
 
-use App\Domain\Model\Abstract\AbstractPublicacaoReacao;
+use App\Domain\Model\Abstract\PublicacaoReacaoAbstract;
 use App\Domain\Model\User;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PublicacaoReacao extends AbstractPublicacaoReacao
+class PublicacaoReacao extends PublicacaoReacaoAbstract
 {
     protected $table = 'publicacao_reacao';
 
@@ -15,16 +15,6 @@ class PublicacaoReacao extends AbstractPublicacaoReacao
         'id_usuario', 
         ...self::FIELDS
     ];
-
-    public function getIdUsuario(): int
-    {
-        return $this->id_usuario;
-    }
-
-    public function getUsuarioColumnName(): string
-    {
-        return 'id_usuario';
-    }
 
     public function publicacao(): BelongsTo
     {

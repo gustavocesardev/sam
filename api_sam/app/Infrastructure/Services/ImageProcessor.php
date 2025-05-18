@@ -3,8 +3,10 @@
 namespace App\Infrastructure\Services;
 
 use App\Application\Contracts\ImageProcessorInterface;
+
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
@@ -17,7 +19,7 @@ class ImageProcessor implements ImageProcessorInterface
         $this->manager = new ImageManager(new Driver());
     }
 
-    public function storeUserProfileImage(UploadedFile $image, string $basePath): string
+    public function storeImage(UploadedFile $image, string $basePath): string
     {
         $filename = $this->gerarFilename($image);
         $path = $this->resolvePath($basePath, $filename);
@@ -28,13 +30,18 @@ class ImageProcessor implements ImageProcessorInterface
         return $path;
     }
 
-    public function storePublicacaoImages(array $imagens, string $basePath): array
+    public function storeImages(array $imagens, string $basePath): array
     {
         return collect($imagens)
             ->filter(fn ($imagem) => $imagem instanceof UploadedFile)
             ->map(fn (UploadedFile $imagem) => $this->armazenarImagem($imagem, $basePath))
             ->values()
             ->all();
+    }
+
+    public function excluirArquivo(string $path): void
+    {
+        Storage::disk('public')->delete($path);
     }
 
     public function excluirDiretorio(string $path): void

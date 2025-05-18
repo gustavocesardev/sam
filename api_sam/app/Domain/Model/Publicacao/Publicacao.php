@@ -2,7 +2,7 @@
 
 namespace App\Domain\Model\Publicacao;
 
-use App\Domain\Model\Abstract\AbstractPublicacao;
+use App\Domain\Model\Abstract\PublicacaoAbstract;
 
 use App\Domain\Model\Publicacao\PublicacaoReacao;
 use App\Domain\Model\User;
@@ -11,30 +11,18 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Publicacao extends AbstractPublicacao
+class Publicacao extends PublicacaoAbstract
 {
     protected $table = 'publicacao';
     
     protected $fillable = [
         'id_usuario',
-        'id_publicacao_vinculada',
-        'texto',
-        'imagens',
-        'qtde_curtidas',
-        'qtde_visualizacoes',
-        'excluido',
-        'excluido_data'
+        ...self::FIELDS
     ];
 
-    protected $casts = [
-        'imagens' => 'array',
-        'excluido' => 'boolean',
-        'excluido_data' => 'date',
-    ];
-
-    public function getBaseImagePath(User $user): string
+    public function getBasePath(): string
     {
-        return "instituicoes/{$user->curso->id_instituicao}/cursos/{$user->curso->id}/users/{$user->id}/publicacoes/{$this->id}";
+        return "instituicoes/{$this->user->curso->id_instituicao}/cursos/{$this->user->curso->id}/users/{$this->user->id}/publicacoes/{$this->id}";
     }
 
     public function getIdUsuario(): int

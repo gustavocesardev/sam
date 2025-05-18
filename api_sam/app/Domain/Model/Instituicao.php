@@ -53,6 +53,11 @@ class Instituicao extends Model
         $this->attributes['tipo_logradouro'] = strtoupper($value); 
     }
 
+    public function getBasePath(): string
+    {
+        return "instituicoes/{$this->id}/imagem";
+    }
+
     public function excluir(): bool
     {
         $this->excluido = true;

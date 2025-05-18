@@ -23,7 +23,7 @@ class InstituicaoRequest extends FormRequest
             'codigo_municipio' => ['required', 'integer', 'min:1'],
             'uf' => ['required', 'string', 'size:2'],
             'dominio_email_institucional' => ['required', 'string', 'max:100'],
-            'imagem' => ['nullable', 'string', 'max:150']
+            'imagem' => ['required', 'image', 'mimes:jpg,jpeg,png']
         ];
     }
 
@@ -66,8 +66,9 @@ class InstituicaoRequest extends FormRequest
             'dominio_email_institucional.string'   => 'O atributo dominio_email_institucional deve ser um texto.',
             'dominio_email_institucional.max'      => 'O atributo dominio_email_institucional deve ter no máximo 100 caracteres.',
 
-            'imagem.string' => 'O atributo imagem deve ser um texto.',
-            'imagem.max'    => 'O atributo imagem deve ter no máximo 150 caracteres.',
+            'imagem.required' => 'O atributo imagem é obrigatório.',
+            'imagem.image'    => 'O arquivo enviado deve ser uma imagem.',
+            'imagem.mimes'    => 'A imagem deve estar no formato JPG, JPEG ou PNG.',
         ];
     }
 }

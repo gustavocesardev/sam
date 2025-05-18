@@ -4,22 +4,17 @@ namespace App\Application\Services;
 
 use App\Application\Contracts\CryptoServiceInterface;
 use App\Application\Contracts\ImageProcessorInterface;
-use App\Domain\Enums\ErrorContext;
 
+use App\Domain\Enums\ErrorContext;
 use App\Domain\Exceptions\AnoMaximoException;
 use App\Domain\Exceptions\EmailException;
-
 use App\Domain\Model\User;
-
 use App\Domain\Policies\CursoPolicy;
 use App\Domain\Policies\EmailPolicy;
-
 use App\Domain\Repository\UserRepositoryInterface;
-
 use App\Domain\VO\Email;
 
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
 
 class UserService
@@ -68,18 +63,20 @@ class UserService
         // TODO: Caso não mandar nenhuma imagem, tratar como se tivesse excluindo a antiga
         $this->atualizarFotoDePerfil($user, $data['foto_perfil']);
         
-        return $user->refresh();
+        return $user->atualizar();
     }
 
     public function atualizarFotoDePerfil(User $user, UploadedFile $imagem): void
     {
-        Storage::disk('public')->delete($user->foto_perfil);
+        if (!empty($user->foto_perfil))
+        {
+            $this->imageProcessor->excluirArquivo($user->foto_perfil);
+        }
 
-        $path = $this->imageProcessor->storeUserProfileImage($imagem, $user->getBaseImagePath());
+        $path = $this->imageProcessor->storeImage($imagem, $user->getBasePath());
         $hashPath = $this->cryptoService->encryptUrl($path);
 
         $user->updateFotoPerfil($hashPath);
-        $this->userRepository->save($user);
     }
 
     public function delete(int $id): bool

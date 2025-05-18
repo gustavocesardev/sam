@@ -70,7 +70,6 @@ class InstituicaoController extends Controller
         try {
 
             $instituicao = $this->instituicaoService->update($id, $request->validated());
-
             return ApiResponse::success(
                 new InstituicaoResource($instituicao), 
                 'Instituição atualizada com sucesso', 
@@ -87,7 +86,6 @@ class InstituicaoController extends Controller
         try {
 
             $this->instituicaoService->delete($id);
-
             return ApiResponse::success(
                 null, 
                 'Instituição excluida com sucesso', 

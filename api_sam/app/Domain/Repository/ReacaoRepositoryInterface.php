@@ -2,10 +2,10 @@
 
 namespace App\Domain\Repository;
 
-use App\Domain\Model\Abstract\AbstractPublicacaoReacao;
+use App\Domain\Model\Abstract\PublicacaoReacaoAbstract;
 
 interface ReacaoRepositoryInterface
 {
-    public function findByPublicacaoAndUsuario(int $idPublicacao, int $idUsuario): ?AbstractPublicacaoReacao;
+    public function findByPublicacaoAndUsuario(int $idPublicacao, int $idUsuario): ?PublicacaoReacaoAbstract;
     public function savePublicacaoReacao(int $idPublicacao, int $idUsuario): void;
 }

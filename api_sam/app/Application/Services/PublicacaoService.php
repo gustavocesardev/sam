@@ -4,12 +4,10 @@ namespace App\Application\Services;
 
 use App\Application\Contracts\CryptoServiceInterface;
 use App\Application\Contracts\ImageProcessorInterface;
-
 use App\Application\Services\Abstract\PublicavelServiceAbstract;
 use App\Application\Services\KeywordService;
 
 use App\Domain\Enums\ErrorContext;
-
 use App\Domain\Repository\PublicacaoRepositoryInterface;
 use App\Domain\Repository\UserRepositoryInterface;
 use App\Domain\Repository\VisualizacaoRepositoryInterface;
