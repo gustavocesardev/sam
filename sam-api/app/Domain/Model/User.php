@@ -5,6 +5,7 @@ namespace App\Domain\Model;
 use App\Domain\Model\GrupoEstudo\GrupoEstudo;
 use App\Domain\Model\GrupoEstudo\Membro;
 
+use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -111,5 +112,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function atualizar()
     {
         return $this->refresh();
+    }
+
+    protected static function newFactory()
+    {
+        return UserFactory::new();
     }
 }

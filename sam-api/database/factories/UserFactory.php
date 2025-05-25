@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Domain\Model\Curso;
+use App\Domain\Model\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -11,6 +13,8 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
+    protected $model = User::class;
+
     /**
      * The current password being used by the factory.
      */
@@ -23,11 +27,18 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $curso = Curso::inRandomOrder()->first();
+
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
+            'id_curso' => $curso->id,
             'password' => static::$password ??= Hash::make('password'),
+            'biografia' => $this->faker->sentence(6),
+            'ano_inicio_curso' => $this->faker->numberBetween(2018, 2022),
+            'ano_fim_curso' => $this->faker->numberBetween(2023, 2026),
+            'situacao' => 'A',
             'remember_token' => Str::random(10),
         ];
     }

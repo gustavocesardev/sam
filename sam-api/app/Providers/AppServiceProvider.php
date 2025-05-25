@@ -12,7 +12,7 @@ use App\Application\Contracts\OAuthClientInterface;
 use App\Application\Contracts\CryptoServiceInterface;
 
 use App\Infrastructure\Auth\OAuthPassportClient;
-use App\Infrastructure\Services\ImageProcessor;
+use App\Infrastructure\Services\ImageProcessorService;
 use App\Application\Services\CryptoService;
 
 use App\Domain\Repository\InstituicaoRepositoryInterface;
@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CursoRepositoryInterface::class, CursoRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(OAuthClientInterface::class, OAuthPassportClient::class);
-        $this->app->bind(ImageProcessorInterface::class, ImageProcessor::class);
+        $this->app->bind(ImageProcessorInterface::class, ImageProcessorService::class);
         $this->app->bind(CryptoServiceInterface::class, CryptoService::class);
         $this->app->bind(KeywordRepositoryInterface::class, PublicacaoKeywordRepository::class);
     }

@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
-use App\Application\Services\KeywordService;
+use App\Application\Services\Recomendacao\RecomendacaoService;
 use Illuminate\Support\ServiceProvider;
 
 use App\Application\Services\PublicacaoService;
+use App\Domain\Services\KeywordService;
 use App\Domain\Repository\PublicacaoRepositoryInterface;
 use App\Domain\Repository\KeywordRepositoryInterface;
 use App\Domain\Repository\VisualizacaoRepositoryInterface;
@@ -43,5 +44,23 @@ class PublicacaoServiceProvider extends ServiceProvider
                     $app->make(PublicacaoKeywordRepository::class)
                 );
             });
+
+        // Referentes à recomendações
+        $this->app->when(RecomendacaoService::class)
+            ->needs(PublicacaoRepositoryInterface::class)
+            ->give(PublicacaoRepository::class);
+
+        $this->app->when(RecomendacaoService::class)
+            ->needs(KeywordRepositoryInterface::class)
+            ->give(PublicacaoKeywordRepository::class);
+
+        $this->app->when(RecomendacaoService::class)
+            ->needs(VisualizacaoRepositoryInterface::class)
+            ->give(PublicacaoVisualizacaoRepository::class);
+
+        $this->app->when(RecomendacaoService::class)
+            ->needs(ReacaoRepositoryInterface::class)
+            ->give(PublicacaoReacaoRepository::class);
+
     }
 }

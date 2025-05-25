@@ -61,6 +61,11 @@ Route::middleware('auth:api')->prefix('publicacao')->group(function () {
     Route::delete('{id}', [PublicacaoController::class, 'destroy']);
 });
 
+// Rotas referente aos feeds
+Route::middleware('auth:api')->prefix('feed')->group(function () {
+    Route::get('/', [PublicacaoController::class, 'recomendar']);
+});
+
 // Rotas referentes ao grupo de estudo
 Route::middleware('auth:api')->prefix('grupo-estudo')->group(function () {
     

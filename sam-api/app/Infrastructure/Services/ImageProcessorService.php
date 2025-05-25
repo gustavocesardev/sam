@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
-class ImageProcessor implements ImageProcessorInterface
+class ImageProcessorService implements ImageProcessorInterface
 {
     private ImageManager $manager;
 

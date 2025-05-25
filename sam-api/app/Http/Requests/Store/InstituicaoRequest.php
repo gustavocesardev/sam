@@ -23,7 +23,7 @@ class InstituicaoRequest extends FormRequest
             'codigo_municipio' => ['required', 'integer', 'min:1'],
             'uf' => ['required', 'string', 'size:2'],
             'dominio_email_institucional' => ['required', 'string', 'max:100'],
-            'imagem' => ['required', 'image', 'mimes:jpg,jpeg,png']
+            /*'imagem' => ['required', 'image', 'mimes:jpg,jpeg,png']*/
         ];
     }
 

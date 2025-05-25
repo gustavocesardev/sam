@@ -9,7 +9,7 @@ use App\Infrastructure\Persistence\Repository\GrupoEstudo\MembroRepository;
 use Illuminate\Support\ServiceProvider;
 
 use App\Application\Services\GrupoEstudo\PublicacaoService as GrupoPublicacaoService;
-use App\Application\Services\KeywordService;
+use App\Domain\Services\KeywordService;
 
 use App\Domain\Repository\PublicacaoRepositoryInterface;
 use App\Domain\Repository\KeywordRepositoryInterface;

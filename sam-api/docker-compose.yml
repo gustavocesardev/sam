@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: api_sam
+    container_name: sam-api
     ports:
       - "8000:8000"
     volumes:

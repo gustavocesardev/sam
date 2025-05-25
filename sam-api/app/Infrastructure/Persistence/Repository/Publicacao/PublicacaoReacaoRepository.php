@@ -22,4 +22,9 @@ class PublicacaoReacaoRepository implements ReacaoRepositoryInterface
             'id_usuario' => $idUsuario,
         ]);
     }
+
+    public function findByUser(int $idUsuario): array
+    {
+        return PublicacaoReacao::where('id_usuario', $idUsuario)->get()->all();
+    }
 }

@@ -16,4 +16,9 @@ class PublicacaoVisualizacaoRepository implements VisualizacaoRepositoryInterfac
 
         PublicacaoVisualizacao::create($data);
     }
+
+     public function findByUser(int $idUsuario): array
+    {
+        return PublicacaoVisualizacao::where('id_membro', $idUsuario)->get()->all();
+    }
 }

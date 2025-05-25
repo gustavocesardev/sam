@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+
 use App\Application\Services\PublicacaoService;
 use App\Domain\Exceptions\AppException;
 
@@ -10,6 +11,8 @@ use App\Http\Requests\Store\PublicacaoRequest;
 use App\Http\Resources\PublicacaoResource;
 use App\Http\Utils\ApiResponse;
 
+use App\Infrastructure\Services\PaginatorService;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class PublicacaoController extends Controller
@@ -89,6 +92,28 @@ class PublicacaoController extends Controller
             return ApiResponse::success(
                 null, 
                 'Publicação excluida com sucesso', 
+                Response::HTTP_OK
+            );
+
+        } catch(AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function recomendar(Request $request)
+    {
+        try {
+
+            $limite = $request->get('limite', 15);
+            $page = $request->get('page', 1);
+
+            $recomendadas = $this->publicacaoService->listFeedGeral(auth()->user(), $limite * $page);
+
+            $paginated = PaginatorService::paginateCollection($recomendadas, $limite, $page);
+
+            return ApiResponse::success(
+                PublicacaoResource::collection($paginated), 
+                'Publicacações (Feed principal)', 
                 Response::HTTP_OK
             );
 

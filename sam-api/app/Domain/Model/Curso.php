@@ -3,11 +3,15 @@
 namespace App\Domain\Model;
 
 use Carbon\Carbon;
+use Database\Factories\CursoFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Curso extends Model
 {
+    use HasFactory;
+    
     protected $table = 'curso';
 
     protected $fillable = [
@@ -50,5 +54,10 @@ class Curso extends Model
         $this->excluido_data = Carbon::now();
 
         return $this->save();
+    }
+
+    protected static function newFactory()
+    {
+        return CursoFactory::new();
     }
 }

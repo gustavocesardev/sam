@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Services;
+namespace App\Domain\Services;
 
 use App\Domain\Model\Abstract\PublicacaoAbstract;
 use App\Domain\Repository\KeywordRepositoryInterface;
@@ -19,7 +19,7 @@ class KeywordService
         $this->repository->saveMany($publicacao->id, $keywords);
     }
 
-    private function extractWithFrequency(string $text): array
+    public function extractWithFrequency(string $text): array
     {
         $normalizedText = $this->normalizeText($text);
 

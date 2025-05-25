@@ -4,7 +4,7 @@ namespace App\Application\Services\Abstract;
 
 use App\Application\Contracts\CryptoServiceInterface;
 use App\Application\Contracts\ImageProcessorInterface;
-use App\Application\Services\KeywordService;
+use App\Domain\Services\KeywordService;
 
 use App\Domain\Model\Abstract\PublicacaoAbstract;
 use App\Domain\Model\User;

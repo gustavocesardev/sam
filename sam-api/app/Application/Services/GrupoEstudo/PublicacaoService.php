@@ -6,12 +6,13 @@ use App\Application\Contracts\CryptoServiceInterface;
 use App\Application\Contracts\ImageProcessorInterface;
 
 use App\Application\Services\Abstract\PublicavelServiceAbstract;
-use App\Application\Services\KeywordService;
+use App\Domain\Services\KeywordService;
 
 use App\Domain\Enums\ErrorContext;
 use App\Domain\Exceptions\MembroNotExistsException;
 use App\Domain\Model\Abstract\PublicacaoAbstract;
 use App\Domain\Model\User;
+
 use App\Domain\Repository\GrupoEstudo\MembroRepositoryInterface;
 use App\Domain\Repository\PublicacaoRepositoryInterface;
 use App\Domain\Repository\UserRepositoryInterface;
