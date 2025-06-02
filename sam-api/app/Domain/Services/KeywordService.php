@@ -5,18 +5,21 @@ namespace App\Domain\Services;
 use App\Domain\Model\Abstract\PublicacaoAbstract;
 use App\Domain\Repository\KeywordRepositoryInterface;
 
+use App\Domain\VO\Recomendacao\InteracoesUsuario;
+use App\Domain\VO\Recomendacao\KeywordsRelevantes;
+
 use TextAnalysis\Tokenizers\GeneralTokenizer;
 use TextAnalysis\Filters\StopWordsFilter;
 
 class KeywordService
 {
-    public function __construct(private KeywordRepositoryInterface $repository) {}
+    public function __construct(private KeywordRepositoryInterface $keywordRepository) {}
 
     public function publicacaoExtractAndStore(PublicacaoAbstract $publicacao)
     {
         $keywords = $this->extractWithFrequency($publicacao->texto);
 
-        $this->repository->saveMany($publicacao->id, $keywords);
+        $this->keywordRepository->saveMany($publicacao->id, $keywords);
     }
 
     public function extractWithFrequency(string $text): array
@@ -39,5 +42,29 @@ class KeywordService
         $text = preg_replace('/[^\w\s]/', '', $text);
 
         return strtolower($text);
+    }
+
+    public function extrairInteracoesUsuario(InteracoesUsuario $interacoes): KeywordsRelevantes
+    {
+        $curtidasIds = $interacoes->getPublicacoesCurtidasIds();
+        $visualizadasIds = $interacoes->getPublicacoesVisualizadasIds();
+
+        $keywordsCurtidas = $this->buscarKeywords($curtidasIds);
+        $keywordsVisualizadas = array_diff(
+            $this->buscarKeywords($visualizadasIds),
+            $keywordsCurtidas
+        );
+
+        return new KeywordsRelevantes($keywordsCurtidas, $keywordsVisualizadas);
+    }
+
+    private function buscarKeywords(array $ids): array
+    {
+        $all = [];
+        foreach ($ids as $id) {
+            $all = array_merge($all, $this->keywordRepository->findByPublicacao($id));
+        }
+
+        return array_unique($all);
     }
 }

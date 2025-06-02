@@ -121,4 +121,26 @@ class PublicacaoController extends Controller
             return ApiResponse::error($exception);
         }
     }
+
+    public function recomendarCurso(Request $request)
+    {
+        try {
+
+            $limite = $request->get('limite', 15);
+            $page = $request->get('page', 1);
+
+            $recomendadas = $this->publicacaoService->listFeedCurso(auth()->user(), $limite * $page);
+
+            $paginated = PaginatorService::paginateCollection($recomendadas, $limite, $page);
+
+            return ApiResponse::success(
+                PublicacaoResource::collection($paginated), 
+                'Publicacações (Feed Curso)', 
+                Response::HTTP_OK
+            );
+
+        } catch(AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
 }
