@@ -33,4 +33,12 @@ class MembroRepository implements MembroRepositoryInterface
 
         return $isIngressado;
     }
+
+    public function update(int $id, array $data): Membro
+    {
+        $membro = $this->find($id);
+        $membro->update($data);
+
+        return $membro;
+    }
 }

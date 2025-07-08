@@ -3,7 +3,7 @@
 namespace App\Domain\Services;
 
 use App\Domain\Model\Abstract\PublicacaoAbstract;
-use App\Domain\Repository\KeywordRepositoryInterface;
+use App\Domain\Repository\Abstract\KeywordRepositoryAbstract;
 
 use App\Domain\VO\Recomendacao\InteracoesUsuario;
 use App\Domain\VO\Recomendacao\KeywordsRelevantes;
@@ -13,9 +13,9 @@ use TextAnalysis\Filters\StopWordsFilter;
 
 class KeywordService
 {
-    public function __construct(private KeywordRepositoryInterface $keywordRepository) {}
+    public function __construct(private KeywordRepositoryAbstract $keywordRepository) {}
 
-    public function publicacaoExtractAndStore(PublicacaoAbstract $publicacao)
+    public function publicacaoExtractAndStore(PublicacaoAbstract $publicacao): void
     {
         $keywords = $this->extractWithFrequency($publicacao->texto);
 

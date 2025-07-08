@@ -8,6 +8,7 @@ use App\Domain\Model\Publicacao\PublicacaoReacao;
 use App\Domain\Model\User;
 
 use Database\Factories\PublicacaoFactory;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -68,7 +69,7 @@ class Publicacao extends PublicacaoAbstract
         return $this->hasMany(PublicacaoVisualizacao::class, 'id_publicacao');
     }
 
-    protected static function newFactory()
+    protected static function newFactory(): PublicacaoFactory
     {
         return PublicacaoFactory::new();
     }

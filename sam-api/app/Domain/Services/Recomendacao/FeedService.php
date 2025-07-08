@@ -2,13 +2,13 @@
 
 namespace App\Domain\Services\Recomendacao;
 
-use App\Domain\Repository\PublicacaoRepositoryInterface;
+use App\Domain\Repository\Abstract\PublicacaoRepositoryAbstract;
 use App\Domain\VO\Recomendacao\InteracoesUsuario;
 use Illuminate\Database\Eloquent\Collection;
 
 class FeedService
 {
-    public function __construct(protected PublicacaoRepositoryInterface $publicacaoRepository) {}
+    public function __construct(protected PublicacaoRepositoryAbstract $publicacaoRepository) {}
 
     public function ordenar(Collection $recomendadas, InteracoesUsuario $interacoes): Collection
     {

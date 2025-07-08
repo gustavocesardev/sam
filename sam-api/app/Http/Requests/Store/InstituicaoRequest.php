@@ -14,16 +14,18 @@ class InstituicaoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'razao_social' => ['required', 'string', 'max:70'],
+            'razao_social'     => ['required', 'string', 'max:70'],
             'tipo_instituicao' => ['required', 'string', 'in:PUB,PRI'],
-            'tipo_logradouro' => ['required', 'string', 'max:100'],
-            'logradouro' => ['required', 'string', 'max:100'],
-            'numero' => ['required', 'integer', 'min:1'],
-            'cidade' => ['required', 'string', 'max:70'],
+            'tipo_logradouro'  => ['required', 'string', 'max:100'],
+            'logradouro'       => ['required', 'string', 'max:100'],
+            'numero'           => ['required', 'integer', 'min:1'],
+            'cidade'           => ['required', 'string', 'max:70'],
             'codigo_municipio' => ['required', 'integer', 'min:1'],
-            'uf' => ['required', 'string', 'size:2'],
+            'uf'               => ['required', 'string', 'size:2'],
+
             'dominio_email_institucional' => ['required', 'string', 'max:100'],
-            /*'imagem' => ['required', 'image', 'mimes:jpg,jpeg,png']*/
+            
+            'imagem' => ['required', 'image', 'mimes:jpg,jpeg,png']
         ];
     }
 

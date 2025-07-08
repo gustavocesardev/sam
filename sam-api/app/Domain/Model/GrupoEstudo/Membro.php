@@ -39,7 +39,7 @@ class Membro extends Model
         return $this->save();
     }
 
-    public function atualizar()
+    public function reload(): Membro
     {
         return $this->refresh();
     }

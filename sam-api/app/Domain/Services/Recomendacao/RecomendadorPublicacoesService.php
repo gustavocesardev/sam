@@ -2,7 +2,7 @@
 
 namespace App\Domain\Services\Recomendacao;
 
-use App\Domain\Repository\PublicacaoRepositoryInterface;
+use App\Domain\Repository\Publicacao\PublicacaoRepositoryInterface;
 use App\Domain\VO\Recomendacao\InteracoesUsuario;
 use App\Domain\VO\Recomendacao\KeywordsRelevantes;
 use Illuminate\Database\Eloquent\Collection;

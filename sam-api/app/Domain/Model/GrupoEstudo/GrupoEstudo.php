@@ -32,7 +32,7 @@ class GrupoEstudo extends Model
         'excluido_data' => 'date',
     ];
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
         
@@ -66,13 +66,13 @@ class GrupoEstudo extends Model
         return $this->belongsTo(Curso::class, 'id_curso');
     }
 
-    public function updateImagem(string $newPath): void
+    public function updateImagem(string $newPath = ''): void
     {
         $this->imagem = $newPath;
         $this->save();
     }
 
-    public function updateImagemHeader(string $newPath): void
+    public function updateImagemHeader(string $newPath = ''): void
     {
         $this->imagem_header = $newPath;
         $this->save();
@@ -86,7 +86,7 @@ class GrupoEstudo extends Model
         return $this->save();
     }
 
-    public function atualizar(): GrupoEstudo
+    public function reload(): GrupoEstudo
     {
         return $this->refresh();
     }

@@ -4,7 +4,7 @@ namespace App\Infrastructure\Persistence\Repository\Publicacao;
 
 use App\Domain\Model\Abstract\PublicacaoAbstract;
 use App\Domain\Model\Publicacao\Publicacao;
-use App\Domain\Repository\PublicacaoRepositoryInterface;
+use App\Domain\Repository\Publicacao\PublicacaoRepositoryInterface;
 use DB;
 use Illuminate\Database\Eloquent\Collection;
 

@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Domain\Repository;
+namespace App\Domain\Repository\Publicacao;
 
-interface VisualizacaoRepositoryInterface
+use App\Domain\Repository\Abstract\VisualizacaoRepositoryAbstract;
+
+interface VisualizacaoRepositoryInterface extends VisualizacaoRepositoryAbstract
 {
     public function store(int $idPublicacao, int $idUsuario): void;
     public function findByUser(int $idUsuario): array;

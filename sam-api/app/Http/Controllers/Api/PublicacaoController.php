@@ -2,22 +2,28 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Application\Factories\AuthenticatedUserFactory;
+use App\Application\Services\Publicacao\InteracoesService;
+use App\Application\Services\Publicacao\PublicacaoService;
 
-use App\Application\Services\PublicacaoService;
 use App\Domain\Exceptions\AppException;
+
+use App\Infrastructure\Services\PaginatorService;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\PublicacaoRequest;
 use App\Http\Resources\PublicacaoResource;
 use App\Http\Utils\ApiResponse;
 
-use App\Infrastructure\Services\PaginatorService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class PublicacaoController extends Controller
 {
-    public function __construct(private PublicacaoService $publicacaoService) {}
+    public function __construct(
+        private PublicacaoService $publicacaoService,
+        private InteracoesService $interacoesService
+    ) {}
 
     public function store(PublicacaoRequest $request)
     {
@@ -39,7 +45,11 @@ class PublicacaoController extends Controller
     {
         try {
 
+            $user = AuthenticatedUserFactory::fromAuth();
             $publicacao = $this->publicacaoService->find($id);
+
+            $this->interacoesService->registrarVisualizacao($publicacao, $user);
+
             return ApiResponse::success(
                 new PublicacaoResource($publicacao), 
                 'Detalhes da publicação.', 
@@ -55,7 +65,9 @@ class PublicacaoController extends Controller
     {
         try {
 
-            $this->publicacaoService->adicionarReacao($id, auth()->user());
+            $user = AuthenticatedUserFactory::fromAuth();
+            $this->interacoesService->adicionarReacao($id, $user);
+
             return ApiResponse::success(
                 null, 
                 'Publicação curtida com sucesso.', 
@@ -70,7 +82,10 @@ class PublicacaoController extends Controller
     public function removerReacao(string $id)
     {
         try {
-            $this->publicacaoService->removerReacao($id, auth()->user());
+
+            $user = AuthenticatedUserFactory::fromAuth();
+            $this->interacoesService->removerReacao($id, $user);
+
             return ApiResponse::success(
                 null, 
                 'Curtida removida com sucesso.', 
@@ -86,8 +101,10 @@ class PublicacaoController extends Controller
     {
         try {
 
+            $user = AuthenticatedUserFactory::fromAuth();
             $publicacao = $this->publicacaoService->find($id);
-            $this->publicacaoService->delete($publicacao, auth()->user());
+
+            $this->publicacaoService->delete($publicacao, $user);
 
             return ApiResponse::success(
                 null, 
@@ -104,10 +121,12 @@ class PublicacaoController extends Controller
     {
         try {
 
+            $user = AuthenticatedUserFactory::fromAuth();
+
             $limite = $request->get('limite', 15);
             $page = $request->get('page', 1);
 
-            $recomendadas = $this->publicacaoService->listFeedGeral(auth()->user(), $limite * $page);
+            $recomendadas = $this->publicacaoService->listFeedGeral($user, $limite * $page);
 
             $paginated = PaginatorService::paginateCollection($recomendadas, $limite, $page);
 
@@ -126,10 +145,12 @@ class PublicacaoController extends Controller
     {
         try {
 
+            $user = AuthenticatedUserFactory::fromAuth();
+
             $limite = $request->get('limite', 15);
             $page = $request->get('page', 1);
 
-            $recomendadas = $this->publicacaoService->listFeedCurso(auth()->user(), $limite * $page);
+            $recomendadas = $this->publicacaoService->listFeedCurso($user, $limite * $page);
 
             $paginated = PaginatorService::paginateCollection($recomendadas, $limite, $page);
 

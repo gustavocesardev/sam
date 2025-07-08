@@ -4,7 +4,7 @@ namespace App\Infrastructure\Persistence\Repository\Publicacao;
 
 use App\Domain\Model\Abstract\PublicacaoReacaoAbstract;
 use App\Domain\Model\Publicacao\PublicacaoReacao;
-use App\Domain\Repository\ReacaoRepositoryInterface;
+use App\Domain\Repository\Publicacao\ReacaoRepositoryInterface;
 
 class PublicacaoReacaoRepository implements ReacaoRepositoryInterface
 {

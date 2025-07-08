@@ -4,19 +4,20 @@ namespace App\Http\Controllers\Api\GrupoEstudo;
 
 use App\Application\Services\GrupoEstudo\MembroService;
 use App\Domain\Exceptions\AppException;
-use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\GrupoEstudo\MembroRequest;
 use App\Http\Resources\GrupoEstudo\MembroResource;
 use App\Http\Utils\ApiResponse;
 
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class MembroController extends Controller
 {
     public function __construct(private MembroService $membroService) {}
 
-    public function show(int $id)
+    public function show(int $id): JsonResponse
     {
         try {
 
@@ -32,7 +33,7 @@ class MembroController extends Controller
         }
     }
 
-    public function store(MembroRequest $request)
+    public function store(MembroRequest $request): JsonResponse
     {
         try {
 
@@ -41,38 +42,6 @@ class MembroController extends Controller
                 new MembroResource($membro),
                 'Membro adicionado com sucesso', 
                 Response::HTTP_CREATED
-            );
-
-        } catch(AppException $exception) {
-            return ApiResponse::error($exception);
-        }
-    }
-
-    public function ativar(string $id)
-    {
-        try {
-
-            $this->membroService->ativarMembro($id);
-            return ApiResponse::success(
-                null, 
-                'Membro ativado com sucesso', 
-                Response::HTTP_OK
-            );
-
-        } catch(AppException $exception) {
-            return ApiResponse::error($exception);
-        }
-    }
-
-    public function inativar(string $id)
-    {
-        try {
-
-            $this->membroService->inativarMembro($id);
-            return ApiResponse::success(
-                null, 
-                'Membro inativado com sucesso', 
-                Response::HTTP_OK
             );
 
         } catch(AppException $exception) {

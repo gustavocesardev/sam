@@ -2,18 +2,19 @@
 
 namespace App\Application\Services\GrupoEstudo;
 
-use App\Application\Contracts\CryptoServiceInterface;
-use App\Application\Contracts\ImageProcessorInterface;
+use App\Application\Contracts\Infrastructure\CryptoServiceInterface;
+use App\Application\Contracts\Infrastructure\ImageProcessorInterface;
 
 use App\Domain\Model\GrupoEstudo\GrupoEstudo;
-use App\Domain\Model\User;
 use App\Domain\Repository\GrupoEstudo\GrupoEstudoRepositoryInterface;
 
+use App\Domain\VO\Auth\AuthenticatedUser;
 use Illuminate\Http\UploadedFile;
 
 class GrupoEstudoService
 {
     public function __construct(
+        private MembroService $membroService,
         private GrupoEstudoRepositoryInterface $grupoEstudoRepository,
         private ImageProcessorInterface $imageProcessor,
         private CryptoServiceInterface $cryptoService
@@ -31,7 +32,12 @@ class GrupoEstudoService
         $this->atualizarImagem($grupoEstudo, $data['imagem']);
         $this->atualizarImagemHeader($grupoEstudo, $data['imagem_header']);
 
-        return $grupoEstudo->atualizar();
+        $this->membroService->store([
+            'id_usuario' => $grupoEstudo->id_usuario,
+            'id_grupo_estudo' => $grupoEstudo->id,
+        ]);
+
+        return $grupoEstudo->reload();
     }
 
     public function update(int $id, array $data): GrupoEstudo
@@ -41,10 +47,10 @@ class GrupoEstudoService
         $this->atualizarImagem($grupoEstudo, $data['imagem']);
         $this->atualizarImagemHeader($grupoEstudo, $data['imagem_header']);
 
-        return $grupoEstudo->atualizar();
+        return $grupoEstudo->reload();
     }
 
-    public function atualizarImagem(GrupoEstudo $grupoEstudo, UploadedFile $imagem)
+    public function atualizarImagem(GrupoEstudo $grupoEstudo, UploadedFile $imagem): void
     {
         if (!empty($grupoEstudo->imagem))
         {
@@ -57,7 +63,7 @@ class GrupoEstudoService
         $grupoEstudo->updateImagem($hashPath);
     }
 
-    public function atualizarImagemHeader(GrupoEstudo $grupoEstudo, UploadedFile $imagem)
+    public function atualizarImagemHeader(GrupoEstudo $grupoEstudo, UploadedFile $imagem): void
     {
         if (!empty($grupoEstudo->imagem_header))
         {
@@ -70,11 +76,11 @@ class GrupoEstudoService
         $grupoEstudo->updateImagemHeader($hashPath);
     }
 
-    public function delete(int $id, User $usuario)
+    public function delete(int $id, AuthenticatedUser $user): void
     {
         $grupoEstudo = $this->find(id: $id);
 
-        if ($grupoEstudo->id_usuario == $usuario->id)
+        if ($grupoEstudo->id_usuario == $user->id())
         {
             $this->imageProcessor->excluirDiretorio($grupoEstudo->getBasePath());
             $grupoEstudo->excluir();

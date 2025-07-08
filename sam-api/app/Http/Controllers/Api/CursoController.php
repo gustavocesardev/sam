@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Application\Services\CursoService;
+
 use App\Domain\Exceptions\AppException;
 
 use App\Http\Controllers\Controller;
@@ -10,8 +11,8 @@ use App\Http\Requests\Store\CursoRequest;
 use App\Http\Resources\CursoResource;
 use App\Http\Utils\ApiResponse;
 
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CursoController extends Controller
 {
@@ -65,7 +66,7 @@ class CursoController extends Controller
         }
     }
 
-    public function update(CursoRequest $request, string $id)
+    public function update(CursoRequest $request, string $id): JsonResponse
     {
         try {
 

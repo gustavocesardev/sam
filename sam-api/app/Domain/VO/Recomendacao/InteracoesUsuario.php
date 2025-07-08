@@ -3,8 +3,9 @@
 namespace App\Domain\VO\Recomendacao;
 
 use App\Domain\Model\User;
+use App\Domain\VO\Recomendacao\Abstract\Interacoes;
 
-class InteracoesUsuario
+class InteracoesUsuario extends Interacoes
 {
     public function __construct(
         public User $usuario,
@@ -12,36 +13,18 @@ class InteracoesUsuario
         public array $visualizacoes
     ) {}
 
-    public function getPublicacoesCurtidasIds(): array
-    {
-        return array_map(fn($r) => $r->id_publicacao, $this->reacoes);
-    }
-
-    public function getPublicacoesVisualizadasIds(): array
-    {
-        return array_map(fn($v) => $v->id_publicacao, $this->visualizacoes);
-    }
-
-    public function getIdUsuario()
+    public function getIdUsuario(): int
     {
         return $this->usuario->id;
     }
 
-    public function getUsuarioIdCurso()
+    public function getUsuarioIdCurso(): int
     {
         return $this->usuario->curso->id;
     }
 
-    public function getUsuarioIdInstituicao()
+    public function getUsuarioIdInstituicao(): int
     {
         return $this->usuario->curso->instituicao->id;
-    }
-
-    public function getIdsIgnorados(): array
-    {
-        return array_unique(array_merge(
-            $this->getPublicacoesCurtidasIds(),
-            $this->getPublicacoesVisualizadasIds()
-        ));
     }
 }

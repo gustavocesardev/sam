@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Services;
 
-use App\Application\Contracts\ImageProcessorInterface;
+use App\Application\Contracts\Infrastructure\ImageProcessorInterface;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;

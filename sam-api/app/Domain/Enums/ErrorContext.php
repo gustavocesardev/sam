@@ -6,6 +6,7 @@ class ErrorContext
 {
     const LOGIN = 'app.login';
     const REGISTER = 'app.register';
+    const EMAIL_VERIFY = 'app.email_verify';
     const IMAGE = 'app.image';
     const AUTH_ACCESS_TOKEN = 'app.auth.access_token';
     const AUTH_REFRESH_TOKEN = 'app.auth.refresh_token';
@@ -22,6 +23,7 @@ class ErrorContext
         self::AUTH_REFRESH_TOKEN => 'Erro ao gerar o Refresh Token.',
         self::IMAGE => 'Erro ao processar solicitação de imagem.',
         self::LOGIN => 'Erro ao efetuar o login do usuário',
+        self::EMAIL_VERIFY => 'Erro ao efetuar a verificação do e-mail.',
         self::REGISTER => 'Erro ao efetuar o registro do usuário.',
         self::INSTITUICAO => 'Erro ao registrar/atualizar uma instituição.',
         self::CURSO => 'Erro ao registrar/atualizar um curso.',

@@ -6,11 +6,13 @@ use App\Domain\Model\GrupoEstudo\GrupoEstudo;
 use App\Domain\Model\GrupoEstudo\Membro;
 
 use Database\Factories\UserFactory;
+use Hash;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -54,7 +56,7 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
         
@@ -68,12 +70,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Curso::class, 'id_curso');
     }
 
-    public function gruposEstudo()
+    public function gruposEstudo(): HasMany
     {
         return $this->hasMany(GrupoEstudo::class, 'id_usuario');
     }
 
-    public function membrosGrupoEstudo()
+    public function membrosGrupoEstudo(): HasMany
     {
         return $this->hasMany(Membro::class, 'id_usuario');
     }
@@ -103,18 +105,28 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->save();
     }
 
-    public function updateFotoPerfil(string $newPath): void
+    public function updateFotoPerfil(string $newPath = ''): void
     {
         $this->foto_perfil = $newPath;
         $this->save();
     }
 
-    public function atualizar()
+    public function reload(): User
     {
         return $this->refresh();
     }
 
-    protected static function newFactory()
+    public function verificarEmailHash(string $hash): bool
+    {
+        return hash_equals($hash, sha1($this->getEmailForVerification()));
+    }
+
+    public function verificarSenha(string $senha): bool
+    {
+        return Hash::check($senha, $this->password);
+    }
+
+    protected static function newFactory(): UserFactory
     {
         return UserFactory::new();
     }

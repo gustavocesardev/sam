@@ -8,7 +8,7 @@ class UserRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true; // ou valida com policy, se necessário
+        return true;
     }
 
     public function rules(): array

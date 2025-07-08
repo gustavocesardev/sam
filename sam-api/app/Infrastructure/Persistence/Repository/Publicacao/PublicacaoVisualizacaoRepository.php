@@ -3,7 +3,7 @@
 namespace App\Infrastructure\Persistence\Repository\Publicacao;
 
 use App\Domain\Model\Publicacao\PublicacaoVisualizacao;
-use App\Domain\Repository\VisualizacaoRepositoryInterface;
+use App\Domain\Repository\Publicacao\VisualizacaoRepositoryInterface;
 
 class PublicacaoVisualizacaoRepository implements VisualizacaoRepositoryInterface
 {

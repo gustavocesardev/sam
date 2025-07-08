@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Contracts;
+namespace App\Application\Contracts\Infrastructure;
 
 interface CryptoServiceInterface
 {

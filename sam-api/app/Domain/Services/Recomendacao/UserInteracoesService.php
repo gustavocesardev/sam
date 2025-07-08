@@ -3,8 +3,8 @@
 namespace App\Domain\Services\Recomendacao;
 
 use App\Domain\Model\User;
-use App\Domain\Repository\ReacaoRepositoryInterface;
-use App\Domain\Repository\VisualizacaoRepositoryInterface;
+use App\Domain\Repository\Publicacao\ReacaoRepositoryInterface;
+use App\Domain\Repository\Publicacao\VisualizacaoRepositoryInterface;
 use App\Domain\VO\Recomendacao\InteracoesUsuario;
 
 class UserInteracoesService

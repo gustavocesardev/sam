@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Api\GrupoEstudo;
 
+use App\Application\Factories\AuthenticatedUserFactory;
+use App\Application\Services\GrupoEstudo\InteracoesService;
 use App\Application\Services\GrupoEstudo\PublicacaoService;
+
 use App\Domain\Exceptions\AppException;
 
 use App\Http\Controllers\Controller;
@@ -10,13 +13,17 @@ use App\Http\Requests\Store\GrupoEstudo\PublicacaoRequest;
 use App\Http\Resources\GrupoEstudo\PublicacaoResource;
 use App\Http\Utils\ApiResponse;
 
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class PublicacaoController extends Controller
 {
-    public function __construct(private PublicacaoService $publicacaoService) {}
+    public function __construct(
+        private PublicacaoService $publicacaoService,
+        private InteracoesService $interacoesService
+    ) {}
 
-    public function store(PublicacaoRequest $request)
+    public function store(PublicacaoRequest $request): JsonResponse
     {
         try {
 
@@ -32,11 +39,15 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         try {
 
+            $user = AuthenticatedUserFactory::fromAuth();
             $publicacao = $this->publicacaoService->find($id);
+
+            $this->interacoesService->registrarVisualizacao($publicacao, $user);
+
             return ApiResponse::success(
                 new PublicacaoResource($publicacao), 
                 'Detalhes da publicação.', 
@@ -48,11 +59,13 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function adicionarReacao(string $id)
+    public function adicionarReacao(string $id): JsonResponse
     {
         try {
 
-            $this->publicacaoService->adicionarReacao($id, auth()->user());
+            $user = AuthenticatedUserFactory::fromAuth();
+            $this->interacoesService->adicionarReacao($id, $user);
+            
             return ApiResponse::success(
                 null, 
                 'Publicação curtida com sucesso.', 
@@ -64,11 +77,13 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function removerReacao(string $id)
+    public function removerReacao(string $id): JsonResponse
     {
         try {
 
-            $this->publicacaoService->removerReacao($id, auth()->user());
+            $user = AuthenticatedUserFactory::fromAuth();
+            $this->interacoesService->removerReacao($id, $user);
+
             return ApiResponse::success(
                 null, 
                 'Curtida removida com sucesso.', 
@@ -80,12 +95,14 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(string $id): JsonResponse
     {
         try {
 
+            $user = AuthenticatedUserFactory::fromAuth();
             $publicacao = $this->publicacaoService->find($id);
-            $this->publicacaoService->delete($publicacao, auth()->user());
+
+            $this->publicacaoService->delete($publicacao, $user);
 
             return ApiResponse::success(
                 null, 

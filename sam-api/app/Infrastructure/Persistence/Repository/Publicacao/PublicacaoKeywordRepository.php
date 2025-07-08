@@ -3,7 +3,7 @@
 namespace App\Infrastructure\Persistence\Repository\Publicacao;
 
 use App\Domain\Model\Publicacao\PublicacaoKeyword;
-use App\Domain\Repository\KeywordRepositoryInterface;
+use App\Domain\Repository\Publicacao\KeywordRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 
 class PublicacaoKeywordRepository implements KeywordRepositoryInterface

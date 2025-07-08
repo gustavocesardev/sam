@@ -27,6 +27,11 @@ class Publicacao extends PublicacaoAbstract
         return $this->id_membro;
     }
 
+    public function getIdGrupoEstudo(): int
+    {
+        return $this->membro->grupoEstudo->id;
+    }
+
     protected static function boot(): void
     {
         parent::boot();
@@ -40,7 +45,6 @@ class Publicacao extends PublicacaoAbstract
     {
         return $this->belongsTo(Membro::class, 'id_membro');
     }
-
     
     public function publicacaoVinculada(): BelongsTo
     {

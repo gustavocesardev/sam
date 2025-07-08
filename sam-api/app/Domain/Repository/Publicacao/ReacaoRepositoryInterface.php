@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Domain\Repository;
+namespace App\Domain\Repository\Publicacao;
 
 use App\Domain\Model\Abstract\PublicacaoReacaoAbstract;
+use App\Domain\Repository\Abstract\ReacaoRepositoryAbstract;
 
-interface ReacaoRepositoryInterface
+interface ReacaoRepositoryInterface extends ReacaoRepositoryAbstract
 {
     public function findByPublicacaoAndUsuario(int $idPublicacao, int $idUsuario): ?PublicacaoReacaoAbstract;
     public function savePublicacaoReacao(int $idPublicacao, int $idUsuario): void;

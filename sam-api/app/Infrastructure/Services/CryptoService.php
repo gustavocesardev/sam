@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Application\Services;
+namespace App\Infrastructure\Services;
 
-use App\Application\Contracts\CryptoServiceInterface;
+use App\Application\Contracts\Infrastructure\CryptoServiceInterface;
+
 use Illuminate\Support\Facades\Crypt;
 
 class CryptoService implements CryptoServiceInterface

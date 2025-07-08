@@ -15,8 +15,8 @@ class CursoRequest extends FormRequest
     {
         return [
             'id_instituicao' => ['required', 'integer'],
-            'nome_curso' => ['required', 'string', 'max:150'],
-            'situacao' => ['string', 'in:A,I'],
+            'nome_curso'     => ['required', 'string', 'max:150'],
+            'situacao'       => ['string', 'in:A,I'],
             'duracao_minima' => ['required', 'integer', 'min:1'],
             'duracao_maxima' => ['required', 'integer', 'min:1', 'gte:duracao_minima']
         ];
@@ -26,7 +26,7 @@ class CursoRequest extends FormRequest
     {
         return [
             'id_instituicao.required' => 'O atributo id_instituicao é obrigatório.',
-            'id_instituicao.integer'   => 'O atributo id_instituicao deve ser um número inteiro',
+            'id_instituicao.integer'  => 'O atributo id_instituicao deve ser um número inteiro',
     
             'nome_curso.required' => 'O atributo nome_curso é obrigatório.',
             'nome_curso.string'   => 'O atributo nome_curso deve ser um texto.',

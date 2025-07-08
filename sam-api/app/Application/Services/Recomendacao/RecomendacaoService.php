@@ -42,7 +42,7 @@ class RecomendacaoService
         return $feedFinal;
     }
 
-    private function filtrarPorConteudoByCurso(InteracoesUsuario $interacoes, int $limite)
+    private function filtrarPorConteudoByCurso(InteracoesUsuario $interacoes, int $limite): Collection
     {
         $keywords = $this->extrator->extrairInteracoesUsuario($interacoes);
         $recomendadas = $this->recomendador->recomendarByCurso($keywords, $interacoes, $limite);

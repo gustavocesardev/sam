@@ -2,8 +2,7 @@
 
 namespace App\Application\Services\GrupoEstudo;
 
-use App\Domain\Enums\ErrorContext;
-use App\Domain\Exceptions\MembroExistsException;
+use App\Domain\Model\GrupoEstudo\Membro;
 use App\Domain\Repository\GrupoEstudo\MembroRepositoryInterface;
 use App\Domain\Repository\UserRepositoryInterface;
 
@@ -20,29 +19,20 @@ class MembroService
         return $membro;
     }
 
-    public function store(array $data)
+    public function store(array $data): Membro
     {
         $usuario = $this->userRepository->find($data['id_usuario']);
         $isUsuarioIngressado = $this->membroRepository->isUsuarioIngressado($usuario, $data['id_grupo_estudo']);
 
         if ($isUsuarioIngressado)
         {
-            throw new MembroExistsException(ErrorContext::GRUPO_ESTUDO_MEMBRO,);
+            $membro = $this->membroRepository->findByUsuarioAndGrupo($usuario->id, $data['id_grupo_estudo']);
+            $membro = $this->membroRepository->update($membro->id, $data);
+
+            return $membro;
         }
 
         $membro = $this->membroRepository->store($data);
-        return $membro->atualizar();
-    }
-
-    public function ativarMembro(int $id)
-    {
-        $membro = $this->membroRepository->find($id);
-        $membro->ativar();
-    }
-
-    public function inativarMembro(int $id)
-    {
-        $membro = $this->membroRepository->find($id);
-        $membro->inativar();
+        return $membro;
     }
 }

@@ -38,7 +38,7 @@ abstract class PublicacaoAbstract extends Model
         return $this->save();
     }
 
-    public function atualizar(): PublicacaoAbstract
+    public function reload(): PublicacaoAbstract
     {
         return $this->refresh();
     }
@@ -61,6 +61,7 @@ abstract class PublicacaoAbstract extends Model
     public function adicionarVisualizacao(): void
     {
         $this->qtde_visualizacoes += 1;
+        $this->save();
     }
 
     public abstract function getBasePath(): string;

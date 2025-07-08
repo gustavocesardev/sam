@@ -2,69 +2,59 @@
 
 namespace App\Application\Services;
 
-use App\Application\Contracts\OAuthClientInterface;
+use App\Application\Contracts\Infrastructure\EmailNotifierInterface;
+use App\Application\Contracts\Infrastructure\OAuthClientInterface;
+
 use App\Domain\Enums\ErrorContext;
+use App\Domain\Exceptions\EmailException;
 use App\Domain\Exceptions\LoginException;
-
-use App\Domain\VO\Status;
-use App\Domain\VO\Email;
-
-use App\Infrastructure\Jobs\SendVerifyEmailJob;
-
-use Bus;
-use Hash;
-use URL;
+use App\Domain\Model\User;
 
 class AuthService
 {
     public function __construct(
         private UserService $userService,
-        private OAuthClientInterface $oauthClient
+        private OAuthClientInterface $oauthClient,
+        private EmailNotifierInterface $notifier
     ) {}
 
-    public function register(array $data)
+    public function register(array $data): void
     {
         $this->userService->validarEmail($data['id_instituicao'], $data['email']);
-
         $user = $this->userService->store($data);
-        $email = new Email($user->getEmailForVerification());
 
-        $verifyEmail = URL::signedRoute('verification.verify', [
-            'id' => $user->id,
-            'hash' => $email->getHash(),
-        ]);
-        
-        Bus::dispatchAfterResponse(new SendVerifyEmailJob($email->get(), [
-            'name' => $user->name,
-            'verification_url' => $verifyEmail
-        ]));
+        $this->notifier->enviarVerificacao($user);
     }
 
-    // TODO : Criar VIEW para exibir as mensagens de forma mais amigável
-    public function verifyEmail(array $data): Status
+    public function verifyEmail(array $data): User
     {
         $user = $this->userService->find($data['id']);
 
-        if (!hash_equals((string) $data['hash'], sha1($user->getEmailForVerification())))
+        if (!$user->verificarEmailHash($data['hash']))
         {
-            return Status::error('Link inválido ou expirado.');
+            throw new EmailException(
+                ErrorContext::EMAIL_VERIFY, 
+                'Link inválido ou expirado.'
+            );
         }
 
         if ($user->hasVerifiedEmail())
         {
-            return Status::success('E-mail já verificado.');
+            throw new EmailException(
+                ErrorContext::EMAIL_VERIFY,
+                'E-mail já verificado.'
+            );
         }
 
         $user->markEmailAsVerified();
-        
-        return Status::success('E-mail verificado com sucesso.');
+        return $user->reload();
     }
 
     public function login(array $data)
     {
         $user = $this->userService->findByEmail($data['email']);
 
-        if (!$user || !Hash::check($data['password'], $user->password))
+        if (!$user || !$user->verificarSenha($data['password']))
         {
             throw new LoginException(
                 ErrorContext::LOGIN, 

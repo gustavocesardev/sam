@@ -9,11 +9,12 @@ use App\Http\Controllers\Api\CursoController;
 use App\Http\Controllers\Api\InstituicaoController;
 use App\Http\Controllers\Api\UserController;
 
+use App\Http\Controllers\Api\PublicacaoController as PublicacaoController;
+
 use App\Http\Controllers\Api\GrupoEstudo\GrupoEstudoController;
 use App\Http\Controllers\Api\GrupoEstudo\MembroController;
 use App\Http\Controllers\Api\GrupoEstudo\PublicacaoController as GrupoEstudoPublicacaoController;
 
-use App\Http\Controllers\Api\PublicacaoController as PublicacaoController;
 
 // Rotas de login e verificação de e-mail
 Route::post('/register', [AuthController::class, 'register']);
@@ -56,8 +57,10 @@ Route::middleware('auth:api')->prefix('user')->group(function () {
 Route::middleware('auth:api')->prefix('publicacao')->group(function () {
     Route::post('/', [PublicacaoController::class, 'store']);
     Route::get('{id}', [PublicacaoController::class, 'show']);
-    Route::post('/reacao/insert/{id}', [PublicacaoController::class, 'adicionarReacao']);
-    Route::post('/reacao/remove/{id}', [PublicacaoController::class, 'removerReacao']);
+
+    Route::post('/reacao/{id}', [PublicacaoController::class, 'adicionarReacao']);
+    Route::delete('/reacao/{id}', [PublicacaoController::class, 'removerReacao']);
+
     Route::delete('{id}', [PublicacaoController::class, 'destroy']);
 });
 
@@ -80,15 +83,15 @@ Route::middleware('auth:api')->prefix('grupo-estudo/membro')->group(function () 
     
     Route::post('/', [MembroController::class, 'store']);
     Route::get('{id}', [MembroController::class, 'show']);
-    Route::get('/ativar/{id}', [MembroController::class, 'ativar']);
-    Route::get('/inativar/{id}', [MembroController::class, 'inativar']);
 });
 
 Route::middleware('auth:api')->prefix('grupo-estudo/publicacao')->group(function () {
     
     Route::post('/', [GrupoEstudoPublicacaoController::class, 'store']);
     Route::get('{id}', [GrupoEstudoPublicacaoController::class, 'show']);
-    Route::post('/reacao/insert/{id}', [GrupoEstudoPublicacaoController::class, 'adicionarReacao']);
-    Route::post('/reacao/remove/{id}', [GrupoEstudoPublicacaoController::class, 'removerReacao']);
+
+    Route::post('/reacao/{id}', [GrupoEstudoPublicacaoController::class, 'adicionarReacao']);
+    Route::delete('/reacao/{id}', [GrupoEstudoPublicacaoController::class, 'removerReacao']);
+    
     Route::delete('{id}', [GrupoEstudoPublicacaoController::class, 'destroy']);
 });
