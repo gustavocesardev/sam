@@ -2,9 +2,9 @@
 
 namespace App\Domain\Repository\Publicacao;
 
-use App\Domain\Repository\Abstract\KeywordRepositoryAbstract;
+use App\Domain\Repository\Contracts\KeywordRepositoryContract;
 
-interface KeywordRepositoryInterface extends KeywordRepositoryAbstract
+interface KeywordRepositoryInterface extends KeywordRepositoryContract
 {
     //
 }

@@ -29,9 +29,9 @@ class ErrorContext
         self::CURSO => 'Erro ao registrar/atualizar um curso.',
         self::USER => 'Erro ao registrar/atualizar um usuário.',
         self::PUBLICACAO => 'Erro ao registrar/atualizar uma publicação.',
-        self::GRUPO_ESTUDO => 'Erro ao registrar/atualizar um grupo de estudo',
-        self::GRUPO_ESTUDO_PUBLICACAO => 'Erro ao registrar/atualizar uma publicação do grupo de estudo',
-        self::GRUPO_ESTUDO_MEMBRO => 'Erro ao registrar um membro no grupo de estudo'
+        self::GRUPO_ESTUDO => 'Erro ao registrar/atualizar um grupo de estudo.',
+        self::GRUPO_ESTUDO_PUBLICACAO => 'Erro ao registrar/atualizar uma publicação do grupo de estudo.',
+        self::GRUPO_ESTUDO_MEMBRO => 'Erro referente a um membro no grupo de estudo.'
     ];
 
     public static function getDescription($context): mixed

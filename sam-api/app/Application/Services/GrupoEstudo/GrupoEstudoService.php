@@ -7,8 +7,8 @@ use App\Application\Contracts\Infrastructure\ImageProcessorInterface;
 
 use App\Domain\Model\GrupoEstudo\GrupoEstudo;
 use App\Domain\Repository\GrupoEstudo\GrupoEstudoRepositoryInterface;
-
 use App\Domain\VO\Auth\AuthenticatedUser;
+
 use Illuminate\Http\UploadedFile;
 
 class GrupoEstudoService

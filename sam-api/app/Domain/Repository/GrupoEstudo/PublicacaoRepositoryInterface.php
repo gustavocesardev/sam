@@ -2,9 +2,9 @@
 
 namespace App\Domain\Repository\GrupoEstudo;
 
-use App\Domain\Repository\Abstract\PublicacaoRepositoryAbstract;
+use App\Domain\Repository\Contracts\PublicacaoRepositoryContract;
 
-interface PublicacaoRepositoryInterface extends PublicacaoRepositoryAbstract
+interface PublicacaoRepositoryInterface extends PublicacaoRepositoryContract
 {
    //
 }

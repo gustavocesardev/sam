@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Application\Services\Recomendacao;
+namespace App\Application\Services\Publicacao;
 
 use App\Domain\Model\User;
-use App\Domain\Services\KeywordService;
-use App\Domain\Services\Recomendacao\FeedService;
-use App\Domain\Services\Recomendacao\RecomendadorPublicacoesService;
-use App\Domain\Services\Recomendacao\UserInteracoesService;
+
+use App\Domain\Services\Recomendacao\Publicacao\FeedService;
+use App\Domain\Services\Recomendacao\Publicacao\KeywordService;
+use App\Domain\Services\Recomendacao\Publicacao\RecomendadorService;
+use App\Domain\Services\Recomendacao\Publicacao\UserInteracoesService;
 use App\Domain\VO\Recomendacao\InteracoesUsuario;
 
 use Illuminate\Database\Eloquent\Collection;
@@ -16,25 +17,25 @@ class RecomendacaoService
     public function __construct(
         protected UserInteracoesService $coletor,
         protected KeywordService $extrator,
-        protected RecomendadorPublicacoesService $recomendador,
+        protected RecomendadorService $recomendador,
         protected FeedService $ordenador
     ) {}
 
     public function recomendarFeed(User $usuario, int $limite = 10): Collection
     {
-        $interacoes = $this->coletor->collectPublicacoes($usuario);
+        $interacoes = $this->coletor->collectInteracoes($usuario);
         return $this->filtrarPorConteudo($interacoes, $limite);
     }
 
     public function recomendarFeedPorCurso(User $usuario, int $limite = 10): Collection
     {
-        $interacoes = $this->coletor->collectPublicacoesByCurso($usuario);
+        $interacoes = $this->coletor->collectInteracoesByCurso($usuario);
         return $this->filtrarPorConteudoByCurso($interacoes, $limite);
     }
 
     private function filtrarPorConteudo(InteracoesUsuario $interacoes, int $limite): Collection
     {
-        $keywords = $this->extrator->extrairInteracoesUsuario($interacoes);
+        $keywords = $this->extrator->extractKeywordsByInteracoes($interacoes);
         $recomendadas = $this->recomendador->recomendar($keywords, $interacoes, $limite);
         $completado = $this->recomendador->preencherComPopulares($recomendadas, $interacoes, $limite);
         $feedFinal = $this->ordenador->ordenar($completado, $interacoes);
@@ -44,7 +45,7 @@ class RecomendacaoService
 
     private function filtrarPorConteudoByCurso(InteracoesUsuario $interacoes, int $limite): Collection
     {
-        $keywords = $this->extrator->extrairInteracoesUsuario($interacoes);
+        $keywords = $this->extrator->extractKeywordsByInteracoes($interacoes);
         $recomendadas = $this->recomendador->recomendarByCurso($keywords, $interacoes, $limite);
         $completado = $this->recomendador->preencherComPopularesByCurso($recomendadas, $interacoes, $limite);
         $feedCurso = $this->ordenador->ordenar($completado, $interacoes);

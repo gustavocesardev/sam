@@ -3,9 +3,9 @@
 namespace App\Domain\Repository\Publicacao;
 
 use App\Domain\Model\Abstract\PublicacaoReacaoAbstract;
-use App\Domain\Repository\Abstract\ReacaoRepositoryAbstract;
+use App\Domain\Repository\Contracts\ReacaoRepositoryContract;
 
-interface ReacaoRepositoryInterface extends ReacaoRepositoryAbstract
+interface ReacaoRepositoryInterface extends ReacaoRepositoryContract
 {
     public function findByPublicacaoAndUsuario(int $idPublicacao, int $idUsuario): ?PublicacaoReacaoAbstract;
     public function savePublicacaoReacao(int $idPublicacao, int $idUsuario): void;

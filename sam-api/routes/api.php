@@ -68,6 +68,7 @@ Route::middleware('auth:api')->prefix('publicacao')->group(function () {
 Route::middleware('auth:api')->prefix('feed')->group(function () {
     Route::get('/', [PublicacaoController::class, 'recomendar']);
     Route::get('/curso', [PublicacaoController::class, 'recomendarCurso']);
+    Route::get('/grupo-estudo/{id}', [GrupoEstudoPublicacaoController::class, 'recomendar']);
 });
 
 // Rotas referentes ao grupo de estudo

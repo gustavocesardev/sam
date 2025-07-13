@@ -2,9 +2,9 @@
 
 namespace App\Domain\Repository\Publicacao;
 
-use App\Domain\Repository\Abstract\VisualizacaoRepositoryAbstract;
+use App\Domain\Repository\Contracts\VisualizacaoRepositoryContract;
 
-interface VisualizacaoRepositoryInterface extends VisualizacaoRepositoryAbstract
+interface VisualizacaoRepositoryInterface extends VisualizacaoRepositoryContract
 {
     public function store(int $idPublicacao, int $idUsuario): void;
     public function findByUser(int $idUsuario): array;

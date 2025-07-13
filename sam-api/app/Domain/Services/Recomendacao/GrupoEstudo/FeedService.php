@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Domain\Services\Recomendacao;
+namespace App\Domain\Services\Recomendacao\GrupoEstudo;
 
-use App\Domain\Repository\Abstract\PublicacaoRepositoryAbstract;
-use App\Domain\VO\Recomendacao\InteracoesUsuario;
+use App\Domain\Repository\GrupoEstudo\PublicacaoRepositoryInterface;
+use App\Domain\VO\Recomendacao\InteracoesMembro;
+
 use Illuminate\Database\Eloquent\Collection;
 
 class FeedService
 {
-    public function __construct(protected PublicacaoRepositoryAbstract $publicacaoRepository) {}
+    public function __construct(protected PublicacaoRepositoryInterface $publicacaoRepository) {}
 
-    public function ordenar(Collection $recomendadas, InteracoesUsuario $interacoes): Collection
+    public function ordenar(Collection $recomendadas, InteracoesMembro $interacoes): Collection
     {
         $recomendadas->each(fn($p) => $p->prioridade = 1);
 

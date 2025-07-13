@@ -2,18 +2,18 @@
 
 namespace App\Infrastructure\Persistence\Repository\GrupoEstudo;
 
-use App\Domain\Model\GrupoEstudo\Membro;
 use App\Domain\Model\User;
+use App\Domain\Model\GrupoEstudo\Membro;
 use App\Domain\Repository\GrupoEstudo\MembroRepositoryInterface;
 
 class MembroRepository implements MembroRepositoryInterface
 {
-    public function find(int $id): Membro
+    public function find(int $id): ?Membro
     {
         return Membro::findOrFail($id);
     }
 
-     public function findByUsuarioAndGrupo(int $idUsuario, int $idGrupoEstudo): Membro
+     public function findByUsuarioAndGrupo(int $idUsuario, int $idGrupoEstudo): ?Membro
     {
         return Membro::where('id_usuario', $idUsuario)
                      ->where('id_grupo_estudo', $idGrupoEstudo)

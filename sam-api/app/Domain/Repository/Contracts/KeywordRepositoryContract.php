@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Domain\Repository\Abstract;
+namespace App\Domain\Repository\Contracts;
 
 use Illuminate\Database\Eloquent\Collection;
 
-interface KeywordRepositoryAbstract
+interface KeywordRepositoryContract
 {
     public function saveMany(int $idPublicacao, array $keywords): void;
     public function findByPublicacao(int $idPublicacao): array;

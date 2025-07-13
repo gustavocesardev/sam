@@ -4,27 +4,19 @@ namespace App\Application\Services\Abstract;
 
 use App\Application\Contracts\Infrastructure\CryptoServiceInterface;
 use App\Application\Contracts\Infrastructure\ImageProcessorInterface;
-use App\Domain\Services\KeywordService;
 
 use App\Domain\Model\Abstract\PublicacaoAbstract;
-
-use App\Domain\Repository\Abstract\PublicacaoRepositoryAbstract;
-use App\Domain\Repository\Abstract\ReacaoRepositoryAbstract;
-use App\Domain\Repository\Abstract\VisualizacaoRepositoryAbstract;
-use App\Domain\Repository\UserRepositoryInterface;
-
+use App\Domain\Repository\Contracts\PublicacaoRepositoryContract;
 use App\Domain\Exceptions\UnprocessableEntityException;
+use App\Domain\Services\Abstract\KeywordServiceAbstract;
 use App\Domain\VO\Auth\AuthenticatedUser;
 
 abstract class PublicavelServiceAbstract
 {
     public function __construct(
         protected string $errorContext,
-        protected UserRepositoryInterface $userRepository,
-        protected PublicacaoRepositoryAbstract $publicacaoRepository,
-        protected KeywordService $keywordService,
-        protected VisualizacaoRepositoryAbstract $visualizacaoRepository,
-        protected ReacaoRepositoryAbstract $reacaoRepository,
+        protected PublicacaoRepositoryContract $publicacaoRepository,
+        protected KeywordServiceAbstract $keywordService,
         protected ImageProcessorInterface $imageProcessor,
         protected CryptoServiceInterface $cryptoService
     ) {}
@@ -45,7 +37,7 @@ abstract class PublicavelServiceAbstract
 
         $this->keywordService->publicacaoExtractAndStore($publicacao);
 
-        return $publicacao->atualizar();
+        return $publicacao->reload();
     }
 
     public function find(int $id): PublicacaoAbstract

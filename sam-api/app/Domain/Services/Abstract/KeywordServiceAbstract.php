@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Domain\Services;
+namespace App\Domain\Services\Abstract;
 
 use App\Domain\Model\Abstract\PublicacaoAbstract;
-use App\Domain\Repository\Abstract\KeywordRepositoryAbstract;
-
-use App\Domain\VO\Recomendacao\InteracoesUsuario;
+use App\Domain\Repository\Contracts\KeywordRepositoryContract;
+use App\Domain\VO\Recomendacao\Abstract\Interacoes;
 use App\Domain\VO\Recomendacao\KeywordsRelevantes;
 
 use TextAnalysis\Tokenizers\GeneralTokenizer;
 use TextAnalysis\Filters\StopWordsFilter;
 
-class KeywordService
+abstract class KeywordServiceAbstract
 {
-    public function __construct(private KeywordRepositoryAbstract $keywordRepository) {}
+    public function __construct(private KeywordRepositoryContract $keywordRepository) {}
 
     public function publicacaoExtractAndStore(PublicacaoAbstract $publicacao): void
     {
@@ -44,7 +43,7 @@ class KeywordService
         return strtolower($text);
     }
 
-    public function extrairInteracoesUsuario(InteracoesUsuario $interacoes): KeywordsRelevantes
+    public function extractKeywordsByInteracoes(Interacoes $interacoes): KeywordsRelevantes
     {
         $curtidasIds = $interacoes->getPublicacoesCurtidasIds();
         $visualizadasIds = $interacoes->getPublicacoesVisualizadasIds();
@@ -62,7 +61,7 @@ class KeywordService
     {
         $all = [];
         foreach ($ids as $id) {
-            $all = array_merge($all, $this->keywordRepository->findByPublicacao($id));
+            $all = array_merge($all, $this->keywordRepository->findByPublicacao(idPublicacao: $id));
         }
 
         return array_unique($all);

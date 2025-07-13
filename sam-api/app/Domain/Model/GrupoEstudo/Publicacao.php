@@ -4,12 +4,17 @@ namespace App\Domain\Model\GrupoEstudo;
 
 use App\Domain\Model\Abstract\PublicacaoAbstract;
 
+use Database\Factories\GrupoEstudo\PublicacaoFactory;
+
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Publicacao extends PublicacaoAbstract
 {
+    use HasFactory;
+
     protected $table = 'grupo_estudo_publicacao';
     
     protected $fillable = [
@@ -64,5 +69,10 @@ class Publicacao extends PublicacaoAbstract
     public function visualizacoes(): HasMany
     {
         return $this->hasMany(PublicacaoVisualizacao::class, 'id_publicacao');
+    }
+
+    protected static function newFactory(): PublicacaoFactory
+    {
+        return PublicacaoFactory::new();
     }
 }

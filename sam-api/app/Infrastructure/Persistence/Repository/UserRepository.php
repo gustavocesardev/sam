@@ -4,6 +4,7 @@ namespace App\Infrastructure\Persistence\Repository;
 
 use App\Domain\Model\User;
 use App\Domain\Repository\UserRepositoryInterface;
+
 use Illuminate\Support\Collection;
 
 class UserRepository implements UserRepositoryInterface

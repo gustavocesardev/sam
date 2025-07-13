@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Domain\Model\Curso;
+use App\Domain\Model\Instituicao;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CursoFactory extends Factory
@@ -33,7 +34,7 @@ class CursoFactory extends Factory
         ];
         
         return [
-            'id_instituicao' => 1,
+            'id_instituicao' => Instituicao::factory(),
             'nome_curso' => $this->faker->randomElement($cursosAleatorios) ,
             'situacao' => 'A',
             'duracao_minima' => $this->faker->numberBetween(3, 4),

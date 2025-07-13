@@ -1,13 +1,19 @@
 <?php
 namespace App\Domain\Model;
 
-use Carbon\Carbon;
+use Database\Factories\InstituicaoFactory;
+
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+use Carbon\Carbon;
+
 class Instituicao extends Model
 {
+    use HasFactory;
+
     protected $table = 'instituicao';
 
     protected $fillable = [
@@ -76,5 +82,10 @@ class Instituicao extends Model
         $this->excluido_data = Carbon::now();
 
         return $this->save();
+    }
+
+    protected static function newFactory(): InstituicaoFactory
+    {
+        return InstituicaoFactory::new();
     }
 }

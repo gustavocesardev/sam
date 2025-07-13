@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\GrupoEstudo;
 
 use App\Application\Factories\AuthenticatedUserFactory;
+use App\Application\Services\GrupoEstudo\GrupoEstudoService;
 use App\Application\Services\GrupoEstudo\InteracoesService;
 use App\Application\Services\GrupoEstudo\PublicacaoService;
 
@@ -13,13 +14,16 @@ use App\Http\Requests\Store\GrupoEstudo\PublicacaoRequest;
 use App\Http\Resources\GrupoEstudo\PublicacaoResource;
 use App\Http\Utils\ApiResponse;
 
+use App\Infrastructure\Services\PaginatorService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class PublicacaoController extends Controller
 {
     public function __construct(
         private PublicacaoService $publicacaoService,
+        private GrupoEstudoService $grupoEstudoService,
         private InteracoesService $interacoesService
     ) {}
 
@@ -110,7 +114,31 @@ class PublicacaoController extends Controller
                 Response::HTTP_OK
             );
 
-        } catch(AppException $exception) {
+        } catch (AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function recomendar(string $idGrupo, Request $request) 
+    {
+        try {
+
+            $user = AuthenticatedUserFactory::fromAuth();
+
+            $limite = $request->get('limite', default: 15);
+            $page = $request->get('page', default: 1);
+
+            $grupoEstudo = $this->grupoEstudoService->find($idGrupo);
+            $recomendadas = $this->publicacaoService->listFeedGeral($user, $grupoEstudo, $limite * $page);
+            $paginated = PaginatorService::paginateCollection($recomendadas, $limite, $page);
+
+            return ApiResponse::success(
+                PublicacaoResource::collection($paginated), 
+                'Publicacações do Grupo de estudo', 
+                Response::HTTP_OK
+            );
+
+        } catch (AppException $exception) {
             return ApiResponse::error($exception);
         }
     }

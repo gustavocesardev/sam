@@ -5,6 +5,7 @@ namespace App\Infrastructure\Persistence\Repository\GrupoEstudo;
 use App\Domain\Model\Abstract\PublicacaoAbstract;
 use App\Domain\Model\GrupoEstudo\Publicacao;
 use App\Domain\Repository\GrupoEstudo\PublicacaoRepositoryInterface;
+
 use Illuminate\Database\Eloquent\Collection;
 
 class PublicacaoRepository implements PublicacaoRepositoryInterface
@@ -39,14 +40,21 @@ class PublicacaoRepository implements PublicacaoRepositoryInterface
         $publicacao->save();
     }
 
-    public function searchKeywords(array $keywords, int $limite = 10): Collection
+    public function searchKeywords(int $idGrupoEstudo, array $keywords, int $limite = 10): Collection
     {
-        return Publicacao::whereHas('keywords', function ($query) use ($keywords) {
+        $query = Publicacao::whereHas('keywords', function ($query) use ($keywords) {
             $query->whereIn('keyword', $keywords);
         })
-        ->withCount(['reacoes as likes', 'visualizacoes as views'])
-        ->limit($limite)
-        ->get();
+        ->withCount(['reacoes as likes', 'visualizacoes as views']);
+
+        if (!is_null($idGrupoEstudo))
+        {
+            $query->whereHas('membro.grupoEstudo', function ($query) use ($idGrupoEstudo) {
+                $query->where('id', $idGrupoEstudo);
+            });
+        }
+
+        return $query->limit($limite)->get();
     }
 
     public function searchByIds(array $ids): Collection
@@ -61,13 +69,20 @@ class PublicacaoRepository implements PublicacaoRepositoryInterface
         return $this->searchByIds($ids);
     }
 
-    public function searchMostPopularPublicacoes(array $excluirIds = [], int $limite = 10): Collection
+    public function searchMostPopularPublicacoes(int $idGrupoEstudo, array $excluirIds = [], int $limite = 10): Collection
     {
-        return Publicacao::withCount(['reacoes as likes', 'visualizacoes as views'])
+        $query = Publicacao::withCount(['reacoes as likes', 'visualizacoes as views'])
             ->when(!empty($excluirIds), function ($query) use ($excluirIds) {
                 $query->whereNotIn('id', $excluirIds);
-            })
-            ->limit($limite)
-            ->get();
+            });
+
+        if (!is_null($idGrupoEstudo))
+        {
+            $query->whereHas('membro.grupoEstudo', function ($query) use ($idGrupoEstudo) {
+                $query->where('id', $idGrupoEstudo);
+            });
+        }
+
+        return $query->limit($limite)->get();
     }
 }

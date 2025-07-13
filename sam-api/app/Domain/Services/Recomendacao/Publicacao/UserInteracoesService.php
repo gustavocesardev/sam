@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Services\Recomendacao;
+namespace App\Domain\Services\Recomendacao\Publicacao;
 
 use App\Domain\Model\User;
 use App\Domain\Repository\Publicacao\ReacaoRepositoryInterface;
@@ -14,7 +14,7 @@ class UserInteracoesService
         protected VisualizacaoRepositoryInterface $visualizacaoRepository
     ) {}
 
-    public function collectPublicacoes(User $usuario): InteracoesUsuario
+    public function collectInteracoes(User $usuario): InteracoesUsuario
     {
         $reacoes = $this->reacaoRepository->findByUser($usuario->id);
         $visualizacoes = $this->visualizacaoRepository->findByUser($usuario->id);
@@ -22,7 +22,7 @@ class UserInteracoesService
         return new InteracoesUsuario( $usuario, $reacoes, $visualizacoes);
     }
 
-    public function collectPublicacoesByCurso(User $usuario): InteracoesUsuario
+    public function collectInteracoesByCurso(User $usuario): InteracoesUsuario
     {
         $reacoes = $this->reacaoRepository->findByUserAndCurso($usuario->id, $usuario->curso->id);
         $visualizacoes = $this->visualizacaoRepository->findByUserAndCurso($usuario->id, $usuario->curso->id);

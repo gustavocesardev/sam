@@ -2,13 +2,12 @@
 
 namespace App\Infrastructure\Persistence\Repository\Publicacao;
 
-use App\Domain\Model\Abstract\PublicacaoReacaoAbstract;
 use App\Domain\Model\Publicacao\PublicacaoReacao;
 use App\Domain\Repository\Publicacao\ReacaoRepositoryInterface;
 
 class PublicacaoReacaoRepository implements ReacaoRepositoryInterface
 {
-    public function findByPublicacaoAndUsuario(int $idPublicacao, int $idUsuario): ?PublicacaoReacaoAbstract
+    public function findByPublicacaoAndUsuario(int $idPublicacao, int $idUsuario): ?PublicacaoReacao
     {
         return PublicacaoReacao::where('id_publicacao', $idPublicacao)
                                ->where('id_usuario', $idUsuario)

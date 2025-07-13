@@ -4,6 +4,7 @@ namespace App\Application\Services;
 
 use App\Application\Contracts\Infrastructure\CryptoServiceInterface;
 use App\Application\Contracts\Infrastructure\ImageProcessorInterface;
+
 use App\Domain\Enums\ErrorContext;
 use App\Domain\Exceptions\DuplicateEntryException;
 use App\Domain\Model\Instituicao;

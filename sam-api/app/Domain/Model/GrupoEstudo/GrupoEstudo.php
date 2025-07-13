@@ -5,7 +5,10 @@ namespace App\Domain\Model\GrupoEstudo;
 use App\Domain\Model\Curso;
 use App\Domain\Model\User;
 
+use Database\Factories\GrupoEstudo\GrupoEstudoFactory;
+
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -13,6 +16,8 @@ use Carbon\Carbon;
 
 class GrupoEstudo extends Model
 {
+    use HasFactory;
+
     protected $table = 'grupo_estudo';
     
     protected $fillable = [
@@ -89,5 +94,10 @@ class GrupoEstudo extends Model
     public function reload(): GrupoEstudo
     {
         return $this->refresh();
+    }
+
+    protected static function newFactory(): GrupoEstudoFactory
+    {
+        return GrupoEstudoFactory::new();
     }
 }

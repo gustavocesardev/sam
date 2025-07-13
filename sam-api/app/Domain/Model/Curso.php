@@ -2,12 +2,14 @@
 
 namespace App\Domain\Model;
 
-use Carbon\Carbon;
 use Database\Factories\CursoFactory;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+use Carbon\Carbon;
 
 class Curso extends Model
 {

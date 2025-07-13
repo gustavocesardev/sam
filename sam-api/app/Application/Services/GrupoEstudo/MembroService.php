@@ -13,7 +13,7 @@ class MembroService
         private UserRepositoryInterface $userRepository,
     ) {}
 
-    public function find(int $id)
+    public function find(int $id): Membro|null
     {
         $membro = $this->membroRepository->find($id);
         return $membro;
