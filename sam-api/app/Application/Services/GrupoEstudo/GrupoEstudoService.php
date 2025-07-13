@@ -6,9 +6,11 @@ use App\Application\Contracts\Infrastructure\CryptoServiceInterface;
 use App\Application\Contracts\Infrastructure\ImageProcessorInterface;
 
 use App\Domain\Model\GrupoEstudo\GrupoEstudo;
+use App\Domain\Model\GrupoEstudo\Membro;
 use App\Domain\Repository\GrupoEstudo\GrupoEstudoRepositoryInterface;
 use App\Domain\VO\Auth\AuthenticatedUser;
 
+use Illuminate\Support\Collection;
 use Illuminate\Http\UploadedFile;
 
 class GrupoEstudoService
@@ -20,7 +22,7 @@ class GrupoEstudoService
         private CryptoServiceInterface $cryptoService
     ) {}
     
-    public function find(int $id): GrupoEstudo
+    public function find(int $id): GrupoEstudo | null
     {
         return $this->grupoEstudoRepository->find($id);
     }
@@ -85,5 +87,32 @@ class GrupoEstudoService
             $this->imageProcessor->excluirDiretorio($grupoEstudo->getBasePath());
             $grupoEstudo->excluir();
         }
+    }
+
+    public function listarGruposIngressadosUsuario(AuthenticatedUser $user, $limite = 15, $page = 1): Collection
+    {
+        $membrosUsuario = $this->membroService->listarMembrosByUsuario($user, $limite, $page);
+
+        $gruposEstudo = $membrosUsuario
+                        ->map(fn(Membro $membro) => $membro->grupoEstudo)
+                        ->filter()
+                        ->values();
+
+        return $gruposEstudo;
+    }
+
+    public function listarGruposUsuarioCriador(AuthenticatedUser $user, int $limite = 15, $page = 1): Collection
+    {
+        return $this->grupoEstudoRepository->searchByUsuarioCriador($user->id(), $limite, $page);
+    }
+
+    public function listarGruposPopularesNaoIngressados(AuthenticatedUser $user, int $limite = 15, $page = 1): Collection
+    {
+        return $this->grupoEstudoRepository->searchMostPopularNaoIngressadosByCurso(
+            $user->id(),
+            $user->getIdCurso(), 
+            $limite,
+            $page
+        );
     }
 }

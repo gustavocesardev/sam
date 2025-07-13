@@ -15,6 +15,7 @@ use App\Http\Requests\Store\PublicacaoRequest;
 use App\Http\Resources\PublicacaoResource;
 use App\Http\Utils\ApiResponse;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,7 +26,7 @@ class PublicacaoController extends Controller
         private InteracoesService $interacoesService
     ) {}
 
-    public function store(PublicacaoRequest $request)
+    public function store(PublicacaoRequest $request): JsonResponse
     {
         try {
 
@@ -41,7 +42,7 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         try {
 
@@ -61,7 +62,7 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function adicionarReacao(string $id)
+    public function adicionarReacao(string $id): JsonResponse
     {
         try {
 
@@ -79,7 +80,7 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function removerReacao(string $id)
+    public function removerReacao(string $id): JsonResponse
     {
         try {
 
@@ -97,7 +98,7 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(string $id): JsonResponse
     {
         try {
 
@@ -117,7 +118,7 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function recomendar(Request $request)
+    public function recomendar(Request $request): JsonResponse
     {
         try {
 
@@ -127,7 +128,6 @@ class PublicacaoController extends Controller
             $page = $request->get('page', 1);
 
             $recomendadas = $this->publicacaoService->listFeedGeral($user, $limite * $page);
-
             $paginated = PaginatorService::paginateCollection($recomendadas, $limite, $page);
 
             return ApiResponse::success(
@@ -141,7 +141,7 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function recomendarCurso(Request $request)
+    public function recomendarCurso(Request $request): JsonResponse
     {
         try {
 
@@ -151,7 +151,6 @@ class PublicacaoController extends Controller
             $page = $request->get('page', 1);
 
             $recomendadas = $this->publicacaoService->listFeedCurso($user, $limite * $page);
-
             $paginated = PaginatorService::paginateCollection($recomendadas, $limite, $page);
 
             return ApiResponse::success(

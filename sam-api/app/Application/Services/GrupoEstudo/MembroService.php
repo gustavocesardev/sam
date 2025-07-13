@@ -5,6 +5,9 @@ namespace App\Application\Services\GrupoEstudo;
 use App\Domain\Model\GrupoEstudo\Membro;
 use App\Domain\Repository\GrupoEstudo\MembroRepositoryInterface;
 use App\Domain\Repository\UserRepositoryInterface;
+use App\Domain\VO\Auth\AuthenticatedUser;
+
+use Illuminate\Support\Collection;
 
 class MembroService
 {
@@ -13,7 +16,7 @@ class MembroService
         private UserRepositoryInterface $userRepository,
     ) {}
 
-    public function find(int $id): Membro|null
+    public function find(int $id): Membro | null
     {
         $membro = $this->membroRepository->find($id);
         return $membro;
@@ -34,5 +37,15 @@ class MembroService
 
         $membro = $this->membroRepository->store($data);
         return $membro;
+    }
+
+    public function listarMembrosByUsuario(AuthenticatedUser $user, int $limite = 15, int $page = 1): Collection
+    {
+        return $this->membroRepository->searchMembrosAtivosByUser($user->id(), $limite, $page);
+    }
+
+    public function listarMembrosAtivosByGrupo(int $idGrupo, int $limite = 15, int $page = 1): Collection
+    {
+        return $this->membroRepository->searchMembrosAtivosByGrupo($idGrupo, $limite, $page);
     }
 }

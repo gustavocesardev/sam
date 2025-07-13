@@ -58,8 +58,8 @@ Route::middleware('auth:api')->prefix('publicacao')->group(function () {
     Route::post('/', [PublicacaoController::class, 'store']);
     Route::get('{id}', [PublicacaoController::class, 'show']);
 
-    Route::post('/reacao/{id}', [PublicacaoController::class, 'adicionarReacao']);
-    Route::delete('/reacao/{id}', [PublicacaoController::class, 'removerReacao']);
+    Route::post('/{id}/reacao', [PublicacaoController::class, 'adicionarReacao']);
+    Route::delete('/{id}/reacao', [PublicacaoController::class, 'removerReacao']);
 
     Route::delete('{id}', [PublicacaoController::class, 'destroy']);
 });
@@ -78,6 +78,12 @@ Route::middleware('auth:api')->prefix('grupo-estudo')->group(function () {
     Route::put('{id}', [GrupoEstudoController::class, 'update']);
     Route::get('{id}', [GrupoEstudoController::class, 'show']);
     Route::delete('{id}', [GrupoEstudoController::class, 'destroy']);
+
+    Route::get('/{id}/membros', [MembroController::class, 'listarMembroPorGrupo']);
+
+    Route::get('/grupos/ingressados', [GrupoEstudoController::class, 'indexGruposUsuarioIngressado']);
+    Route::get('/grupos/criador', [GrupoEstudoController::class, 'indexGruposUsuarioCriador']);
+    Route::get('/grupos/populares', [GrupoEstudoController::class, 'indexGruposPopularesNaoIngressados']);
 });
 
 Route::middleware('auth:api')->prefix('grupo-estudo/membro')->group(function () {
@@ -91,8 +97,8 @@ Route::middleware('auth:api')->prefix('grupo-estudo/publicacao')->group(function
     Route::post('/', [GrupoEstudoPublicacaoController::class, 'store']);
     Route::get('{id}', [GrupoEstudoPublicacaoController::class, 'show']);
 
-    Route::post('/reacao/{id}', [GrupoEstudoPublicacaoController::class, 'adicionarReacao']);
-    Route::delete('/reacao/{id}', [GrupoEstudoPublicacaoController::class, 'removerReacao']);
+    Route::post('/{id}/reacao', [GrupoEstudoPublicacaoController::class, 'adicionarReacao']);
+    Route::delete('/{id}/reacao', [GrupoEstudoPublicacaoController::class, 'removerReacao']);
     
     Route::delete('{id}', [GrupoEstudoPublicacaoController::class, 'destroy']);
 });

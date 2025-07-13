@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class GrupoEstudo extends Model
 {
@@ -69,6 +70,12 @@ class GrupoEstudo extends Model
     public function curso(): BelongsTo
     {
         return $this->belongsTo(Curso::class, 'id_curso');
+    }
+
+    public function membros(): HasMany
+    {
+        return $this->hasMany(Membro::class, 'id_grupo_estudo')
+                    ->where('situacao', 'A');
     }
 
     public function updateImagem(string $newPath = ''): void

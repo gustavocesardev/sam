@@ -13,6 +13,7 @@ use App\Http\Resources\GrupoEstudo\GrupoEstudoResource;
 use App\Http\Utils\ApiResponse;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class GrupoEstudoController extends Controller
@@ -81,6 +82,72 @@ class GrupoEstudoController extends Controller
             );
 
         } catch(AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function indexGruposUsuarioIngressado(Request $request): JsonResponse
+    {
+        try {
+            
+            $user = AuthenticatedUserFactory::fromAuth();
+
+            $limite = $request->get('limit', default: 15);
+            $page = $request->get('page', default: 1);
+
+            $gruposEstudo = $this->grupoEstudoService->listarGruposIngressadosUsuario($user, $limite, $page);
+
+            return ApiResponse::success(
+                GrupoEstudoResource::collection($gruposEstudo), 
+                'Grupos de estudo (Ingressados pelo usuário)', 
+                Response::HTTP_OK
+            );
+
+        } catch (AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function indexGruposUsuarioCriador(Request $request): JsonResponse
+    {
+        try {
+
+            $user = AuthenticatedUserFactory::fromAuth();
+
+            $limite = $request->get('limit', default: 15);
+            $page = $request->get('page', default: 1);
+
+            $gruposEstudo = $this->grupoEstudoService->listarGruposUsuarioCriador($user, $limite, $page);
+
+            return ApiResponse::success(
+                GrupoEstudoResource::collection($gruposEstudo), 
+                'Grupos de estudo (Criados pelo usuário)', 
+                Response::HTTP_OK
+            );
+            
+        } catch (AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function indexGruposPopularesNaoIngressados(Request $request): JsonResponse
+    {
+        try {
+
+            $user = AuthenticatedUserFactory::fromAuth();
+
+            $limite = $request->get('limit', default: 15);
+            $page = $request->get('page', default: 1);
+
+            $gruposEstudo = $this->grupoEstudoService->listarGruposPopularesNaoIngressados($user, $limite, $page);
+
+            return ApiResponse::success(
+                GrupoEstudoResource::collection($gruposEstudo), 
+                'Grupos de estudo (Populares)', 
+                Response::HTTP_OK
+            );
+            
+        } catch (AppException $exception) {
             return ApiResponse::error($exception);
         }
     }

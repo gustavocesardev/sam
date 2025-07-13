@@ -119,7 +119,7 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function recomendar(string $idGrupo, Request $request) 
+    public function recomendar(string $id, Request $request): JsonResponse 
     {
         try {
 
@@ -128,7 +128,7 @@ class PublicacaoController extends Controller
             $limite = $request->get('limite', default: 15);
             $page = $request->get('page', default: 1);
 
-            $grupoEstudo = $this->grupoEstudoService->find($idGrupo);
+            $grupoEstudo = $this->grupoEstudoService->find($id);
             $recomendadas = $this->publicacaoService->listFeedGeral($user, $grupoEstudo, $limite * $page);
             $paginated = PaginatorService::paginateCollection($recomendadas, $limite, $page);
 

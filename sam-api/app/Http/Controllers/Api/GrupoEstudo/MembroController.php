@@ -11,6 +11,7 @@ use App\Http\Resources\GrupoEstudo\MembroResource;
 use App\Http\Utils\ApiResponse;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class MembroController extends Controller
@@ -41,6 +42,22 @@ class MembroController extends Controller
             return ApiResponse::success(
                 new MembroResource($membro),
                 'Membro adicionado com sucesso', 
+                Response::HTTP_CREATED
+            );
+
+        } catch(AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function listarMembroPorGrupo(int $idGrupoEstudo): JsonResponse
+    {
+        try {
+
+            $membros = $this->membroService->listarMembrosAtivosByGrupo($idGrupoEstudo);
+            return ApiResponse::success(
+                MembroResource::collection($membros),
+                'Membro do grupo de estudo', 
                 Response::HTTP_CREATED
             );
 
