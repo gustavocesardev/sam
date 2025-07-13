@@ -31,18 +31,6 @@ class Membro extends Model
     {
         return $this->belongsTo(GrupoEstudo::class, 'id_grupo_estudo');
     }
-    
-    public function inativar(): bool
-    {
-        $this->situacao = 'I';
-        return $this->save();
-    }
-
-    public function ativar(): bool
-    {
-        $this->situacao = 'A';
-        return $this->save();
-    }
 
     public function reload(): Membro
     {

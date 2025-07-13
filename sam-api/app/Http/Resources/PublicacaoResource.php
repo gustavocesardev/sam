@@ -20,6 +20,7 @@ class PublicacaoResource extends JsonResource
             'id_usuario'              => $this->id_usuario,
             'texto'                   => $this->texto,
             'imagens'                 => $this->imagens,
+            'criado_em'               => $this->created_at->format('\à\s\ H:i \e\m d/m/Y'),
             'qtde_curtidas'           => $this->qtde_curtidas,
             'qtde_visualizacoes'      => $this->qtde_visualizacoes
         ];

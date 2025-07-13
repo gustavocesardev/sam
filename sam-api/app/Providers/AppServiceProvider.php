@@ -7,10 +7,10 @@ use App\Application\Contracts\Infrastructure\ImageProcessorInterface;
 use App\Application\Contracts\Infrastructure\OAuthClientInterface;
 use App\Application\Contracts\Infrastructure\CryptoServiceInterface;
 
+use App\Domain\Repository\FormularioRepositoryInterface;
+use App\Infrastructure\Persistence\Repository\FormularioRepository;
 use App\Infrastructure\Services\CryptoService;
 
-use App\Domain\Repository\Abstract\KeywordRepositoryAbstract;
-use App\Domain\Repository\Abstract\PublicacaoRepositoryAbstract;
 use App\Domain\Repository\InstituicaoRepositoryInterface;
 use App\Domain\Repository\CursoRepositoryInterface;
 use App\Domain\Repository\UserRepositoryInterface;
@@ -18,8 +18,6 @@ use App\Domain\Repository\UserRepositoryInterface;
 use App\Infrastructure\Persistence\Repository\InstituicaoRepository;
 use App\Infrastructure\Persistence\Repository\CursoRepository;
 use App\Infrastructure\Persistence\Repository\UserRepository;
-use App\Infrastructure\Persistence\Repository\Publicacao\PublicacaoRepository;
-use App\Infrastructure\Persistence\Repository\Publicacao\PublicacaoKeywordRepository;
 
 use App\Infrastructure\Auth\OAuthPassportClient;
 use App\Infrastructure\Services\EmailNotifier;
@@ -32,16 +30,17 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        // Serviços globais
+        // Dependências globais
         $this->app->bind(InstituicaoRepositoryInterface::class, InstituicaoRepository::class);
         $this->app->bind(CursoRepositoryInterface::class, CursoRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(FormularioRepositoryInterface::class, FormularioRepository::class);
+
+        // Dependências de infraestrutura
         $this->app->bind(OAuthClientInterface::class, OAuthPassportClient::class);
         $this->app->bind(ImageProcessorInterface::class, ImageProcessorService::class);
         $this->app->bind(EmailNotifierInterface::class, EmailNotifier::class);
         $this->app->bind(CryptoServiceInterface::class, CryptoService::class);
-        $this->app->bind(KeywordRepositoryAbstract::class, PublicacaoKeywordRepository::class);
-        $this->app->bind(PublicacaoRepositoryAbstract::class, PublicacaoRepository::class);
     }
 
     public function boot(): void

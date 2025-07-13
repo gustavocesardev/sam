@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\FormularioController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
@@ -101,4 +102,12 @@ Route::middleware('auth:api')->prefix('grupo-estudo/publicacao')->group(function
     Route::delete('/{id}/reacao', [GrupoEstudoPublicacaoController::class, 'removerReacao']);
     
     Route::delete('{id}', [GrupoEstudoPublicacaoController::class, 'destroy']);
+});
+
+Route::middleware('auth:api')->prefix('formulario')->group(function () {
+
+    Route::post('/', [FormularioController::class, 'store']);
+    Route::get('{id}', [FormularioController::class, 'show']);
+    Route::put('{id}', [FormularioController::class, 'update']);
+    Route::delete('{id}', [FormularioController::class, 'destroy']);
 });

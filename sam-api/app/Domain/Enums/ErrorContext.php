@@ -17,6 +17,7 @@ class ErrorContext
     const GRUPO_ESTUDO = 'app.grupo_estudo';
     const GRUPO_ESTUDO_PUBLICACAO = 'app.grupo_estudo.publicaco';
     const GRUPO_ESTUDO_MEMBRO = 'app.grupo_estudo.membro';
+    const FORMULARIO = 'app.formulario';
     
     const CONTEXTS = [
         self::AUTH_ACCESS_TOKEN  => 'Erro ao gerar o Access Token.',
@@ -25,13 +26,14 @@ class ErrorContext
         self::LOGIN => 'Erro ao efetuar o login do usuário',
         self::EMAIL_VERIFY => 'Erro ao efetuar a verificação do e-mail.',
         self::REGISTER => 'Erro ao efetuar o registro do usuário.',
-        self::INSTITUICAO => 'Erro ao registrar/atualizar uma instituição.',
-        self::CURSO => 'Erro ao registrar/atualizar um curso.',
-        self::USER => 'Erro ao registrar/atualizar um usuário.',
-        self::PUBLICACAO => 'Erro ao registrar/atualizar uma publicação.',
-        self::GRUPO_ESTUDO => 'Erro ao registrar/atualizar um grupo de estudo.',
-        self::GRUPO_ESTUDO_PUBLICACAO => 'Erro ao registrar/atualizar uma publicação do grupo de estudo.',
-        self::GRUPO_ESTUDO_MEMBRO => 'Erro referente a um membro no grupo de estudo.'
+        self::INSTITUICAO => 'Erro no processamento ou serviço referente à instituição.',
+        self::CURSO => 'Erro no processamento ou serviço referente ao curso.',
+        self::USER => 'Erro no processamento ou serviço referente ao usuário.',
+        self::PUBLICACAO => 'Erro no processamento ou serviço referente à publicação.',
+        self::GRUPO_ESTUDO => 'Erro no processamento ou serviço referente ao grupo de estudo.',
+        self::GRUPO_ESTUDO_PUBLICACAO => 'Erro no processamento ou serviço referente à publicação do grupo de estudo.',
+        self::GRUPO_ESTUDO_MEMBRO => 'Erro no processamento ou serviço referente ao membro no grupo de estudo.',
+        self::FORMULARIO => 'Erro no processamento ou serviço referente ao formulário.'
     ];
 
     public static function getDescription($context): mixed

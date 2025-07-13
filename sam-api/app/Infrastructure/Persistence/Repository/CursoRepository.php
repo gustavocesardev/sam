@@ -22,9 +22,7 @@ class CursoRepository implements CursoRepositoryInterface
 
     public function store(array $data): Curso
     {
-        $curso = Curso::create($data);
-        $curso->refresh();
-        return $curso;
+        return Curso::create($data);
     }
 
     public function update(int $id, array $data): Curso
