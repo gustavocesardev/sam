@@ -7,6 +7,7 @@ use App\Application\Contracts\Infrastructure\DocumentProcessorInterface;
 use App\Domain\Model\ArtigoUniversitario;
 use App\Domain\Repository\ArtigoUniversitarioRepositoryInterface;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 
 class ArtigoUniversitarioService
 {
@@ -84,4 +85,8 @@ class ArtigoUniversitarioService
         }
     }
 
+    public function filtrar(array $filtros, int $limite = 15, int $page = 1): Collection
+    {
+        return $this->artigoUniversitarioRepository->filtrarPorCampos($filtros, $limite, $page);
+    }
 }

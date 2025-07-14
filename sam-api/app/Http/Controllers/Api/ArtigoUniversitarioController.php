@@ -6,6 +6,7 @@ use App\Application\Services\ArtigoUniversitarioService;
 use App\Domain\Exceptions\AppException;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Filter\ArtigoUniversitarioFilterRequest;
 use App\Http\Requests\Store\ArtigoUniversitarioRequest;
 use App\Http\Resources\ArtigoUniversitarioResource;
 use App\Http\Utils\ApiResponse;
@@ -73,6 +74,26 @@ class ArtigoUniversitarioController extends Controller
             return ApiResponse::success(
                 null, 
                 'Artigo universitário excluido com sucesso.', 
+                Response::HTTP_OK
+            );
+
+        } catch(AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function filtrarPorCampos(ArtigoUniversitarioFilterRequest $request): JsonResponse
+    {
+        try {
+
+            $limite = $request->get('limite', default: 15);
+            $page = $request->get('page', default: 1);
+
+            $artigosUniversitarios = $this->artigoUniversitarioService->filtrar($request->validated(), $limite, $page);
+
+            return ApiResponse::success(
+                ArtigoUniversitarioResource::collection($artigosUniversitarios), 
+                'Listagem de artigos universitários (Filtro avançado).', 
                 Response::HTTP_OK
             );
 

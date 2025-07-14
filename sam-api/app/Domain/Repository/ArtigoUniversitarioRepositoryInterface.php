@@ -12,4 +12,5 @@ interface ArtigoUniversitarioRepositoryInterface
     public function store(array $data): ArtigoUniversitario;
     public function update(int $id, array $data): ArtigoUniversitario;
     public function delete(int $id): bool;
+    public function filtrarPorCampos(array $filters, int $limite = 15, int $page = 1): Collection;
 }

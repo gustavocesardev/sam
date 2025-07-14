@@ -122,6 +122,8 @@ Route::middleware('auth:api')->prefix('formulario')->group(function () {
 Route::middleware('auth:api')->prefix('artigo-universitario')->group(function () {
 
     Route::post('/', [ArtigoUniversitarioController::class, 'store']);
+    Route::post('/filtrar', [ArtigoUniversitarioController::class, 'filtrarPorCampos']);
+
     Route::get('{id}', [ArtigoUniversitarioController::class, 'show']);
     Route::put('{id}', [ArtigoUniversitarioController::class, 'update']);
     Route::delete('{id}', [ArtigoUniversitarioController::class, 'destroy']);
