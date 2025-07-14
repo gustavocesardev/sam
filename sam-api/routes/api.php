@@ -110,9 +110,12 @@ Route::middleware('auth:api')->prefix('grupo-estudo/publicacao')->group(function
 Route::middleware('auth:api')->prefix('formulario')->group(function () {
 
     Route::post('/', [FormularioController::class, 'store']);
+    Route::post('/filtrar', [FormularioController::class, 'filtrarPorCampos']);
+
     Route::get('{id}', [FormularioController::class, 'show']);
     Route::put('{id}', [FormularioController::class, 'update']);
     Route::delete('{id}', [FormularioController::class, 'destroy']);
+
 });
 
 // Rotas referentes aos artigos universitários

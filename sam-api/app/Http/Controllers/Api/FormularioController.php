@@ -6,6 +6,7 @@ use App\Application\Services\FormularioService;
 use App\Domain\Exceptions\AppException;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Filter\FormularioFilterRequest;
 use App\Http\Requests\Store\FormularioRequest;
 use App\Http\Resources\FormularioResource;
 use App\Http\Utils\ApiResponse;
@@ -73,6 +74,26 @@ class FormularioController extends Controller
             return ApiResponse::success(
                 null, 
                 'Formulário excluido com sucesso.', 
+                Response::HTTP_OK
+            );
+
+        } catch(AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function filtrarPorCampos(FormularioFilterRequest $request): JsonResponse
+    {
+        try {
+
+            $limite = $request->get('limite', default: 15);
+            $page = $request->get('page', default: 1);
+
+            $formularios = $this->formularioService->filtrar($request->validated(), $limite, $page);
+
+            return ApiResponse::success(
+                FormularioResource::collection($formularios), 
+                'Listagem de formulários (Filtro avançado).', 
                 Response::HTTP_OK
             );
 
