@@ -5,7 +5,7 @@ namespace Database\Factories\GrupoEstudo;
 use App;
 use App\Domain\Model\GrupoEstudo\Publicacao;
 use App\Domain\Model\GrupoEstudo\Membro;
-use App\Domain\Services\KeywordService;
+use App\Domain\Services\Recomendacao\GrupoEstudo\KeywordService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PublicacaoFactory extends Factory

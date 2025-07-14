@@ -28,7 +28,7 @@ abstract class PublicavelServiceAbstract
             $this->validarPublicacaoVinculada($data['id_publicacao_vinculada']);
         }
 
-        $publicacao = $this->publicacaoRepository->store($data);
+        $publicacao = $this->publicacaoRepository->store(data: $data);
 
         if (!empty($data['imagens']))
         {

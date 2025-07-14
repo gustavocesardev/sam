@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 use Exception;
 
-class ImageController extends Controller
+class FileController extends Controller
 {
     public function __construct(private CryptoService $cryptoService) {}
 
@@ -29,13 +29,13 @@ class ImageController extends Controller
 
             if (!Storage::disk('public')->exists($path))
             {
-                return ApiResponse::error(new NotFoundException(ErrorContext::IMAGE));
+                return ApiResponse::error(new NotFoundException(ErrorContext::FILE));
             }
 
             return response()->file(Storage::disk('public')->path($path));
 
         } catch (Exception $e) {
-            return ApiResponse::error(new ImageException(ErrorContext::IMAGE));
+            return ApiResponse::error(new ImageException(ErrorContext::FILE));
         }
     }
 }

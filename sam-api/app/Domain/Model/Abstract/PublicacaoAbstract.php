@@ -28,6 +28,7 @@ abstract class PublicacaoAbstract extends Model
     public function updateImagens(array $newPaths): void
     {
         $this->imagens = $newPaths;
+        $this->save();
     }
 
     public function excluir(): bool

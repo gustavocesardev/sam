@@ -6,12 +6,11 @@ use App\Application\Services\FormularioService;
 use App\Domain\Exceptions\AppException;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\FormularioRequest;
+use App\Http\Requests\Store\FormularioRequest;
 use App\Http\Resources\FormularioResource;
 use App\Http\Utils\ApiResponse;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class FormularioController extends Controller

@@ -1,0 +1,87 @@
+<?php
+
+namespace App\Application\Services;
+
+use App\Application\Contracts\Infrastructure\CryptoServiceInterface;
+use App\Application\Contracts\Infrastructure\DocumentProcessorInterface;
+use App\Domain\Model\ArtigoUniversitario;
+use App\Domain\Repository\ArtigoUniversitarioRepositoryInterface;
+use Illuminate\Http\UploadedFile;
+
+class ArtigoUniversitarioService
+{
+    public function __construct(
+        private ArtigoUniversitarioRepositoryInterface $artigoUniversitarioRepository,
+        private DocumentProcessorInterface $documentProcessor,
+        private CryptoServiceInterface $cryptoService
+    ) {}
+
+    public function find(int $id): ArtigoUniversitario
+    {
+        return $this->artigoUniversitarioRepository->find($id);
+    }
+
+    public function store(array $data): ArtigoUniversitario
+    {
+        $artigoUniversitario = $this->artigoUniversitarioRepository->store($data);
+
+        if (array_key_exists('pdf', $data))
+        {  
+            if ($data['pdf'] instanceof UploadedFile)
+            {
+                $this->atualizarPdf($artigoUniversitario, $data['pdf']);
+                return $artigoUniversitario->reload();
+            } 
+
+            $this->removerPdf($artigoUniversitario);
+            return $artigoUniversitario->reload();
+        }
+
+        return $artigoUniversitario->reload();
+    }
+
+    public function update(int $id, array $data): ArtigoUniversitario
+    {
+        $artigoUniversitario = $this->artigoUniversitarioRepository->update($id, $data);
+
+        if (array_key_exists('pdf', $data))
+        { 
+            if ($data['pdf'] instanceof UploadedFile)
+            {
+                $this->atualizarPdf($artigoUniversitario, $data['pdf']);
+                return $artigoUniversitario->reload();
+            }
+
+            $this->removerPdf($artigoUniversitario);
+            return $artigoUniversitario->reload();
+        }
+
+        return $artigoUniversitario->reload();
+    }
+
+    private function atualizarPdf(ArtigoUniversitario $artigoUniversitario, UploadedFile $document): void
+    {
+        $path = $this->documentProcessor->storeDocument($document, $artigoUniversitario->getBasePath());
+        $hashPath = $this->cryptoService->encryptUrl($path);
+
+        $artigoUniversitario->updatePdf($hashPath);
+    }
+
+    public function delete(int $id): void
+    {
+        $artigoUniversitario = $this->find($id);
+        $this->documentProcessor->excluirDiretorio($artigoUniversitario->getBasePath());
+        
+        $this->artigoUniversitarioRepository->delete($id);
+    }
+
+    private function removerPdf(ArtigoUniversitario $artigoUniversitario): void
+    {
+        if (!empty($artigoUniversitario->pdf))
+        {
+            $this->documentProcessor->excluirArquivo($artigoUniversitario->pdf);
+            $artigoUniversitario->updatePdf();
+        }
+    }
+
+}

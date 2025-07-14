@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\ArtigoUniversitarioController;
 use App\Http\Controllers\Api\FormularioController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\ImageController;
+use App\Http\Controllers\Api\FileController;
 
 use App\Http\Controllers\Api\CursoController;
 use App\Http\Controllers\Api\InstituicaoController;
@@ -42,8 +43,9 @@ Route::prefix('curso')->group(function () {
 });
 
 // Rotas referentes à imagens
-Route::prefix('image')->group(function () {
-    Route::get('/{hash}', [ImageController::class, 'show']);
+Route::prefix('file')->group(function () {
+    Route::get('image/{hash}', [FileController::class, 'show']);
+    Route::get('document/{hash}', [FileController::class, 'show']);
 });
 
 // Rotas referentes ao usuário
@@ -104,10 +106,20 @@ Route::middleware('auth:api')->prefix('grupo-estudo/publicacao')->group(function
     Route::delete('{id}', [GrupoEstudoPublicacaoController::class, 'destroy']);
 });
 
+// Rotas referentes aos formulários
 Route::middleware('auth:api')->prefix('formulario')->group(function () {
 
     Route::post('/', [FormularioController::class, 'store']);
     Route::get('{id}', [FormularioController::class, 'show']);
     Route::put('{id}', [FormularioController::class, 'update']);
     Route::delete('{id}', [FormularioController::class, 'destroy']);
+});
+
+// Rotas referentes aos artigos universitários
+Route::middleware('auth:api')->prefix('artigo-universitario')->group(function () {
+
+    Route::post('/', [ArtigoUniversitarioController::class, 'store']);
+    Route::get('{id}', [ArtigoUniversitarioController::class, 'show']);
+    Route::put('{id}', [ArtigoUniversitarioController::class, 'update']);
+    Route::delete('{id}', [ArtigoUniversitarioController::class, 'destroy']);
 });

@@ -4,6 +4,7 @@ namespace App\Infrastructure\Persistence\Repository;
 
 use App\Domain\Model\Formulario;
 use App\Domain\Repository\FormularioRepositoryInterface;
+
 use Illuminate\Support\Collection;
 
 class FormularioRepository implements FormularioRepositoryInterface

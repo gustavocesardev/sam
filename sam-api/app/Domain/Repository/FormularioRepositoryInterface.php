@@ -2,7 +2,6 @@
 
 namespace App\Domain\Repository; 
 
-
 use App\Domain\Model\Formulario;
 use Illuminate\Support\Collection;
 

@@ -25,6 +25,11 @@ class InstituicaoService
     {
         return $this->instituicaoRepository->findAll();
     }
+    
+    public function find(int $id): Instituicao
+    {
+        return $this->instituicaoRepository->find($id);
+    }
 
     public function store(array $data): Instituicao
     {
@@ -66,7 +71,7 @@ class InstituicaoService
         return $instituicao->reload();
     }
 
-    public function atualizarImagem(Instituicao $instituicao, UploadedFile $imagem): void
+    private function atualizarImagem(Instituicao $instituicao, UploadedFile $imagem): void
     {
         $path = $this->imageProcessor->storeImage($imagem, $instituicao->getBasePath());
         $hashPath = $this->cryptoService->encryptUrl($path);
@@ -74,7 +79,7 @@ class InstituicaoService
         $instituicao->updateImagem($hashPath);
     }
 
-    public function removerImagem(Instituicao $instituicao): void
+    private function removerImagem(Instituicao $instituicao): void
     {
         if (!empty($instituicao->imagem))
         {
@@ -83,13 +88,11 @@ class InstituicaoService
         }
     }
 
-    public function find(int $id): Instituicao
-    {
-        return $this->instituicaoRepository->find($id);
-    }
-
     public function delete(int $id): void
     {
+        $instituicao = $this->find($id);
+        $this->imageProcessor->excluirDiretorio($instituicao->getBasePath());
+        
         $this->instituicaoRepository->delete($id);
     }
 

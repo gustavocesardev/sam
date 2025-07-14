@@ -7,7 +7,7 @@ class ErrorContext
     const LOGIN = 'app.login';
     const REGISTER = 'app.register';
     const EMAIL_VERIFY = 'app.email_verify';
-    const IMAGE = 'app.image';
+    const FILE = 'app.file';
     const AUTH_ACCESS_TOKEN = 'app.auth.access_token';
     const AUTH_REFRESH_TOKEN = 'app.auth.refresh_token';
     const INSTITUICAO = 'app.instituicao';
@@ -22,7 +22,7 @@ class ErrorContext
     const CONTEXTS = [
         self::AUTH_ACCESS_TOKEN  => 'Erro ao gerar o Access Token.',
         self::AUTH_REFRESH_TOKEN => 'Erro ao gerar o Refresh Token.',
-        self::IMAGE => 'Erro ao processar solicitação de imagem.',
+        self::FILE => 'Erro ao processar solicitação de arquivo.',
         self::LOGIN => 'Erro ao efetuar o login do usuário',
         self::EMAIL_VERIFY => 'Erro ao efetuar a verificação do e-mail.',
         self::REGISTER => 'Erro ao efetuar o registro do usuário.',

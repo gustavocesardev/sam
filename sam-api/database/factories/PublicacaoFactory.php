@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App;
 
-use App\Domain\Services\KeywordService;
+use App\Domain\Services\Recomendacao\Publicacao\KeywordService;
 use App\Domain\Model\Publicacao\Publicacao;
 use App\Domain\Model\User;
 
