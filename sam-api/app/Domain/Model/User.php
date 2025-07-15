@@ -5,6 +5,7 @@ namespace App\Domain\Model;
 use App\Domain\Model\GrupoEstudo\GrupoEstudo;
 use App\Domain\Model\GrupoEstudo\Membro;
 
+use App\Domain\Model\Publicacao\Publicacao;
 use Database\Factories\UserFactory;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -79,6 +80,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function membrosGrupoEstudo(): HasMany
     {
         return $this->hasMany(Membro::class, 'id_usuario');
+    }
+
+    public function publicacoes(): HasMany
+    {
+        return $this->hasMany(Publicacao::class, 'id_usuario');
+    }
+
+    public function artigos(): HasMany
+    {
+        return $this->hasMany(ArtigoUniversitario::class, 'id_usuario');
     }
 
     public function getBasePath(): string

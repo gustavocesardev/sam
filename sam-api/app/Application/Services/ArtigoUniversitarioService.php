@@ -6,6 +6,8 @@ use App\Application\Contracts\Infrastructure\CryptoServiceInterface;
 use App\Application\Contracts\Infrastructure\DocumentProcessorInterface;
 use App\Domain\Model\ArtigoUniversitario;
 use App\Domain\Repository\ArtigoUniversitarioRepositoryInterface;
+
+use App\Domain\VO\Auth\AuthenticatedUser;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 
@@ -85,8 +87,13 @@ class ArtigoUniversitarioService
         }
     }
 
-    public function filtrar(array $filtros, int $limite = 15, int $page = 1): Collection
+    public function filtrar(AuthenticatedUser $user, array $filtros, int $limite = 15, int $page = 1): Collection
     {
-        return $this->artigoUniversitarioRepository->filtrarPorCampos($filtros, $limite, $page);
+        return $this->artigoUniversitarioRepository->filtrarPorCampos(
+            $user->getIdInstituicao(), 
+            $filtros, 
+            $limite, 
+            $page
+        );
     }
 }

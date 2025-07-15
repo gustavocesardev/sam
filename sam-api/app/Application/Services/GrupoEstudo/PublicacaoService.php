@@ -14,7 +14,7 @@ use App\Domain\Repository\GrupoEstudo\MembroRepositoryInterface;
 use App\Domain\Services\Recomendacao\GrupoEstudo\KeywordService;
 use App\Domain\VO\Auth\AuthenticatedUser;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 class PublicacaoService extends PublicavelServiceAbstract
 {

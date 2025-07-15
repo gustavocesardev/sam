@@ -3,7 +3,7 @@
 namespace App\Domain\Repository\Contracts;
 
 use App\Domain\Model\Abstract\PublicacaoAbstract;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 interface PublicacaoRepositoryContract
 {

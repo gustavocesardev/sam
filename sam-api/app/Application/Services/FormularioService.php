@@ -4,6 +4,8 @@ namespace App\Application\Services;
 
 use App\Domain\Model\Formulario;
 use App\Domain\Repository\FormularioRepositoryInterface;
+
+use App\Domain\VO\Auth\AuthenticatedUser;
 use Illuminate\Support\Collection;
 
 class FormularioService
@@ -30,8 +32,13 @@ class FormularioService
         return $this->formularioRepository->delete($id);
     }
 
-    public function filtrar(array $filtros, int $limite = 15, int $page = 1): Collection
+    public function filtrar(AuthenticatedUser $user, array $filtros, int $limite = 15, int $page = 1): Collection
     {
-        return $this->formularioRepository->filtrarPorCampos($filtros, $limite, $page);
+        return $this->formularioRepository->filtrarPorCampos(
+            $user->getIdInstituicao(), 
+            $filtros, 
+            $limite, 
+            $page
+        );
     }
 }

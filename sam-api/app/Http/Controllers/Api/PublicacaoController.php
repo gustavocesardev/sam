@@ -163,4 +163,48 @@ class PublicacaoController extends Controller
             return ApiResponse::error($exception);
         }
     }
+
+    public function listPublicacoesUsuario(Request $request): JsonResponse
+    {
+        try {
+
+            $user = AuthenticatedUserFactory::fromAuth();
+
+            $limite = $request->get('limite', 15);
+            $page = $request->get('page', 1);
+
+            $publicacoes = $this->publicacaoService->listPublicacoesUsuario($user, $limite, $page);
+
+            return ApiResponse::success(
+                PublicacaoResource::collection($publicacoes), 
+                'Publicacações (Usuário)', 
+                Response::HTTP_OK
+            );
+
+        } catch(AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function listPublicacoesCurtidasUsuario(Request $request): JsonResponse
+    {
+        try {
+
+            $user = AuthenticatedUserFactory::fromAuth();
+
+            $limite = $request->get('limite', 15);
+            $page = $request->get('page', 1);
+
+            $publicacoes = $this->publicacaoService->listPublicacoesCurtidas($user, $limite, $page);
+
+            return ApiResponse::success(
+                PublicacaoResource::collection($publicacoes), 
+                'Publicacações (Curtidas pelo usuário)', 
+                Response::HTTP_OK
+            );
+
+        } catch(AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
 }

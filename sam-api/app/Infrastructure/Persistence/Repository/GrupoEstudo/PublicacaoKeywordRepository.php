@@ -5,7 +5,7 @@ namespace App\Infrastructure\Persistence\Repository\GrupoEstudo;
 use App\Domain\Model\GrupoEstudo\PublicacaoKeyword;
 use App\Domain\Repository\GrupoEstudo\KeywordRepositoryInterface;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 class PublicacaoKeywordRepository implements KeywordRepositoryInterface
 {

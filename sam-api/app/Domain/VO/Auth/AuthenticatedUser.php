@@ -18,6 +18,11 @@ class AuthenticatedUser
         return $this->user->id_curso;
     }
 
+    public function getIdInstituicao(): int
+    {
+        return $this->user->curso->id_instituicao;
+    }
+
     public function id(): int
     {
         return $this->user->id;

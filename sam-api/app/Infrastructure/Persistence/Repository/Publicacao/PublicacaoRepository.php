@@ -6,7 +6,7 @@ use App\Domain\Model\Abstract\PublicacaoAbstract;
 use App\Domain\Model\Publicacao\Publicacao;
 use App\Domain\Repository\Publicacao\PublicacaoRepositoryInterface;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 class PublicacaoRepository implements PublicacaoRepositoryInterface
 {
@@ -108,6 +108,17 @@ class PublicacaoRepository implements PublicacaoRepositoryInterface
             ->whereHas('user.curso', function ($query) use ($idCurso) {
                 $query->where('id', $idCurso);
             })
+            ->limit($limite)
+            ->get();
+    }
+
+    public function searchByUsuario(int $idUsuario, int $limite = 15, int $page = 1): Collection
+    {
+        $offset = ($page - 1) * $limite;
+
+        return Publicacao::where('id_usuario', $idUsuario)
+            ->orderBy('created_at', 'desc')
+            ->skip($offset)
             ->limit($limite)
             ->get();
     }

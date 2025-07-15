@@ -7,6 +7,7 @@ use App\Domain\Exceptions\AppException;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\UserRequest;
+use App\Http\Resources\UserDetailsResource;
 use App\Http\Resources\UserResource;
 use App\Http\Utils\ApiResponse;
 
@@ -56,6 +57,22 @@ class UserController extends Controller
             $user = $this->userService->find($id);
             return ApiResponse::success(
                 new UserResource($user),
+                'Detalhes do usuário.',
+                Response::HTTP_OK
+            );
+
+        } catch (AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function showDetails(string $id): JsonResponse
+    {
+        try {
+
+            $user = $this->userService->findWithDetails($id);
+            return ApiResponse::success(
+                new UserDetailsResource($user),
                 'Detalhes do usuário.',
                 Response::HTTP_OK
             );

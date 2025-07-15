@@ -5,7 +5,7 @@ namespace App\Domain\Services\Recomendacao\GrupoEstudo;
 use App\Domain\Repository\GrupoEstudo\PublicacaoRepositoryInterface;
 use App\Domain\VO\Recomendacao\InteracoesMembro;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 class FeedService
 {

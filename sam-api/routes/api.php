@@ -52,6 +52,7 @@ Route::prefix('file')->group(function () {
 Route::middleware('auth:api')->prefix('user')->group(function () {
     Route::get('/', [UserController::class, 'index']);
     Route::get('{id}', [UserController::class, 'show']);
+    Route::get('{id}/details', [UserController::class, 'showDetails']);
     Route::put('{id}', [UserController::class, 'update']);
     Route::delete('{id}', [UserController::class, 'destroy']);
 });
@@ -72,6 +73,9 @@ Route::middleware('auth:api')->prefix('feed')->group(function () {
     Route::get('/', [PublicacaoController::class, 'recomendar']);
     Route::get('/curso', [PublicacaoController::class, 'recomendarCurso']);
     Route::get('/grupo-estudo/{id}', [GrupoEstudoPublicacaoController::class, 'recomendar']);
+
+    Route::get('/usuario', [PublicacaoController::class, 'listPublicacoesUsuario']);
+    Route::get('/usuario/curtidas', [PublicacaoController::class, 'listPublicacoesCurtidasUsuario']);
 });
 
 // Rotas referentes ao grupo de estudo

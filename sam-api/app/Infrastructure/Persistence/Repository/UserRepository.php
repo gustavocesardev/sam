@@ -19,6 +19,13 @@ class UserRepository implements UserRepositoryInterface
         return User::with('curso')->findOrFail($id);
     }
 
+    public function findWithCountArtigoPublicacao(int $id): User
+    {
+        return User::with('curso')
+        ->withCount(['artigos', 'publicacoes'])
+        ->findOrFail($id);
+    }
+
     public function findAll(): Collection
     {
         return User::all();

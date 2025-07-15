@@ -6,7 +6,7 @@ use App\Domain\Repository\GrupoEstudo\PublicacaoRepositoryInterface;
 use App\Domain\VO\Recomendacao\InteracoesMembro;
 use App\Domain\VO\Recomendacao\KeywordsRelevantes;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 class RecomendadorService
 {

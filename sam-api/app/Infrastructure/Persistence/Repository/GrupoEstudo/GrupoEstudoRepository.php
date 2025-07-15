@@ -3,6 +3,7 @@ namespace App\Infrastructure\Persistence\Repository\GrupoEstudo;
 
 use App\Domain\Model\GrupoEstudo\GrupoEstudo;
 use App\Domain\Repository\GrupoEstudo\GrupoEstudoRepositoryInterface;
+
 use Illuminate\Support\Collection;
 
 class GrupoEstudoRepository implements GrupoEstudoRepositoryInterface

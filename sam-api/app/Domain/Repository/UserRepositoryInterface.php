@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 interface UserRepositoryInterface
 {
     public function find(int $id): User;
+    public function findWithCountArtigoPublicacao(int $id): User;
     public function findWithCurso(int $id): User;
     public function findAll(): Collection;
     public function findByEmail(string $email): ?User;

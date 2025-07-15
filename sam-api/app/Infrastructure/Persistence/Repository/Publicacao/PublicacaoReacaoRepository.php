@@ -5,9 +5,11 @@ namespace App\Infrastructure\Persistence\Repository\Publicacao;
 use App\Domain\Model\Publicacao\PublicacaoReacao;
 use App\Domain\Repository\Publicacao\ReacaoRepositoryInterface;
 
+use Illuminate\Support\Collection;
+
 class PublicacaoReacaoRepository implements ReacaoRepositoryInterface
 {
-    public function findByPublicacaoAndUsuario(int $idPublicacao, int $idUsuario): ?PublicacaoReacao
+    public function findByPublicacaoAndUsuario(int $idPublicacao, int $idUsuario): PublicacaoReacao | null
     {
         return PublicacaoReacao::where('id_publicacao', $idPublicacao)
                                ->where('id_usuario', $idUsuario)
@@ -35,5 +37,17 @@ class PublicacaoReacaoRepository implements ReacaoRepositoryInterface
             })
             ->get()
             ->all();
+    }
+
+    public function searchByUsuario(int $idUsuario, int $limite = 15, int $page = 1): Collection
+    {
+        $offset = ($page - 1) * $limite;
+
+        return PublicacaoReacao::where('id_usuario', $idUsuario)
+            ->where('situacao', 'A')
+            ->orderBy('created_at', 'desc')
+            ->skip($offset)
+            ->limit($limite)
+            ->get();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Application\Factories\AuthenticatedUserFactory;
 use App\Application\Services\FormularioService;
 use App\Domain\Exceptions\AppException;
 
@@ -86,10 +87,12 @@ class FormularioController extends Controller
     {
         try {
 
+            $user = AuthenticatedUserFactory::fromAuth();
+
             $limite = $request->get('limite', default: 15);
             $page = $request->get('page', default: 1);
 
-            $formularios = $this->formularioService->filtrar($request->validated(), $limite, $page);
+            $formularios = $this->formularioService->filtrar($user, $request->validated(), $limite, $page);
 
             return ApiResponse::success(
                 FormularioResource::collection($formularios), 

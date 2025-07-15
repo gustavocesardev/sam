@@ -6,7 +6,7 @@ use App\Domain\Model\Abstract\PublicacaoAbstract;
 use App\Domain\Model\GrupoEstudo\Publicacao;
 use App\Domain\Repository\GrupoEstudo\PublicacaoRepositoryInterface;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 class PublicacaoRepository implements PublicacaoRepositoryInterface
 {

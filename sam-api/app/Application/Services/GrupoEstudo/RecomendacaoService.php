@@ -10,7 +10,7 @@ use App\Domain\Services\Recomendacao\GrupoEstudo\FeedService;
 use App\Domain\Services\Recomendacao\GrupoEstudo\RecomendadorService;
 use App\Domain\VO\Recomendacao\InteracoesMembro;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 class RecomendacaoService
 {

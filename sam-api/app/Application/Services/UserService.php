@@ -42,6 +42,11 @@ class UserService
         return $this->userRepository->findByEmail($email);
     }
 
+    public function findWithDetails(int $id): User
+    {
+        return $this->userRepository->findWithCountArtigoPublicacao($id);
+    }
+
     public function store(array $data): User
     {
         $this->validarEmail($data['id_instituicao'], $data['email']);

@@ -39,11 +39,14 @@ class ArtigoUniversitarioRepository implements ArtigoUniversitarioRepositoryInte
         return $artigo->excluir();
     }
 
-    public function filtrarPorCampos(array $filters, int $limite = 15, int $page = 1): Collection
+    public function filtrarPorCampos(int $idInstituicao, array $filters, int $limite = 15, int $page = 1): Collection
     {
         $offset = ($page - 1) * $limite;
 
         return ArtigoUniversitario::query()
+            ->whereHas('usuario.curso', function ($query) use ($idInstituicao) {
+                $query->where('id_instituicao', $idInstituicao);
+            })
             ->when(!empty($filters['titulo']), function ($query) use ($filters) {
                 $query->where('titulo', 'ILIKE', '%' . $filters['titulo'] . '%');
             })

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Application\Factories\AuthenticatedUserFactory;
 use App\Application\Services\ArtigoUniversitarioService;
 use App\Domain\Exceptions\AppException;
 
@@ -86,10 +87,12 @@ class ArtigoUniversitarioController extends Controller
     {
         try {
 
+            $user = AuthenticatedUserFactory::fromAuth();
+
             $limite = $request->get('limite', default: 15);
             $page = $request->get('page', default: 1);
 
-            $artigosUniversitarios = $this->artigoUniversitarioService->filtrar($request->validated(), $limite, $page);
+            $artigosUniversitarios = $this->artigoUniversitarioService->filtrar($user, $request->validated(), $limite, $page);
 
             return ApiResponse::success(
                 ArtigoUniversitarioResource::collection($artigosUniversitarios), 
