@@ -69,6 +69,11 @@ class Publicacao extends PublicacaoAbstract
         return $this->hasMany(PublicacaoVisualizacao::class, 'id_publicacao');
     }
 
+    public function publicacoesVinculadas()
+    {
+        return $this->hasMany(Publicacao::class, 'id_publicacao_vinculada');
+    }
+
     protected static function newFactory(): PublicacaoFactory
     {
         return PublicacaoFactory::new();

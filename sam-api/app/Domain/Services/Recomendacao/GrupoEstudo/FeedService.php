@@ -21,7 +21,7 @@ class FeedService
         return $recomendadas
             ->concat($rebaixadas)
             ->unique('id')
-            ->sortByDesc(fn($p) => ($p->prioridade * 1000000) + ($p->likes + $p->views))
+            ->sortByDesc(fn($p) => ($p->prioridade * 1000000) + ($p->qtde_curtidas + $p->qtde_visualizacoes))
             ->values();
     }
 }

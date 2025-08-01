@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Application\Services\AuthService;
 use App\Domain\Exceptions\AppException;
 
+use App\Domain\VO\Auth\Token;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\LoginResponseResource;
+use App\Http\Resources\TokenResource;
 use App\Http\Utils\ApiResponse;
 
 use Illuminate\Contracts\View\View;
@@ -61,9 +64,10 @@ class AuthController extends Controller
     {
         try {
 
-            $tokenData = $this->authService->login($request->validated());
+            $authUser = $this->authService->login($request->validated());
+            
             return ApiResponse::success(
-                $tokenData, 
+                new LoginResponseResource($authUser), 
                 'Login efetuado com sucesso.', 
             );
 
@@ -77,9 +81,10 @@ class AuthController extends Controller
         try {
 
             $validated = $request->validate(['refresh_token' => 'required']);
-            $tokenData = $this->authService->refreshToken($validated['refresh_token']);
+            $token = new Token($this->authService->refreshToken($validated['refresh_token']));
+            
             return ApiResponse::success(
-                $tokenData,
+                new TokenResource($token),
                 'Refresh do token efetuado com sucesso.'
             );
             

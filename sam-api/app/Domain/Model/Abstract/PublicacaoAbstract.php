@@ -41,7 +41,7 @@ abstract class PublicacaoAbstract extends Model
 
     public function reload(): PublicacaoAbstract
     {
-        return $this->refresh();
+        return $this->refresh()->loadCount(['publicacoesVinculadas as qtde_comentarios']);
     }
 
     public function adicionarReacao(): void
