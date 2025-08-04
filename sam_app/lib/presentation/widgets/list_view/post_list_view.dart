@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sam_app/domain/viewmodels/publicacao/feed_viewmodel.dart';
-import 'package:sam_app/presentation/widgets/post/post_card.dart';
+import 'package:sam_app/presentation/widgets/cards/feed_post_card.dart';
 
 class PostListView extends StatelessWidget {
   final FeedViewModel vm;

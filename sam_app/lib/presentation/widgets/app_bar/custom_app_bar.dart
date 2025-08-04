@@ -5,23 +5,27 @@ import 'package:sam_app/data/storage/auth_storage_service.dart';
 import 'package:sam_app/presentation/widgets/tabs/custom_tab_bar.dart';
 import 'package:sam_app/shared/constants.dart';
 
-class FeedAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final TabController tabController;
+class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
+  final String textAppBar;
+  final CustomTabBar customAppBar;
 
-  const FeedAppBar({super.key, required this.tabController});
+  const CustomAppBar({
+    super.key,
+    required this.textAppBar,
+    required this.customAppBar,
+  });
 
   @override
   Size get preferredSize => const Size.fromHeight(110);
 
   @override
-  State<FeedAppBar> createState() => _FeedAppBarState();
+  State<CustomAppBar> createState() => _CustomAppBarState();
 }
 
-class _FeedAppBarState extends State<FeedAppBar> {
+class _CustomAppBarState extends State<CustomAppBar> {
   final UserService service = UserService();
 
   String? userImageUrl;
-  String? instituicaoImageUrl;
 
   @override
   void initState() {
@@ -32,15 +36,12 @@ class _FeedAppBarState extends State<FeedAppBar> {
   Future<void> _loadUser() async {
     final user = await AuthStorageService.getStoredUser();
     if (user != null) {
-      // Recuperando foto de perfil atual do usuário
       final UserModel? currentUser = await service.getUser(user.id);
 
       if (!mounted) return;
 
       setState(() {
         userImageUrl = "$baseUrl/file/image/${currentUser?.avatarEncrypted}";
-        instituicaoImageUrl =
-            "$baseUrl/file/image/${user.instituicao.imagemInstituicao}";
       });
     }
   }
@@ -70,47 +71,16 @@ class _FeedAppBarState extends State<FeedAppBar> {
               mainAxisSize: MainAxisSize.min,
               spacing: 5,
               children: [
-                const Text(
-                  'SAM',
+                Text(
+                  widget.textAppBar,
                   style: TextStyle(fontSize: 24, color: Colors.white),
                 ),
-                if (instituicaoImageUrl != null)
-                  Text(
-                    ' | ',
-                    style: TextStyle(fontSize: 24, color: Colors.white),
-                  ),
-                if (instituicaoImageUrl != null)
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: SizedBox(
-                      height: 35,
-                      width: 70,
-                      child: Image.network(
-                        instituicaoImageUrl!,
-                        fit: BoxFit.contain,
-                        alignment: Alignment.center,
-                        errorBuilder: (_, __, ___) => Container(
-                          color: Colors.grey[700],
-                          child: const Icon(
-                            Icons.image_not_supported,
-                            color: Colors.white54,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
               ],
             ),
           ),
         ],
       ),
-      bottom: CustomTabBar(
-        tabController: widget.tabController,
-        tabs: const [
-          Tab(text: 'Feed principal'),
-          Tab(text: 'Meu curso'),
-        ],
-      ),
+      bottom: widget.customAppBar,
     );
   }
 }

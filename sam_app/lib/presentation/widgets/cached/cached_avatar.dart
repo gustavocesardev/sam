@@ -7,6 +7,11 @@ import 'package:sam_app/data/cache/image_cache_service.dart';
 class CachedAvatar extends StatefulWidget {
   final String? avatarHash;
   final Color avatarColor;
+  final double circleRadius;
+  final double imageSize;
+  final IconData iconNotFound;
+  final double iconSize;
+  final Color iconColor;
   final String Function(String) imageUrlFromHash;
   final ImageCacheService imageCacheService;
 
@@ -16,6 +21,11 @@ class CachedAvatar extends StatefulWidget {
     required this.avatarColor,
     required this.imageUrlFromHash,
     required this.imageCacheService,
+    this.circleRadius = 20,
+    this.imageSize = 40,
+    this.iconNotFound = Icons.person,
+    this.iconColor = Colors.white70,
+    this.iconSize = 20,
   });
 
   @override
@@ -53,8 +63,12 @@ class _CachedAvatarState extends State<CachedAvatar> {
     if (widget.avatarHash == null || widget.avatarHash!.isEmpty) {
       return CircleAvatar(
         backgroundColor: widget.avatarColor,
-        radius: 20,
-        child: const Icon(Icons.person, color: Colors.white70),
+        radius: widget.circleRadius,
+        child: Icon(
+          widget.iconNotFound,
+          color: widget.iconColor,
+          size: widget.iconSize,
+        ),
       );
     }
 
@@ -62,15 +76,15 @@ class _CachedAvatarState extends State<CachedAvatar> {
 
     return CircleAvatar(
       backgroundColor: widget.avatarColor,
-      radius: 20,
+      radius: widget.circleRadius,
       child: ClipOval(
         child: FutureBuilder<Uint8List>(
           future: _loadImageBytes(url),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Container(
-                width: 40,
-                height: 40,
+                width: widget.imageSize,
+                height: widget.imageSize,
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: const Center(
                   child: CircularProgressIndicator(strokeWidth: 2),
@@ -80,8 +94,8 @@ class _CachedAvatarState extends State<CachedAvatar> {
             if (snapshot.hasError) {
               _scheduleRetry(url);
               return Container(
-                width: 40,
-                height: 40,
+                width: widget.imageSize,
+                height: widget.imageSize,
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: const Center(
                   child: CircularProgressIndicator(strokeWidth: 2),
@@ -90,8 +104,8 @@ class _CachedAvatarState extends State<CachedAvatar> {
             }
             return Image.memory(
               snapshot.data!,
-              width: 40,
-              height: 40,
+              width: widget.imageSize,
+              height: widget.imageSize,
               fit: BoxFit.cover,
             );
           },

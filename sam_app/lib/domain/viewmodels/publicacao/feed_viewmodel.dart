@@ -4,7 +4,7 @@ import 'package:sam_app/data/models/post_model.dart';
 typedef FeedFetcher = Future<List<PostModel>> Function({required int page});
 
 class FeedViewModel extends ChangeNotifier {
-  final Future<List<PostModel>> Function({int page}) fetchPosts;
+  final FeedFetcher fetchPosts;
 
   FeedViewModel({required this.fetchPosts});
 

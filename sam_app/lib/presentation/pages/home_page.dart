@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sam_app/presentation/pages/artigos/artigos_page.dart';
 import 'package:sam_app/presentation/pages/feed/feed_page.dart';
-import 'package:sam_app/presentation/pages/forms/formulario_page.dart';
+import 'package:sam_app/presentation/pages/forms/formularios_page.dart';
 import 'package:sam_app/presentation/pages/grupos/grupos_estudo_page.dart';
 import 'package:sam_app/presentation/vo/fab_config_vo.dart';
 import 'package:sam_app/presentation/widgets/bottom_bar/custom_bottom_bar.dart';

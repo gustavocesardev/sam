@@ -36,7 +36,7 @@ class _SplashPageState extends State<SplashPage> {
               child: Column(
                 children: [
                   Text('SAM', style: TextStyle(fontSize: 80)),
-                  Text('Social Academic Media'),
+                  Text('Sua rede social universitária :)'),
                 ],
               ),
             ),
