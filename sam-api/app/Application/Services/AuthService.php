@@ -9,6 +9,8 @@ use App\Domain\Enums\ErrorContext;
 use App\Domain\Exceptions\EmailException;
 use App\Domain\Exceptions\LoginException;
 use App\Domain\Model\User;
+use App\Domain\VO\Auth\AuthUser;
+use App\Domain\VO\Auth\Token;
 
 class AuthService
 {
@@ -50,7 +52,7 @@ class AuthService
         return $user->reload();
     }
 
-    public function login(array $data)
+    public function login(array $data): AuthUser
     {
         $user = $this->userService->findByEmail($data['email']);
 
@@ -72,10 +74,15 @@ class AuthService
             );
         }
 
-        return $this->oauthClient->getAccessToken($data['email'], $data['password']);
+        return new AuthUser(
+            $user, 
+            new Token(
+                $this->oauthClient->getAccessToken($data['email'], $data['password'])
+            )
+        );
     }
 
-    public function refreshToken(string $refreshToken)
+    public function refreshToken(string $refreshToken): array
     {
         return $this->oauthClient->refreshToken($refreshToken);
     }

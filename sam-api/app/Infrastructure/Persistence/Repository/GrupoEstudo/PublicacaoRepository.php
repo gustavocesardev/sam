@@ -12,7 +12,7 @@ class PublicacaoRepository implements PublicacaoRepositoryInterface
 {
     public function find(int $id): Publicacao
     {
-        return Publicacao::findOrFail($id);
+        return Publicacao::withCount(['publicacoesVinculadas as qtde_comentarios'])->findOrFail($id);
     }
 
     public function store(array $data): Publicacao
@@ -42,10 +42,11 @@ class PublicacaoRepository implements PublicacaoRepositoryInterface
 
     public function searchKeywords(int $idGrupoEstudo, array $keywords, int $limite = 10): Collection
     {
-        $query = Publicacao::whereHas('keywords', function ($query) use ($keywords) {
+        $query = Publicacao::with(['membro.user', 'membro.user.curso'])
+        ->whereHas('keywords', function ($query) use ($keywords) {
             $query->whereIn('keyword', $keywords);
         })
-        ->withCount(['reacoes as likes', 'visualizacoes as views']);
+        ->withCount(['publicacoesVinculadas as qtde_comentarios']);
 
         if (!is_null($idGrupoEstudo))
         {
@@ -59,8 +60,9 @@ class PublicacaoRepository implements PublicacaoRepositoryInterface
 
     public function searchByIds(array $ids): Collection
     {
-        return Publicacao::whereIn('id', $ids)
-            ->withCount(['reacoes as likes', 'visualizacoes as views'])
+        return Publicacao::with(['membro.user', 'membro.user.curso'])
+            ->whereIn('id', $ids)
+            ->withCount(['publicacoesVinculadas as qtde_comentarios'])
             ->get();
     }
 
@@ -71,7 +73,8 @@ class PublicacaoRepository implements PublicacaoRepositoryInterface
 
     public function searchMostPopularPublicacoes(int $idGrupoEstudo, array $excluirIds = [], int $limite = 10): Collection
     {
-        $query = Publicacao::withCount(['reacoes as likes', 'visualizacoes as views'])
+        $query = Publicacao::with(['membro.user', 'membro.user.curso'])
+            ->withCount(['publicacoesVinculadas as qtde_comentarios'])
             ->when(!empty($excluirIds), function ($query) use ($excluirIds) {
                 $query->whereNotIn('id', $excluirIds);
             });
