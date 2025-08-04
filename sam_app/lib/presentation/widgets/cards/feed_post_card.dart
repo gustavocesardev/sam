@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:sam_app/data/cache/image_cache_service.dart';
 import 'package:sam_app/presentation/pages/post/post_images_page.dart';
 import 'package:sam_app/presentation/widgets/cached/cached_avatar.dart';
@@ -154,7 +154,7 @@ class _FeedPostCardState extends State<FeedPostCard> {
               ],
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 12,),
             const Divider(color: Colors.white12, height: 1),
           ],
         ),

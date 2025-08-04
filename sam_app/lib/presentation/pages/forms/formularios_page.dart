@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:sam_app/presentation/pages/forms/formularios_criados_page.dart';
+import 'package:sam_app/presentation/pages/forms/formularios_explorar_page.dart';
 import 'package:sam_app/presentation/widgets/app_bar/custom_app_bar.dart';
 import 'package:sam_app/presentation/widgets/tabs/custom_tab_bar.dart';
-import 'artigos_criados_page.dart';
-import 'artigos_explorar_page.dart';
 
-class ArtigosPage extends StatefulWidget {
-  const ArtigosPage({super.key});
+class FormulariosPage extends StatefulWidget {
+  const FormulariosPage({super.key});
 
   @override
-  State<ArtigosPage> createState() => _ArtigosPageState();
+  State<FormulariosPage> createState() => _FormulariosPageState();
 }
 
-class _ArtigosPageState extends State<ArtigosPage>
+class _FormulariosPageState extends State<FormulariosPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int _currentIndex = 0;
@@ -33,22 +33,22 @@ class _ArtigosPageState extends State<ArtigosPage>
   @override
   Widget build(BuildContext context) {
     final List<Widget> tabsContent = [
-      ArtigosCriadosPage(),
-          ArtigosExplorarPage(),
+      FormulariosCriadosPage(),
+      FormulariosExplorarPage(),
     ];
 
     return Scaffold(
       appBar: CustomAppBar(
-        textAppBar: 'Artigos',
+        textAppBar: 'Formulários',
         customAppBar: CustomTabBar(
           tabController: _tabController,
           tabs: const [
-            Tab(text: 'Meus artigos'),
+            Tab(text: 'Meus forms'),
             Tab(text: 'Explorar'),
           ],
         ),
       ),
-      body: Center(child: tabsContent[_currentIndex]),
+      body: Center(child: tabsContent[_currentIndex])
     );
   }
 }

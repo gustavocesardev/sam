@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sam_app/domain/viewmodels/publicacao/feed_curso_viewmodel.dart';
-import 'package:sam_app/presentation/widgets/list_view/post_list_view.dart';
+import 'package:sam_app/domain/viewmodels/grupo_estudo/grupos_populares_viewmodel.dart';
+import 'package:sam_app/presentation/widgets/list_view/grupos_list_view.dart';
 
-class FeedCursoPage extends StatefulWidget {
-  const FeedCursoPage({super.key});
+class GruposPopularesPage extends StatefulWidget {
+  const GruposPopularesPage({super.key});
 
   @override
-  State<FeedCursoPage> createState() => _FeedCursoPageState();
+  State<GruposPopularesPage> createState() => _GruposPopularesPageState();
 }
 
-class _FeedCursoPageState extends State<FeedCursoPage> {
-  late FeedCursoViewmodel viewModel;
+class _GruposPopularesPageState extends State<GruposPopularesPage> {
+  late GruposPopularesViewmodel viewModel;
   final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    viewModel = context.read<FeedCursoViewmodel>();
+    viewModel = context.read<GruposPopularesViewmodel>();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       viewModel.loadInitial();
@@ -38,13 +38,13 @@ class _FeedCursoPageState extends State<FeedCursoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<FeedCursoViewmodel>(
+    return Consumer<GruposPopularesViewmodel>(
       builder: (context, vm, _) {
         return RefreshIndicator(
           onRefresh: () async => vm.loadInitial(),
           color: Theme.of(context).colorScheme.secondary,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          child: PostListView(vm: vm, controller: _scrollController),
+          child: GruposListView(vm: vm, controller: _scrollController),
         );
       },
     );

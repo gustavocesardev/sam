@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sam_app/domain/viewmodels/publicacao/feed_geral_viewmodel.dart';
-import 'package:sam_app/presentation/widgets/post/post_list_view.dart';
+import 'package:sam_app/presentation/widgets/list_view/post_list_view.dart';
 
 class FeedGeralPage extends StatefulWidget {
   const FeedGeralPage({super.key});
