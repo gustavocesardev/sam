@@ -78,6 +78,11 @@ class GrupoEstudo extends Model
                     ->where('situacao', 'A');
     }
 
+    public function getQtdeMembrosAtivosAttribute(): int
+    {
+        return $this->membros()->where('situacao', 'A')->count();
+    }
+
     public function updateImagem(string $newPath = ''): void
     {
         $this->imagem = $newPath;

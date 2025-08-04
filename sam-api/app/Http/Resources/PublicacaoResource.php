@@ -15,7 +15,7 @@ class PublicacaoResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $periodoAnoAtual = ($this->ano_inicio_curso -  Carbon::now()->year) + 1;
+        $periodoAnoAtual = ($this->user->ano_inicio_curso -  Carbon::now()->year) + 1;
         $periodoAnoAtual = $periodoAnoAtual > 0 ? $periodoAnoAtual : 1;
 
         return [

@@ -14,10 +14,16 @@ class FormularioRepository implements FormularioRepositoryInterface
     {
         return Formulario::findOrFail($id);
     }
-    public function findAtivoByUsuario(int $idUsuario): Collection
+    public function findAtivoByUsuario(int $idUsuario, int $limite = 15, int $page = 1): Collection
     {
-        return Formulario::where('id_usuario', $idUsuario)
+        $offset = ($page - 1) * $limite;
+
+        return Formulario::with(['usuario', 'usuario.curso'])
+                ->where('id_usuario', $idUsuario)
                 ->where('situacao', 'A')
+                ->whereDate('data_limite', '>=', Carbon::today())
+                ->skip($offset)
+                ->limit($limite)
                 ->get();
     }
 
@@ -45,15 +51,19 @@ class FormularioRepository implements FormularioRepositoryInterface
     {
         $offset = ($page - 1) * $limite;
 
-        return Formulario::query()
+        return Formulario::with(['usuario', 'usuario.curso'])
             ->whereHas('usuario.curso', function ($query) use ($idInstituicao) {
                 $query->where('id_instituicao', $idInstituicao);
             })
-            ->when(!empty($filters['titulo']), function ($query) use ($filters) {
-                $query->where('titulo', 'ILIKE', '%' . $filters['titulo'] . '%');
-            })
-            ->when(!empty($filters['descricao']), function ($query) use ($filters) {
-                $query->where('descricao', 'ILIKE', '%' . $filters['descricao'] . '%');
+            ->when(!empty($filters['titulo']) || !empty($filters['descricao']), function ($query) use ($filters) {
+                $query->where(function ($q) use ($filters) {
+                    if (!empty($filters['titulo'])) {
+                        $q->orWhere('titulo', 'ILIKE', '%' . $filters['titulo'] . '%');
+                    }
+                    if (!empty($filters['titulo'])) {
+                        $q->orWhere('descricao', 'ILIKE', '%' . $filters['titulo'] . '%');
+                    }
+                });
             })
             ->when(!empty($filters['tipo']), function ($query) use ($filters) {
                 $query->where('tipo', $filters['tipo']);

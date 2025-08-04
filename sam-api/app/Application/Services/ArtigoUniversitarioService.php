@@ -96,4 +96,13 @@ class ArtigoUniversitarioService
             $page
         );
     }
+
+    public function artigosUsuario(AuthenticatedUser $user, int $limite = 15, int $page = 1): Collection
+    {
+        return $this->artigoUniversitarioRepository->findByUsuario(
+            $user->id(),
+            $limite,
+            $page
+        );
+    }
 }

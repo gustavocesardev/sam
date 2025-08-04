@@ -66,6 +66,22 @@ class CursoController extends Controller
         }
     }
 
+    public function cursoByInstituicao(string $id): JsonResponse
+    {
+        try {
+
+            $cursos = $this->cursoService->searchByInstituicao($id);
+            return ApiResponse::success(
+                CursoResource::collection($cursos), 
+                'Cursos da instituição.', 
+                Response::HTTP_OK
+            );
+
+        } catch(AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
     public function update(CursoRequest $request, string $id): JsonResponse
     {
         try {

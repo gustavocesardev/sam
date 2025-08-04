@@ -26,6 +26,11 @@ class CursoService
         return $this->cursoRepository->find($id);
     }
 
+    public function searchByInstituicao(int $idInstituicao): Collection
+    {
+        return $this->cursoRepository->searchByInstituicao($idInstituicao);
+    }
+
     public function update(int $id, array $data): Curso
     {
         return $this->cursoRepository->update($id, $data);

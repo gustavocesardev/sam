@@ -41,4 +41,9 @@ class FormularioService
             $page
         );
     }
+
+    public function formulariosUsuario(AuthenticatedUser $user, int $limite = 15, int $page = 1): Collection
+    {
+        return $this->formularioRepository->findAtivoByUsuario($user->id(), $limite, $page);
+    }
 }

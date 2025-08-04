@@ -14,9 +14,15 @@ class ArtigoUniversitarioRepository implements ArtigoUniversitarioRepositoryInte
         return ArtigoUniversitario::findOrFail($id);
     }
 
-    public function findByUsuario(int $idUsuario): Collection
+    public function findByUsuario(int $idUsuario, int $limite = 15, int $page = 1): Collection
     {
-        return ArtigoUniversitario::where('id_usuario', $idUsuario)->get();
+        $offset = ($page - 1) * $limite;
+
+        return ArtigoUniversitario::with(['usuario', 'usuario.curso'])
+            ->where('id_usuario', $idUsuario)
+            ->skip($offset)
+            ->limit($limite)
+            ->get();
     }
 
     public function store(array $data): ArtigoUniversitario
@@ -44,6 +50,7 @@ class ArtigoUniversitarioRepository implements ArtigoUniversitarioRepositoryInte
         $offset = ($page - 1) * $limite;
 
         return ArtigoUniversitario::query()
+            ->with(['usuario', 'usuario.curso'])
             ->whereHas('usuario.curso', function ($query) use ($idInstituicao) {
                 $query->where('id_instituicao', $idInstituicao);
             })

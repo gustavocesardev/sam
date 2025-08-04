@@ -104,4 +104,26 @@ class FormularioController extends Controller
             return ApiResponse::error($exception);
         }
     }
+
+    public function formulariosUsuario(FormularioFilterRequest $request): JsonResponse
+    {
+        try {
+
+            $user = AuthenticatedUserFactory::fromAuth();
+
+            $limite = $request->get('limite', default: 15);
+            $page = $request->get('page', default: 1);
+
+            $formularios = $this->formularioService->formulariosUsuario($user, $limite, $page);
+
+            return ApiResponse::success(
+                FormularioResource::collection($formularios), 
+                'Listagem de formulários (Criados).', 
+                Response::HTTP_OK
+            );
+
+        } catch(AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
 }

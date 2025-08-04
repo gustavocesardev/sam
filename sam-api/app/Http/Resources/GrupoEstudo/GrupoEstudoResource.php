@@ -23,6 +23,7 @@ class GrupoEstudoResource extends JsonResource
             'hashtags'        => $this->hashtags,
             'imagem'          => $this->imagem,
             'imagem_header'   => $this->imagem_header,
+            'qtde_membros'     => $this->qtde_membros_ativos    
         ];
     }
 }

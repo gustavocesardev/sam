@@ -15,7 +15,7 @@ class MembroRepository implements MembroRepositoryInterface
         return Membro::findOrFail($id);
     }
 
-     public function findByUsuarioAndGrupo(int $idUsuario, int $idGrupoEstudo): ?Membro
+    public function findByUsuarioAndGrupo(int $idUsuario, int $idGrupoEstudo): ?Membro
     {
         return Membro::where('id_usuario', $idUsuario)
                      ->where('id_grupo_estudo', $idGrupoEstudo)

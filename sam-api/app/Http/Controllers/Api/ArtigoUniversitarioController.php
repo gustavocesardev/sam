@@ -104,4 +104,26 @@ class ArtigoUniversitarioController extends Controller
             return ApiResponse::error($exception);
         }
     }
+
+    public function artigosUsuario(ArtigoUniversitarioFilterRequest $request): JsonResponse
+    {
+        try {
+
+            $user = AuthenticatedUserFactory::fromAuth();
+
+            $limite = $request->get('limite', default: 15);
+            $page = $request->get('page', default: 1);
+
+            $artigosUniversitarios = $this->artigoUniversitarioService->artigosUsuario($user, $limite,  $page);
+
+            return ApiResponse::success(
+                ArtigoUniversitarioResource::collection($artigosUniversitarios), 
+                'Listagem de artigos universitários (Criados).', 
+                Response::HTTP_OK
+            );
+
+        } catch(AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
 }

@@ -36,6 +36,7 @@ Route::prefix('instituicao')->group(function () {
 // Rotas referentes ao curso
 Route::prefix('curso')->group(function () {
     Route::get('/', [CursoController::class, 'index'])->name('curso.index');
+    Route::get('/instituicao/{id}', [CursoController::class, 'cursoByInstituicao'])->name('curso.cursoByInstituicao');
     Route::post('/', [CursoController::class, 'store'])->name('curso.store');
     Route::get('{id}', [CursoController::class, 'show'])->name('curso.show'); 
     Route::put('{id}', [CursoController::class, 'update'])->name('curso.update');
@@ -115,6 +116,7 @@ Route::middleware('auth:api')->prefix('formulario')->group(function () {
 
     Route::post('/', [FormularioController::class, 'store']);
     Route::post('/filtrar', [FormularioController::class, 'filtrarPorCampos']);
+    Route::get('/criados', [FormularioController::class, 'formulariosUsuario']);
 
     Route::get('{id}', [FormularioController::class, 'show']);
     Route::put('{id}', [FormularioController::class, 'update']);
@@ -127,6 +129,7 @@ Route::middleware('auth:api')->prefix('artigo-universitario')->group(function ()
 
     Route::post('/', [ArtigoUniversitarioController::class, 'store']);
     Route::post('/filtrar', [ArtigoUniversitarioController::class, 'filtrarPorCampos']);
+    Route::get('/criados', [ArtigoUniversitarioController::class, 'artigosUsuario']);
 
     Route::get('{id}', [ArtigoUniversitarioController::class, 'show']);
     Route::put('{id}', [ArtigoUniversitarioController::class, 'update']);
