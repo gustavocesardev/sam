@@ -31,18 +31,18 @@ class CustomDropdown<T> extends StatelessWidget {
                 .enabledBorder!
                 .borderSide
                 .color,
-            width: 1,
+            width: 0.75,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: Theme.of(context).colorScheme.secondary,
-            width: 2,
+            width: 1,
           ),
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       ),
-      dropdownColor: Theme.of(context).colorScheme.primary,
+      dropdownColor: Theme.of(context).scaffoldBackgroundColor,
       items: itens,
       onChanged: onChanged,
     );

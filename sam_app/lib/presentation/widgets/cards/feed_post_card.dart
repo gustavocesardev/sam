@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:typed_data';
 
 import 'package:sam_app/data/cache/image_cache_service.dart';
-import 'package:sam_app/presentation/pages/post/post_images_page.dart';
+import 'package:sam_app/presentation/pages/publicacoes/post_images_page.dart';
 import 'package:sam_app/presentation/widgets/cached/cached_avatar.dart';
 import 'package:sam_app/presentation/widgets/cached/cached_post_image.dart';
 import 'package:sam_app/presentation/widgets/cached/cached_post_image_grid.dart';
@@ -68,16 +68,17 @@ class _FeedPostCardState extends State<FeedPostCard> {
       color: Theme.of(context).scaffoldBackgroundColor,
       margin: const EdgeInsets.only(bottom: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-
-            /// Avatar, nome e curso do usuário do post
-            Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          /// Conteúdo do Card
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+                /// Avatar
                 CachedAvatar(
                   avatarHash: widget.avatarHash,
                   avatarColor: widget.avatarColor,
@@ -85,79 +86,91 @@ class _FeedPostCardState extends State<FeedPostCard> {
                   imageCacheService: _imageCacheService
                 ),
                 const SizedBox(width: 12),
+
+                /// Coluna da direita: Nome, curso, conteúdo, imagens, etc.
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        widget.name,
-                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+
+                      /// Nome + curso + opções
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.name,
+                                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  widget.cursoInfo,
+                                  style: const TextStyle(color: Colors.white60, fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Icon(Icons.more_horiz, color: Colors.white70),
+                        ],
                       ),
+
+                      const SizedBox(height: 8),
+
+                      /// Conteúdo do post
                       Text(
-                        widget.cursoInfo,
-                        style: const TextStyle(color: Colors.white60, fontSize: 12),
+                        widget.content,
+                        textAlign: TextAlign.justify,
+                        style: const TextStyle(color: Colors.white, height: 1.4),
+                      ),
+
+                      /// Imagens do post
+                      if (widget.imageHashes.isNotEmpty) ...[
+                        const SizedBox(height: 12),
+                        if (imageCount == 1)
+                          CachedPostImage(
+                            url: widget.imageUrlFromHash(images[0]),
+                            height: 180,
+                            borderRadius: BorderRadius.circular(8),
+                            onTap: _openPostImages,
+                            imageCacheService: _imageCacheService,
+                          )
+                        else
+                          CachedPostImagesGrid(
+                            urls: images.map((hash) => widget.imageUrlFromHash(hash)).toList(),
+                            onImageTap: _openPostImages,
+                            imageCacheService: _imageCacheService,
+                            height: 180,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                      ],
+
+                      const SizedBox(height: 12),
+
+                      /// Comentários e curtidas
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.mode_comment_outlined, color: Colors.white54, size: 20),
+                              const SizedBox(width: 4),
+                              Text('${widget.comments}', style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                            ],
+                          ),
+                          const Icon(Icons.favorite_border, color: Colors.white54, size: 20),
+                        ],
                       ),
                     ],
                   ),
                 ),
-                const Icon(Icons.more_horiz, color: Colors.white70),
               ],
             ),
-            const SizedBox(height: 12),
+          ),
 
-            /// Conteúdo do post
-            Text(
-              widget.content,
-              textAlign: TextAlign.justify,
-              style: const TextStyle(color: Colors.white, height: 1.4),
-            ),
-
-            /// Imagens do post
-            if (widget.imageHashes.isNotEmpty) ...[
-              const SizedBox(height: 12),
-              if (imageCount == 1)
-                CachedPostImage(
-                  url: widget.imageUrlFromHash(images[0]),
-                  height: 180,
-                  borderRadius: BorderRadius.circular(8),
-                  onTap: _openPostImages,
-                  imageCacheService: _imageCacheService,
-                )
-              else
-                CachedPostImagesGrid(
-                  urls: images.map((hash) => widget.imageUrlFromHash(hash)).toList(),
-                  onImageTap: _openPostImages,
-                  imageCacheService: _imageCacheService,
-                  height: 180,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-            ],
-
-            const SizedBox(height: 12),
-
-            /// Comentários e curtidas
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    const Icon(Icons.mode_comment_outlined, color: Colors.white54, size: 20),
-                    const SizedBox(width: 4),
-                    Text('${widget.comments}', style: const TextStyle(color: Colors.white54, fontSize: 12)),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Icon(Icons.favorite_border, color: Colors.white54, size: 20),
-                  ],
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 12,),
-            const Divider(color: Colors.white12, height: 1),
-          ],
-        ),
+          const Divider(color: Colors.white12, height: 1),
+        ],
       ),
     );
   }

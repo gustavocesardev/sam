@@ -1,29 +1,36 @@
 import 'package:flutter/material.dart';
 
-class FielRoundedIcon extends StatelessWidget {
+class CustomTextFormField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
-  final IconData icon;
-  final ValueChanged<String>? onChanged;
+  final String hint;
+  final bool isRequired;
+  final int maxLines;
 
-  const FielRoundedIcon({
+  const CustomTextFormField({
     super.key,
     required this.controller,
-    this.label = 'Pesquisar',
-    required this.icon,
-    this.onChanged,
+    required this.label,
+    required this.hint,
+    this.isRequired = true,
+    this.maxLines = 1,
   });
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = BorderRadius.circular(20);
+    final borderRadius = BorderRadius.circular(10);
 
-    return TextField(
+    return TextFormField(
       controller: controller,
-      onChanged: onChanged,
+      maxLines: maxLines,
       decoration: InputDecoration(
         labelText: label,
-        suffixIcon: Icon(icon, color: Theme.of(context).colorScheme.secondary),
+        hintText: hint,
+        alignLabelWithHint: true,
+        hintStyle: TextStyle(
+          color: Theme.of(context).colorScheme.secondary,
+          fontSize: 14,
+        ),
         border: OutlineInputBorder(borderRadius: borderRadius),
         contentPadding: const EdgeInsets.all(12),
         enabledBorder: OutlineInputBorder(
@@ -34,17 +41,20 @@ class FielRoundedIcon extends StatelessWidget {
                   context,
                 ).inputDecorationTheme.enabledBorder?.borderSide.color ??
                 Colors.grey,
-            width: 1.5,
+            width: 0.75,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: borderRadius,
           borderSide: BorderSide(
             color: Theme.of(context).colorScheme.secondary,
-            width: 1.75,
+            width: 1,
           ),
         ),
       ),
+      validator: (value) => (value == null || value.isEmpty) && isRequired
+          ? '$label é um campo obrigatório'
+          : null,
     );
   }
 }

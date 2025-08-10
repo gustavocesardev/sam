@@ -38,6 +38,31 @@ class HttpService {
     return _handleResponse(response);
   }
 
+  Future<Map<String, dynamic>> postMultipart({
+    required String endpoint,
+    required Map<String, String> fields,
+    List<http.MultipartFile>? files,
+  }) async {
+    final uri = Uri.parse('$baseUrl$endpoint');
+    final token = await _getToken();
+
+    final request = http.MultipartRequest('POST', uri)
+      ..fields.addAll(fields);
+
+    if (token != null) {
+      request.headers['Authorization'] = 'Bearer $token';
+    }
+
+    if (files != null && files.isNotEmpty) {
+      request.files.addAll(files);
+    }
+
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+
+    return _handleResponse(response);
+  }
+
   Future<Uint8List> fetchImageBytes(String url) async {
     final token = await _getToken();
     final uri = Uri.parse(url);

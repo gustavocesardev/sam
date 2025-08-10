@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sam_app/presentation/pages/forms/formularios_criados_page.dart';
-import 'package:sam_app/presentation/pages/forms/formularios_explorar_page.dart';
+import 'package:sam_app/presentation/pages/formularios/formularios_criados_page.dart';
+import 'package:sam_app/presentation/pages/formularios/formularios_explorar_page.dart';
 import 'package:sam_app/presentation/widgets/app_bar/custom_app_bar.dart';
 import 'package:sam_app/presentation/widgets/tabs/custom_tab_bar.dart';
 

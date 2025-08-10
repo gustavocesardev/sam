@@ -7,4 +7,5 @@ class AppRoutes {
   static const gruposEstudo = '/grupos-estudo';
   static const formularios = '/formularios';
   static const artigos = '/artigos';
+  static const criarPublicacao = '/publicacao';
 }

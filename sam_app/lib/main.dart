@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:provider/provider.dart';
 import 'package:sam_app/core/routing/app_routes.dart';
 import 'package:sam_app/core/themes/app_theme.dart';
@@ -19,7 +20,7 @@ import 'package:sam_app/domain/viewmodels/splash_viewmodel.dart';
 import 'package:sam_app/presentation/pages/artigos/artigos_page.dart';
 
 import 'package:sam_app/presentation/pages/feed/feed_page.dart';
-import 'package:sam_app/presentation/pages/forms/formularios_page.dart';
+import 'package:sam_app/presentation/pages/formularios/formularios_page.dart';
 import 'package:sam_app/presentation/pages/grupos/grupos_estudo_page.dart';
 import 'package:sam_app/presentation/pages/home_page.dart';
 import 'package:sam_app/presentation/pages/instituicoes_page.dart';
@@ -123,6 +124,13 @@ class MyApp extends StatelessWidget {
         AppRoutes.formularios: (_) => const FormulariosPage(),
         AppRoutes.artigos: (_) => const ArtigosPage(),
       },
+      localizationsDelegates: const [
+        FlutterQuillLocalizations.delegate
+      ],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('pt'),
+      ],
     );
   }
 }

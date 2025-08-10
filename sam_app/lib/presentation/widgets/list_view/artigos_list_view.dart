@@ -14,7 +14,7 @@ class ArtigosListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (vm.artigos.isEmpty && !vm.isLoading) {
+    if (vm.artigos.isEmpty && !vm.isLoadingInitial) {
       return const Center(
         child: Text(
           'Nenhum artigo encontrado :(',
@@ -28,7 +28,7 @@ class ArtigosListView extends StatelessWidget {
       itemCount: vm.artigos.length + (vm.isLoading || !vm.hasMore ? 1 : 0),
       padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
       itemBuilder: (context, index) {
-        if (index == vm.artigos.length) {
+        if (index == vm.artigos.length || vm.isLoadingInitial) {
           if (vm.isLoadingMore) {
             return const Center(
               child: Padding(
