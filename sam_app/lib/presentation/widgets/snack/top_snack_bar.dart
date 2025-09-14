@@ -5,6 +5,7 @@ class TopSnackBar {
     BuildContext context,
     String message, {
     Duration duration = const Duration(seconds: 3),
+    Color? color,
   }) {
     final overlay = Overlay.of(context);
 
@@ -14,6 +15,7 @@ class TopSnackBar {
         message: message,
         onDismissed: () => entry.remove(),
         duration: duration,
+        color: color,
       ),
     );
 
@@ -25,11 +27,13 @@ class _TopSnackBarWidget extends StatefulWidget {
   final String message;
   final VoidCallback onDismissed;
   final Duration duration;
+  final Color? color;
 
   const _TopSnackBarWidget({
     required this.message,
     required this.onDismissed,
     required this.duration,
+    this.color,
   });
 
   @override
@@ -40,6 +44,7 @@ class _TopSnackBarWidgetState extends State<_TopSnackBarWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
+  late Color? color = widget.color;
 
   @override
   void initState() {
@@ -78,7 +83,7 @@ class _TopSnackBarWidgetState extends State<_TopSnackBarWidget>
         child: Material(
           elevation: 6,
           borderRadius: BorderRadius.circular(8),
-          color: Theme.of(context).colorScheme.primary,
+          color: color ?? Theme.of(context).colorScheme.primary,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
             child: Text(

@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
       ),
       3: FabConfigVO(
         icon: Icon(Icons.article_outlined, size: 30),
-        builder: (_) => FormularioFormPage()
+        builder: (_) => FormularioFormPage(idUsuario: userModel!.id,)
       ),
       4: FabConfigVO(
         icon: Icon(Icons.note_add_outlined, size: 30),

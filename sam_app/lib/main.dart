@@ -7,6 +7,7 @@ import 'package:sam_app/data/repositories/artigo/artigo_repository.dart';
 import 'package:sam_app/data/repositories/formulario/formulario_repository.dart';
 import 'package:sam_app/data/repositories/grupo_estudo/grupos_estudo_repository.dart';
 import 'package:sam_app/data/repositories/publicacao/feed_repository.dart';
+import 'package:sam_app/data/services/formulario/formulario_service.dart';
 import 'package:sam_app/domain/viewmodels/artigo/artigos_criados_viewmodel.dart';
 import 'package:sam_app/domain/viewmodels/artigo/artigos_explorar_viewmodel.dart';
 import 'package:sam_app/domain/viewmodels/formulario/formularios_criados_viewmodel.dart';
@@ -35,7 +36,10 @@ void main() async {
   final storageService = await AuthStorageService.init();
   final feedRepository = FeedRepository();
   final grupoRepository = GruposEstudoRepository();
-  final formRepository = FormularioRepository();
+
+  final formService = FormularioService();
+  final formRepository = FormularioRepository(formService);
+  
   final artigoRepository = ArtigoRepository();
 
   runApp(
@@ -124,13 +128,8 @@ class MyApp extends StatelessWidget {
         AppRoutes.formularios: (_) => const FormulariosPage(),
         AppRoutes.artigos: (_) => const ArtigosPage(),
       },
-      localizationsDelegates: const [
-        FlutterQuillLocalizations.delegate
-      ],
-      supportedLocales: const [
-        Locale('en'),
-        Locale('pt'),
-      ],
+      localizationsDelegates: const [FlutterQuillLocalizations.delegate],
+      supportedLocales: const [Locale('en'), Locale('pt')],
     );
   }
 }

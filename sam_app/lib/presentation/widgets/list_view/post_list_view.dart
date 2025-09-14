@@ -30,7 +30,7 @@ class PostListView extends StatelessWidget {
           } else {
             return const Center(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 40),
+                padding: EdgeInsets.only(bottom: 40, top: 25),
                 child: Text(
                   'Parece que você chegou ao fim',
                   style: TextStyle(color: Colors.white70, fontSize: 14),

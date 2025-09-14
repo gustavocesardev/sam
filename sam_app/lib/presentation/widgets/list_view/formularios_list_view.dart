@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:sam_app/domain/viewmodels/formulario/formularios_viewmodel.dart';
+import 'package:sam_app/presentation/pages/formularios/formulario_form_page.dart';
 import 'package:sam_app/presentation/widgets/cards/form_card.dart';
+import 'package:sam_app/shared/utils/storage_utils.dart';
 
 class FormulariosListView extends StatelessWidget {
   final FormulariosViewmodel vm;
   final ScrollController controller;
+  final bool isCriado;
 
   const FormulariosListView({
     super.key,
     required this.vm,
     required this.controller,
+    this.isCriado = false,
   });
 
   @override
@@ -60,13 +64,39 @@ class FormulariosListView extends StatelessWidget {
         }
 
         final form = vm.forms[index];
-        return FormCard(
-          key: ValueKey(form.id),
-          periodo: form.periodo,
-          curso: form.curso,
-          autor: form.nome,
-          titulo: form.titulo,
-          corFundo: Theme.of(context).colorScheme.primary,
+
+        return GestureDetector(
+          onTap: () async {
+            if (isCriado) {
+              final userId = await StorageUtils.getUserId();
+              if (userId == null) return;
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => FormularioFormPage(
+                    idUsuario: userId,
+                    idFormulario: form.id,
+                  ),
+                ),
+              ).then((value) {
+                if (value == true) {
+                  vm.loadInitial();
+                }
+              });
+            }
+            else {
+              
+            }
+          },
+          child: FormCard(
+            key: ValueKey(form.id),
+            periodo: form.periodo,
+            curso: form.curso,
+            autor: form.nome,
+            titulo: form.titulo,
+            corFundo: Theme.of(context).colorScheme.primary,
+          ),
         );
       },
     );

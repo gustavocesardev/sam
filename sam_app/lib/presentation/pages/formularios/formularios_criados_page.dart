@@ -56,6 +56,7 @@ class _FormulariosCriadosPageState extends State<FormulariosCriadosPage> {
                   child: FormulariosListView(
                     vm: vm,
                     controller: _scrollController,
+                    isCriado: true,
                   ),
                 ),
             ],

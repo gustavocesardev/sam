@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sam_app/core/routing/app_routes.dart';
 import 'package:sam_app/domain/viewmodels/login_viewmodel.dart';
+import 'package:sam_app/presentation/pages/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,11 +16,8 @@ class _LoginPageState extends State<LoginPage> {
   final _senhaController = TextEditingController();
 
   Future<void> _login() async {
-  final vm = context.read<LoginViewModel>();
-    await vm.loginAndStore(
-      _emailController.text,
-      _senhaController.text,
-    );
+    final vm = context.read<LoginViewModel>();
+    await vm.loginAndStore(_emailController.text, _senhaController.text);
 
     if (!mounted) return;
 
@@ -38,7 +36,11 @@ class _LoginPageState extends State<LoginPage> {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(vm.errorMessage!, style: TextStyle(color: Colors.white,),textAlign: TextAlign.center,),
+            content: Text(
+              vm.errorMessage!,
+              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
             backgroundColor: Colors.red[700],
           ),
         );
@@ -125,7 +127,15 @@ class _LoginPageState extends State<LoginPage> {
                         minimumSize: Size(125, 40),
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
-                      child: const Text('Cadastre-se agora'),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => RegisterPage()),
+                          );
+                        },
+                        child: const Text('Cadastre-se agora'),
+                      ),
                     ),
                   ],
                 ),

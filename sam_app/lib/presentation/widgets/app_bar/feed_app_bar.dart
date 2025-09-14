@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sam_app/data/models/user_model.dart';
 import 'package:sam_app/data/services/user_service.dart';
 import 'package:sam_app/data/storage/auth_storage_service.dart';
+import 'package:sam_app/presentation/pages/profile_page.dart';
 import 'package:sam_app/presentation/widgets/tabs/custom_tab_bar.dart';
 import 'package:sam_app/shared/constants.dart';
 
@@ -21,6 +22,7 @@ class _FeedAppBarState extends State<FeedAppBar> {
   final UserService service = UserService();
 
   String? userImageUrl;
+  int? userId;
   String? instituicaoImageUrl;
 
   @override
@@ -38,6 +40,7 @@ class _FeedAppBarState extends State<FeedAppBar> {
       if (!mounted) return;
 
       setState(() {
+        userId = user.id; 
         userImageUrl = "$baseUrl/file/image/${currentUser?.avatarEncrypted}";
         instituicaoImageUrl =
             "$baseUrl/file/image/${user.instituicao.imagemInstituicao}";
@@ -55,15 +58,32 @@ class _FeedAppBarState extends State<FeedAppBar> {
         children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: CircleAvatar(
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-              radius: 18,
-              backgroundImage: userImageUrl != null
-                  ? NetworkImage(userImageUrl!)
-                  : null,
-              child: userImageUrl == null ? const Icon(Icons.person) : null,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(20),
+                onTap: () {
+                  if (userId != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ProfilePage(userId: userId!),
+                      ),
+                    );
+                  }
+                },
+                child: CircleAvatar(
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  radius: 18,
+                  backgroundImage: userImageUrl != null
+                      ? NetworkImage(userImageUrl!)
+                      : null,
+                  child: userImageUrl == null ? const Icon(Icons.person) : null,
+                ),
+              ),
             ),
           ),
+
           Align(
             alignment: Alignment.center,
             child: Row(

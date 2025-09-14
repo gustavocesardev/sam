@@ -6,6 +6,7 @@ class CustomTextFormField extends StatelessWidget {
   final String hint;
   final bool isRequired;
   final int maxLines;
+  final int? maxLength;
 
   const CustomTextFormField({
     super.key,
@@ -14,6 +15,7 @@ class CustomTextFormField extends StatelessWidget {
     required this.hint,
     this.isRequired = true,
     this.maxLines = 1,
+    this.maxLength,
   });
 
   @override
@@ -23,6 +25,7 @@ class CustomTextFormField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       maxLines: maxLines,
+      maxLength: maxLength,
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
@@ -37,10 +40,7 @@ class CustomTextFormField extends StatelessWidget {
           borderRadius: borderRadius,
           borderSide: BorderSide(
             color:
-                Theme.of(
-                  context,
-                ).inputDecorationTheme.enabledBorder?.borderSide.color ??
-                Colors.grey,
+                Theme.of(context).inputDecorationTheme.enabledBorder?.borderSide.color ?? Colors.grey,
             width: 0.75,
           ),
         ),
@@ -52,9 +52,15 @@ class CustomTextFormField extends StatelessWidget {
           ),
         ),
       ),
-      validator: (value) => (value == null || value.isEmpty) && isRequired
-          ? '$label é um campo obrigatório'
-          : null,
+      validator: (value) {
+        if ((value == null || value.isEmpty) && isRequired) {
+          return '$label é um campo obrigatório';
+        }
+        if (maxLength != null && value != null && value.length > maxLength!) {
+          return '$label não pode exceder $maxLength caracteres';
+        }
+        return null;
+      },
     );
   }
 }

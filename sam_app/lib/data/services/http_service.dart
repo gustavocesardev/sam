@@ -38,6 +38,37 @@ class HttpService {
     return _handleResponse(response);
   }
 
+  Future<Map<String, dynamic>> put(String endpoint, {Map<String, dynamic>? body}) async {
+    final uri = Uri.parse('$baseUrl$endpoint');
+    final token = await _getToken();
+
+    final response = await http.put(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(body),
+    );
+
+    return _handleResponse(response);
+  }
+
+  Future<Map<String, dynamic>> delete(String endpoint) async {
+    final uri = Uri.parse('$baseUrl$endpoint');
+    final token = await _getToken();
+
+    final response = await http.delete(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token',
+      },
+    );
+
+    return _handleResponse(response);
+  }
+
   Future<Map<String, dynamic>> postMultipart({
     required String endpoint,
     required Map<String, String> fields,
