@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sam_app/domain/viewmodels/artigo/artigos_viewmodel.dart';
+import 'package:sam_app/presentation/pages/artigos/artigo_form_page.dart';
 import 'package:sam_app/presentation/widgets/cards/artigo_card.dart';
+import 'package:sam_app/shared/utils/storage_utils.dart';
 
 class ArtigosListView extends StatelessWidget {
   final ArtigosViewmodel vm;
@@ -26,7 +28,7 @@ class ArtigosListView extends StatelessWidget {
     return ListView.builder(
       controller: controller,
       itemCount: vm.artigos.length + (vm.isLoading || !vm.hasMore ? 1 : 0),
-      padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       itemBuilder: (context, index) {
         if (index == vm.artigos.length || vm.isLoadingInitial) {
           if (vm.isLoadingMore) {
@@ -39,14 +41,10 @@ class ArtigosListView extends StatelessWidget {
           } else {
             return const Center(
               child: Padding(
-                padding: EdgeInsets.only(
-                  bottom: 40,
-                  top: 10,
-                  left: 15,
-                  right: 15,
-                ),
+                padding: EdgeInsets.only(bottom: 40, top: 10, left: 15, right: 15),
                 child: Column(
                   children: [
+                    Divider(color: Colors.white12, height: 1),
                     SizedBox(height: 12),
                     Text(
                       'Parece que você chegou ao fim',
@@ -60,11 +58,33 @@ class ArtigosListView extends StatelessWidget {
         }
 
         final artigo = vm.artigos[index];
-        return ArtigoCard(
-          dataPublicacao: artigo.publicadoEm,
-          titulo: artigo.titulo,
-          autor: "${artigo.nome} - ${artigo.anoCurso}",
-          descricao: artigo.conteudo,
+
+        return GestureDetector(
+          onTap: () async {
+            final userId = await StorageUtils.getUserId();
+            if (userId == null) return;
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ArtigoFormPage(
+                  idUsuario: userId,
+                  idArtigo: artigo.id,
+                ),
+              ),
+            ).then((value) {
+              if (value == true) {
+                vm.loadInitial();
+              }
+            });
+          },
+          child: ArtigoCard(
+            key: ValueKey(artigo.id),
+            dataPublicacao: artigo.publicadoEm,
+            titulo: artigo.titulo,
+            autor: "${artigo.nome} - ${artigo.anoCurso}",
+            descricao: vm.quillContentToPlainText(artigo.conteudo),
+          )
         );
       },
     );

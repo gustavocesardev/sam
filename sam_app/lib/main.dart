@@ -7,7 +7,6 @@ import 'package:sam_app/data/repositories/artigo/artigo_repository.dart';
 import 'package:sam_app/data/repositories/formulario/formulario_repository.dart';
 import 'package:sam_app/data/repositories/grupo_estudo/grupos_estudo_repository.dart';
 import 'package:sam_app/data/repositories/publicacao/feed_repository.dart';
-import 'package:sam_app/data/services/formulario/formulario_service.dart';
 import 'package:sam_app/domain/viewmodels/artigo/artigos_criados_viewmodel.dart';
 import 'package:sam_app/domain/viewmodels/artigo/artigos_explorar_viewmodel.dart';
 import 'package:sam_app/domain/viewmodels/formulario/formularios_criados_viewmodel.dart';
@@ -36,9 +35,7 @@ void main() async {
   final storageService = await AuthStorageService.init();
   final feedRepository = FeedRepository();
   final grupoRepository = GruposEstudoRepository();
-
-  final formService = FormularioService();
-  final formRepository = FormularioRepository(formService);
+  final formRepository = FormularioRepository();
   
   final artigoRepository = ArtigoRepository();
 

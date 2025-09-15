@@ -5,8 +5,6 @@ import 'package:sam_app/data/services/formulario/formulario_service.dart';
 class FormularioRepository {
   final FormularioService service = FormularioService();
 
-  FormularioRepository(FormularioService formularioService);
-
   Future<FormularioModel> index({required int id}) {
     return service.index(id: id);
   }

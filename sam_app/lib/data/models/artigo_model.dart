@@ -5,7 +5,7 @@ class ArtigoModel {
   final String anoCurso;
   final String titulo;
   final String palavrasChave;
-  final String conteudo;
+  final List<dynamic> conteudo;
   final String? pdf;
   final String publicadoEm;
   final String criadoEm;
@@ -30,8 +30,8 @@ class ArtigoModel {
       nome: json['nome'],
       anoCurso: json['ano_curso'],
       titulo: json['titulo'],
-      palavrasChave: json['palavras_chave'],
-      conteudo: json['conteudo'],
+      palavrasChave: json['palavras_chave'] ?? '',
+      conteudo: List<dynamic>.from(json['conteudo'] ?? []),
       pdf: json['pdf'],
       publicadoEm: json['publicaco_em'],
       criadoEm: json['created_at'],

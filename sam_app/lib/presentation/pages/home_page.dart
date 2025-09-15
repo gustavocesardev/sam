@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
       ),
       4: FabConfigVO(
         icon: Icon(Icons.note_add_outlined, size: 30),
-        builder: (_) => ArtigoFormPage()
+        builder: (_) => ArtigoFormPage(idUsuario: userModel!.id,)
       ),
     };
   }

@@ -3,13 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:sam_app/data/enums/tipo_formulario_enum.dart';
 import 'package:sam_app/data/repositories/formulario/formulario_repository.dart';
 import 'package:sam_app/data/requests/formulario_request.dart';
-import 'package:sam_app/data/services/formulario/formulario_service.dart';
 
 class FormularioFormViewModel extends ChangeNotifier {
   final int idUsuario;
   final int? idFormulario;
-
-  final FormularioService _formularioService = FormularioService();
 
   FormularioFormViewModel({this.idFormulario, required this.idUsuario});
 
@@ -47,7 +44,7 @@ class FormularioFormViewModel extends ChangeNotifier {
 
   Future<void> carregarFormulario(int id) async {
     setLoadingData(true);
-    final repository = FormularioRepository(_formularioService);
+    final repository = FormularioRepository();
     final formulario = await repository.index(id: id);
 
     tituloController.text = formulario.titulo;
@@ -71,7 +68,7 @@ class FormularioFormViewModel extends ChangeNotifier {
 
   Future<void> excluirFormulario() async {
     setLoadingExclude(true);
-    final repository = FormularioRepository(_formularioService);
+    final repository = FormularioRepository();
     await repository.delete(id: idFormulario!);
   }
 
@@ -79,7 +76,7 @@ class FormularioFormViewModel extends ChangeNotifier {
     setLoading(true);
     notifyListeners();
 
-    final repository = FormularioRepository(_formularioService);
+    final repository = FormularioRepository();
 
     try {
       final DateTime data = DateFormat(
