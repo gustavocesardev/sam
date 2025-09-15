@@ -22,7 +22,7 @@ class ArtigoUniversitarioController extends Controller
     public function store(ArtigoUniversitarioRequest $request): JsonResponse
     {
         try {
-
+            
             $artigoUniversitario = $this->artigoUniversitarioService->store($request->validated());
             return ApiResponse::success(
                 new ArtigoUniversitarioResource($artigoUniversitario), 

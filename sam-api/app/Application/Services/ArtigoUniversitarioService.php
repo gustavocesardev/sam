@@ -4,6 +4,8 @@ namespace App\Application\Services;
 
 use App\Application\Contracts\Infrastructure\CryptoServiceInterface;
 use App\Application\Contracts\Infrastructure\DocumentProcessorInterface;
+use App\Domain\Enums\ErrorContext;
+use App\Domain\Exceptions\AppException;
 use App\Domain\Model\ArtigoUniversitario;
 use App\Domain\Repository\ArtigoUniversitarioRepositoryInterface;
 
@@ -26,6 +28,21 @@ class ArtigoUniversitarioService
 
     public function store(array $data): ArtigoUniversitario
     {
+        if (isset($data['conteudo']) && is_string($data['conteudo']))
+        {
+            $decoded = json_decode($data['conteudo'], true);
+
+            if ($decoded === null && json_last_error() !== JSON_ERROR_NONE)
+            {
+                throw new AppException(
+                    'O atributo conteudo não é um JSON válido.',
+                    ErrorContext::ARTIGO
+                );
+            }
+
+            $data['conteudo'] = $decoded;
+        }
+
         $artigoUniversitario = $this->artigoUniversitarioRepository->store($data);
 
         if (array_key_exists('pdf', $data))
@@ -45,6 +62,21 @@ class ArtigoUniversitarioService
 
     public function update(int $id, array $data): ArtigoUniversitario
     {
+        if (isset($data['conteudo']) && is_string($data['conteudo']))
+        {
+            $decoded = json_decode($data['conteudo'], true);
+
+            if ($decoded === null && json_last_error() !== JSON_ERROR_NONE)
+            {
+                throw new AppException(
+                    'O atributo conteudo não é um JSON válido.',
+                    ErrorContext::ARTIGO
+                );
+            }
+
+            $data['conteudo'] = $decoded;
+        }
+        
         $artigoUniversitario = $this->artigoUniversitarioRepository->update($id, $data);
 
         if (array_key_exists('pdf', $data))

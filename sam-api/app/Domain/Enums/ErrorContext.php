@@ -18,6 +18,7 @@ class ErrorContext
     const GRUPO_ESTUDO_PUBLICACAO = 'app.grupo_estudo.publicaco';
     const GRUPO_ESTUDO_MEMBRO = 'app.grupo_estudo.membro';
     const FORMULARIO = 'app.formulario';
+    const ARTIGO = 'app.artigo';
     
     const CONTEXTS = [
         self::AUTH_ACCESS_TOKEN  => 'Erro ao gerar o Access Token.',
@@ -33,7 +34,8 @@ class ErrorContext
         self::GRUPO_ESTUDO => 'Erro no processamento ou serviço referente ao grupo de estudo.',
         self::GRUPO_ESTUDO_PUBLICACAO => 'Erro no processamento ou serviço referente à publicação do grupo de estudo.',
         self::GRUPO_ESTUDO_MEMBRO => 'Erro no processamento ou serviço referente ao membro no grupo de estudo.',
-        self::FORMULARIO => 'Erro no processamento ou serviço referente ao formulário.'
+        self::FORMULARIO => 'Erro no processamento ou serviço referente ao formulário.',
+        self::ARTIGO => 'Erro no processamento ou serviço referente ao artigo.'
     ];
 
     public static function getDescription($context): mixed

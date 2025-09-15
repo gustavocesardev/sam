@@ -31,7 +31,7 @@ abstract class KeywordServiceAbstract
         $stopWordsFilter = new StopWordsFilter(['pt']);
         $filtered = array_filter(array_map([$stopWordsFilter, 'transform'], $tokens), fn($w) => strlen($w) > 2);
 
-        $frequency = array_count_values($filtered);
+        $frequency = array_count_values(array: $filtered);
 
         return $frequency;
     }

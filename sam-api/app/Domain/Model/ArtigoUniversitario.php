@@ -20,6 +20,7 @@ class ArtigoUniversitario extends Model
     ];
 
     protected $casts = [
+        'conteudo' => 'array',
         'excluido' => 'boolean',
         'excluido_data' => 'date'
     ];

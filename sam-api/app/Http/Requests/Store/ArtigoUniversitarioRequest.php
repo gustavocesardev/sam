@@ -18,7 +18,7 @@ class ArtigoUniversitarioRequest extends FormRequest
             'id_usuario'     => ['required', 'integer'],
             'titulo'         => ['required', 'string', 'max:250'],
             'palavras_chave' => ['nullable', 'string', 'max:250'],
-            'conteudo'       => ['required', 'string'],
+            'conteudo'       => ['required'],
             'pdf'            => ['nullable', File::types(['pdf'])->max(10240)],
         ];
     }
@@ -37,7 +37,6 @@ class ArtigoUniversitarioRequest extends FormRequest
             'palavras_chave.max'    => 'O atributo palavras_chave deve ter no máximo 250 caracteres.',
 
             'conteudo.required' => 'O atributo conteudo é obrigatório.',
-            'conteudo.string'   => 'O atributo conteudo deve ser um texto.',
 
             'pdf.file'      => 'O arquivo enviado deve ser um arquivo.',
             'pdf.mimes'     => 'O arquivo deve ser um PDF.',
