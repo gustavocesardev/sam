@@ -47,7 +47,7 @@ class FormularioRequest extends FormRequest
 
             'link_forms.required' => 'O atributo link_forms é obrigatório.',
             'link_forms.string'   => 'O atributo link_forms deve ser um texto.',
-            'link_forms.url'      => 'O atributo link_forms deve ser uma URL válida.',
+            'link_forms.url'      => 'Form Link deve ser uma URL válida.',
             'link_forms.max'      => 'O atributo link_forms deve ter no máximo 500 caracteres.',
 
             'data_limite.required'       => 'O atributo data_limite é obrigatório.',
