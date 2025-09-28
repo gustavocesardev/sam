@@ -72,27 +72,43 @@ class ArtigoService {
     await _http.delete('/artigo-universitario/$id');
   }
 
-  Future<void> downloadPdf(String url, String nomeArquivo) async {
-    final client = http.Client();
-    try {
-      final request = http.Request('GET', Uri.parse('$baseUrl/file/document/$url'));
-      final streamedResponse = await client.send(request);
+  Future<void> downloadPdf(String url, String nomeArquivo, {int maxRetries = 10}) async {
+    int attempt = 0;
+    while (attempt < maxRetries) {
+      final client = http.Client();
 
-      if (streamedResponse.statusCode != 200) {
-        throw Exception('Falha ao baixar PDF: ${streamedResponse.statusCode}');
+      try {
+
+        final request = http.Request('GET', Uri.parse('$baseUrl/file/document/$url'));
+        final streamedResponse = await client.send(request);
+
+        if (streamedResponse.statusCode != 200) {
+          throw Exception('Falha ao baixar PDF: ${streamedResponse.statusCode}');
+        }
+
+        final dir = await getApplicationDocumentsDirectory();
+        final safeFileName = nomeArquivo.replaceAll(RegExp(r'[\\/:*?"<>|]'), '_');
+        final file = File('${dir.path}/$safeFileName.pdf');
+        final sink = file.openWrite();
+
+        await streamedResponse.stream.pipe(sink);
+        await sink.close();
+
+        await OpenFile.open(file.path);
+        return;
+
+      } catch (e) {
+
+        attempt++;
+        if (attempt >= maxRetries) {
+          throw Exception('Falha ao baixar PDF após $maxRetries tentativas. Erro: $e');
+        }
+        
+        await Future.delayed(const Duration(seconds: 2));
+        
+      } finally {
+        client.close();
       }
-
-      final dir = await getApplicationDocumentsDirectory();
-      final safeFileName = nomeArquivo.replaceAll(RegExp(r'[\\/:*?"<>|]'), '_');
-      final file = File('${dir.path}/$safeFileName.pdf');
-      final sink = file.openWrite();
-
-      await streamedResponse.stream.pipe(sink);
-      await sink.close();
-
-      await OpenFile.open(file.path);
-    } finally {
-      client.close();
     }
   }
 }

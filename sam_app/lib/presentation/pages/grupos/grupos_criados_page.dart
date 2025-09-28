@@ -44,7 +44,11 @@ class _GruposCriadosPageState extends State<GruposCriadosPage> {
           onRefresh: () async => vm.loadInitial(),
           color: Theme.of(context).colorScheme.secondary,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          child: GruposListView(vm: vm, controller: _scrollController),
+          child: GruposListView(
+            vm: vm,
+            controller: _scrollController,
+            isCriado: true,
+          ),
         );
       },
     );

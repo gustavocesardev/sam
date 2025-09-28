@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:sam_app/domain/viewmodels/grupo_estudo/grupos_estudo_viewmodel.dart';
+import 'package:sam_app/presentation/pages/grupos/grupo_estudo_form_page.dart';
 import 'package:sam_app/presentation/widgets/cards/grupo_card.dart';
+import 'package:sam_app/shared/utils/storage_utils.dart';
 
 class GruposListView extends StatelessWidget {
   final GruposEstudoViewmodel vm;
   final ScrollController controller;
+  final bool isCriado;
 
   const GruposListView({
     super.key,
     required this.vm,
-    required this.controller
+    required this.controller,
+    this.isCriado = false,
   });
 
   @override
@@ -50,12 +54,34 @@ class GruposListView extends StatelessWidget {
         }
 
         final grupo = vm.grupos[index];
-        return GrupoCard(
-          key: ValueKey(grupo.id),
-          iconPath: grupo.imagem,
-          nome: grupo.nomeGrupo,
-          membros: grupo.qtdeMembros,
-          tags: grupo.hashtags,
+        return GestureDetector(
+          onTap: () async {
+            if (isCriado) {
+              final userId = await StorageUtils.getUserId();
+              if (userId == null) return;
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => GrupoEstudoFormPage(
+                    idUsuario: userId,
+                    idGrupoEstudo: grupo.id,
+                  ),
+                ),
+              ).then((value) {
+                if (value == true) {
+                  vm.loadInitial();
+                }
+              });
+            }
+          },
+          child: GrupoCard(
+            key: ValueKey(grupo.id),
+            iconPath: grupo.imagem,
+            nome: grupo.nomeGrupo,
+            membros: grupo.qtdeMembros,
+            tags: grupo.hashtags,
+          ),
         );
       },
     );

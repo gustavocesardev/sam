@@ -1,4 +1,4 @@
-class FormularioRequest {
+class  FormularioRequest {
   final int? idFormulario;
   final int idUsuario;
   final String titulo;

@@ -61,7 +61,6 @@ class _FormularioFormPageState extends State<FormularioFormPage> {
           if (vm.isLoadingData) {
             return const Center(child: CircularProgressIndicator());
           }
-
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.only(
@@ -124,43 +123,41 @@ class _FormularioFormPageState extends State<FormularioFormPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        vm.idFormulario != null 
-                          ? 
-                            vm.isLoadingExclude
-                            ? const LoadingButtonSimple()
-                            :
-                            CustomIconButton(
-                              label: "Excluir",
-                              color: Colors.red.shade700,
-                              icon: Icons.close,
-                              onPressed: () async {
-                                try {
-                                  await vm.excluirFormulario();
-                                  if (context.mounted) {
-                                    TopSnackBar.show(
-                                      context,
-                                      'Formulario excluido com sucesso!',
-                                      color: Colors.orange[800]
-                                    );
-                                    Navigator.pop(context, true);
-                                  }
-                                } catch (error) {
-                                  if (context.mounted) {
-                                    TopSnackBar.show(
-                                      context,
-                                      error.toString(),
-                                      color: Colors.red[700],
-                                    );
-                                  }
-                                }
-                              },
-                            )
-                          : CustomIconButton(
-                              label: "Cancelar",
-                              color: Colors.red.shade700,
-                              icon: Icons.close,
-                              onPressed: () async => Navigator.pop(context),
-                            ),
+                        vm.idFormulario != null
+                            ? vm.isLoadingExclude
+                                  ? const LoadingButtonSimple()
+                                  : CustomIconButton(
+                                      label: "Excluir",
+                                      color: Colors.red.shade700,
+                                      icon: Icons.close,
+                                      onPressed: () async {
+                                        try {
+                                          await vm.excluirFormulario();
+                                          if (context.mounted) {
+                                            TopSnackBar.show(
+                                              context,
+                                              'Formulario excluído com sucesso!',
+                                              color: Colors.orange[800],
+                                            );
+                                            Navigator.pop(context, true);
+                                          }
+                                        } catch (error) {
+                                          if (context.mounted) {
+                                            TopSnackBar.show(
+                                              context,
+                                              error.toString(),
+                                              color: Colors.red[700],
+                                            );
+                                          }
+                                        }
+                                      },
+                                    )
+                            : CustomIconButton(
+                                label: "Cancelar",
+                                color: Colors.red.shade700,
+                                icon: Icons.close,
+                                onPressed: () async => Navigator.pop(context),
+                              ),
                         vm.isLoading
                             ? const LoadingButtonSimple()
                             : CustomIconButton(

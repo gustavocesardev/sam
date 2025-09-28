@@ -111,6 +111,17 @@ class HttpService {
     }
   }
 
+  Future<Uint8List> fetchImageWithRetry(String url, {Duration delay = const Duration(seconds: 1)}) async {
+    while (true) {
+      try {
+        final bytes = await HttpService().fetchImageBytes(url);
+        return bytes;
+      } catch (e) {
+        await Future.delayed(delay);
+      }
+    }
+  }
+
   Map<String, dynamic> _handleResponse(http.Response response) {
     final decoded = jsonDecode(response.body);
     if (response.statusCode >= 200 && response.statusCode < 300) {

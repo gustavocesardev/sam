@@ -49,14 +49,14 @@ class _HomePageState extends State<HomePage> {
     const FeedPage(),
     const GruposEstudoPage(),
 
-    /// Apenas para ocupar o centro da BottomBar :P
+    // Apenas para ocupar o centro da BottomBar :P
     const FeedPage(),
 
     const FormulariosPage(),
     const ArtigosPage(),
   ];
 
-  /// Definindo os Icons e suas rotas para a bottom bar
+  // Definindo os Icons e suas rotas para a bottom bar
   Map<int, FabConfigVO> get _fabConfigs {
     return {
       0: FabConfigVO(
@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
       ),
       1: FabConfigVO(
         icon: Icon(Icons.group_add, size: 30),
-        builder: (_) => GrupoEstudoFormPage()
+        builder: (_) => GrupoEstudoFormPage(idUsuario: userModel!.id)
       ),
       3: FabConfigVO(
         icon: Icon(Icons.article_outlined, size: 30),

@@ -2,12 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:crop_your_image/crop_your_image.dart';
 import 'package:sam_app/domain/viewmodels/grupo_estudo/grupo_estudo_form_viewmodel.dart';
 import 'package:sam_app/presentation/widgets/app_bar/simple_app_bar.dart';
+import 'package:sam_app/presentation/widgets/buttons/custom_icon_button.dart';
+import 'package:sam_app/presentation/widgets/buttons/loading_button.dart';
 import 'package:sam_app/presentation/widgets/input/custom_text_form_field.dart';
+import 'package:sam_app/presentation/widgets/snack/top_snack_bar.dart';
 
 class GrupoEstudoFormPage extends StatefulWidget {
+  final int idUsuario;
   final int? idGrupoEstudo;
 
-  const GrupoEstudoFormPage({super.key, this.idGrupoEstudo});
+  const GrupoEstudoFormPage({
+    super.key,
+    required this.idUsuario,
+    this.idGrupoEstudo,
+  });
 
   @override
   State<GrupoEstudoFormPage> createState() => _GrupoEstudoFormPageState();
@@ -15,13 +23,15 @@ class GrupoEstudoFormPage extends StatefulWidget {
 
 class _GrupoEstudoFormPageState extends State<GrupoEstudoFormPage> {
   late GrupoEstudoFormViewModel vm;
-
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    vm = GrupoEstudoFormViewModel(idGrupoEstudo: widget.idGrupoEstudo);
+    vm = GrupoEstudoFormViewModel(
+      idGrupoEstudo: widget.idGrupoEstudo,
+      idUsuario: widget.idUsuario,
+    );
     vm.addListener(() {
       if (mounted) setState(() {});
     });
@@ -56,12 +66,13 @@ class _GrupoEstudoFormPageState extends State<GrupoEstudoFormPage> {
                     key: _formKey,
                     child: Column(
                       children: [
+                        // Header + Avatar
                         SizedBox(
                           height: 140,
                           child: Stack(
                             clipBehavior: Clip.none,
                             children: [
-                              // Header
+                              // HEADER
                               GestureDetector(
                                 onTap: vm.pickImageAsHeader,
                                 child: Container(
@@ -117,7 +128,7 @@ class _GrupoEstudoFormPageState extends State<GrupoEstudoFormPage> {
                                         shape: BoxShape.circle,
                                         border: Border.all(width: 0.5),
                                       ),
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.close,
                                         color: Colors.white,
                                         size: 20,
@@ -126,7 +137,7 @@ class _GrupoEstudoFormPageState extends State<GrupoEstudoFormPage> {
                                   ),
                                 ),
 
-                              // Avatar
+                              // AVATAR
                               Positioned(
                                 top: 60,
                                 left: 16,
@@ -166,6 +177,29 @@ class _GrupoEstudoFormPageState extends State<GrupoEstudoFormPage> {
                                           ),
                                         ),
                                       ),
+
+                                      if (vm.avatarImageData != null)
+                                        Positioned(
+                                          top: -8,
+                                          right: -8,
+                                          child: GestureDetector(
+                                            onTap: vm.clearAvatarImage,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Theme.of(
+                                                  context,
+                                                ).scaffoldBackgroundColor,
+                                                shape: BoxShape.circle,
+                                                border: Border.all(width: 0.5),
+                                              ),
+                                              child: const Icon(
+                                                Icons.close,
+                                                color: Colors.white,
+                                                size: 20,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                     ],
                                   ),
                                 ),
@@ -198,61 +232,89 @@ class _GrupoEstudoFormPageState extends State<GrupoEstudoFormPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red.shade700,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 32,
-                                  vertical: 16,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              icon: const Icon(
-                                Icons.close,
-                                color: Colors.white,
-                              ),
-                              label: const Text(
-                                'Cancelar',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              onPressed: () => Navigator.of(context).pop(),
-                            ),
-                            ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(
-                                  context,
-                                ).colorScheme.primary,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 32,
-                                  vertical: 16,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              icon: const Icon(
-                                Icons.arrow_forward,
-                                color: Colors.white,
-                              ),
-                              label: const Text(
-                                'Finalizar',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  vm.salvarGrupo();
-                                  // Futuramente, navegue ou mostre feedback
-                                }
-                              },
-                            ),
+                            vm.idGrupoEstudo != null
+                                ? vm.isDeleting
+                                      ? const LoadingButtonSimple()
+                                      : CustomIconButton(
+                                          label: "Excluir",
+                                          color: Colors.red.shade700,
+                                          icon: Icons.close,
+                                          onPressed: () async {
+                                            try {
+                                              await vm.excluirGrupo();
+                                              if (context.mounted) {
+                                                TopSnackBar.show(
+                                                  context,
+                                                  'Grupo de estudo excluído com sucesso!',
+                                                  color: Colors.orange[800],
+                                                );
+                                                Navigator.pop(context, true);
+                                              }
+                                            } catch (error) {
+                                              if (context.mounted) {
+                                                TopSnackBar.show(
+                                                  context,
+                                                  error.toString(),
+                                                  color: Colors.red[700],
+                                                );
+                                              }
+                                            }
+                                          },
+                                        )
+                                : CustomIconButton(
+                                    label: "Cancelar",
+                                    color: Colors.red.shade700,
+                                    icon: Icons.close,
+                                    onPressed: () async =>
+                                        Navigator.pop(context),
+                                  ),
+                            vm.isLoading
+                                ? const LoadingButtonSimple()
+                                : ElevatedButton.icon(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 32,
+                                        vertical: 16,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    icon: const Icon(
+                                      Icons.arrow_forward,
+                                      color: Colors.white,
+                                    ),
+                                    label: const Text(
+                                      'Finalizar',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      if (_formKey.currentState!.validate()) {
+                                        try {
+                                          await vm.salvarGrupo();
+                                          if (context.mounted) {
+                                            TopSnackBar.show(
+                                              context,
+                                              'Grupo de estudo gravado com sucesso!',
+                                            );
+                                            Navigator.of(context).pop();
+                                          }
+                                        } catch (e) {
+                                          TopSnackBar.show(
+                                            context,
+                                            e.toString(),
+                                            color: Colors.red[700],
+                                          );
+                                        }
+                                      }
+                                    },
+                                  ),
                           ],
                         ),
                       ],
@@ -260,6 +322,7 @@ class _GrupoEstudoFormPageState extends State<GrupoEstudoFormPage> {
                   ),
                 ),
 
+                // CROPPER
                 if (vm.showCropper && vm.imageToCrop != null)
                   Container(
                     color: Colors.black,

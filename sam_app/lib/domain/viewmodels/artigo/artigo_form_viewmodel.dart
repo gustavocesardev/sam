@@ -7,7 +7,6 @@ import 'package:sam_app/data/repositories/artigo/artigo_repository.dart';
 import 'package:sam_app/data/requests/artigo_request.dart';
 import 'package:sam_app/data/services/artigo/artigo_service.dart';
 
-// TODO: Refinar EDICAO do artigo
 class ArtigoFormViewModel extends ChangeNotifier {
   final int idUsuario;
   final int? idArtigo;
@@ -18,21 +17,14 @@ class ArtigoFormViewModel extends ChangeNotifier {
 
   final TextEditingController tituloController = TextEditingController();
   final TextEditingController hashtagsController = TextEditingController();
-  final quill.QuillController conteudoController =
-      quill.QuillController.basic();
+  final quill.QuillController conteudoController = quill.QuillController.basic();
 
   File? pdfSelecionado;
   String? pdfUrl;
 
-  bool isLoading = false;
   bool isLoadingData = false;
   bool isLoadingDelete = false;
   bool isSaving = false;
-
-  void setLoading(bool value) {
-    isLoading = value;
-    notifyListeners();
-  }
 
   void setLoadingData(bool value) {
     isLoadingData = value;
@@ -88,6 +80,7 @@ class ArtigoFormViewModel extends ChangeNotifier {
     setSaving(true);
 
     try {
+
       final repository = ArtigoRepository();
 
       final ArtigoRequest request = ArtigoRequest(
@@ -100,6 +93,7 @@ class ArtigoFormViewModel extends ChangeNotifier {
       );
 
       await repository.store(request: request);
+
     } catch (e) {
       rethrow;
     }
@@ -110,8 +104,10 @@ class ArtigoFormViewModel extends ChangeNotifier {
 
     setLoadingDelete(true);
     try {
+
       final repository = ArtigoRepository();
       await repository.delete(id: idArtigo!);
+      
     } finally {
       setLoadingDelete(false);
     }

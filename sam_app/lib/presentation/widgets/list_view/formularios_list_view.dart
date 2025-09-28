@@ -85,9 +85,6 @@ class FormulariosListView extends StatelessWidget {
                 }
               });
             }
-            else {
-              
-            }
           },
           child: FormCard(
             key: ValueKey(form.id),
