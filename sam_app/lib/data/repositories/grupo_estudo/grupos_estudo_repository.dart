@@ -1,4 +1,5 @@
 import 'package:sam_app/data/models/grupo_estudo_model.dart';
+import 'package:sam_app/data/models/membro_model.dart';
 import 'package:sam_app/data/requests/grupo_estudo_request.dart';
 import 'package:sam_app/data/services/grupo_estudo/grupo_estudo_service.dart';
 
@@ -27,5 +28,31 @@ class GruposEstudoRepository {
 
   Future<void> delete({required int id}) {
     return service.delete(id: id);
+  }
+
+  Future<List<MembroModel>> getMembros({required int idGrupo}) {
+    return service.fetchMembros(idGrupo: idGrupo);
+  }
+
+  Future<MembroModel> ingressarMembro({
+    required int idUsuario,
+    required int idGrupoEstudo,
+  }) {
+    return service.ingressarMembro(
+      idUsuario: idUsuario,
+      idGrupoEstudo: idGrupoEstudo,
+    );
+  }
+
+  Future<void> removerMembro({
+    required int idMembro,
+    required int idUsuario,
+    required int idGrupoEstudo,
+  }) {
+    return service.removerMembro(
+      idMembro: idMembro,
+      idUsuario: idUsuario,
+      idGrupoEstudo: idGrupoEstudo,
+    );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'package:sam_app/data/models/grupo_estudo_model.dart';
+import 'package:sam_app/data/models/membro_model.dart';
 import 'package:sam_app/data/requests/grupo_estudo_request.dart';
 import 'package:sam_app/data/services/http_service.dart';
 
@@ -87,5 +88,41 @@ class GrupoEstudoService {
 
   Future<void> delete({required int id}) async {
     await _http.delete('/grupo-estudo/$id');
+  }
+
+  Future<List<MembroModel>> fetchMembros({required int idGrupo}) async {
+    final response = await _http.get('/grupo-estudo/$idGrupo/membros');
+    final list = response['content'] as List;
+    return list.map((e) => MembroModel.fromJson(e)).toList();
+  }
+
+  Future<MembroModel> ingressarMembro({
+    required int idUsuario,
+    required int idGrupoEstudo,
+  }) async {
+    final body = {
+      'id_usuario': idUsuario,
+      'id_grupo_estudo': idGrupoEstudo,
+      'situacao': 'A',
+    };
+
+    final response = await _http.post('/grupo-estudo/membro', body: body);
+    final content = response['content'] as Map<String, dynamic>;
+
+    return MembroModel.fromJson(content);
+  }
+
+  Future<void> removerMembro({
+    required int idMembro,
+    required int idUsuario,
+    required int idGrupoEstudo,
+  }) async {
+    final body = {
+      'id_usuario': idUsuario,
+      'id_grupo_estudo': idGrupoEstudo,
+      'situacao': 'I',
+    };
+
+    await _http.post('/grupo-estudo/membro', body: body);
   }
 }

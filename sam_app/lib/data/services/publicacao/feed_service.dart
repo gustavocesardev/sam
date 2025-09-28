@@ -17,4 +17,11 @@ class FeedService {
     final list = response['content'] as List;
     return list.map((e) => PostModel.fromJson(e)).toList();
   }
+
+  Future<List<PostModel>> fetchFeedGrupoEstudo({required int idGrupoEstudo, int page = 1}) async {
+    final response = await _http.get('/feed/grupo-estudo/$idGrupoEstudo?page=$page&limite=7');
+
+    final list = response['content'] as List;
+    return list.map((e) => PostModel.fromJson(e)).toList();
+  }
 }

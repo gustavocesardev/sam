@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:sam_app/data/enums/tipo_autor_publicacao.dart';
 import 'package:sam_app/data/services/http_service.dart';
 import 'package:sam_app/data/requests/publicacao_request.dart';
 
@@ -9,14 +10,14 @@ class PublicacaoService {
     required String chaveAutor,
     required PublicacaoRequest request,
   }) async {
-    
     final fields = <String, String>{
       chaveAutor: request.idAutor.toString(),
       'texto': request.texto,
     };
 
     if (request.idPublicacaoVinculada != null) {
-      fields['id_publicacao_vinculada'] = request.idPublicacaoVinculada.toString();
+      fields['id_publicacao_vinculada'] = request.idPublicacaoVinculada
+          .toString();
     }
 
     final List<http.MultipartFile> arquivos = [];
@@ -35,8 +36,14 @@ class PublicacaoService {
       }
     }
 
+    String endpoint = '/publicacao';
+
+    if (chaveAutor == TipoAutorPublicacao.membro.atributo) {
+      endpoint = '/grupo-estudo/publicacao';
+    }
+
     await _http.postMultipart(
-      endpoint: '/publicacao',
+      endpoint: endpoint,
       fields: fields,
       files: arquivos,
     );

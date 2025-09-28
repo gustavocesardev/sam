@@ -66,7 +66,6 @@ class _GrupoEstudoFormPageState extends State<GrupoEstudoFormPage> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        // Header + Avatar
                         SizedBox(
                           height: 140,
                           child: Stack(
@@ -99,7 +98,9 @@ class _GrupoEstudoFormPageState extends State<GrupoEstudoFormPage> {
                                           borderRadius: BorderRadius.circular(
                                             12,
                                           ),
-                                          color: Colors.black26,
+                                          color: vm.headerImageData != null
+                                          ?  Colors.black26
+                                          : null,
                                         ),
                                       ),
                                       const Center(
@@ -161,7 +162,9 @@ class _GrupoEstudoFormPageState extends State<GrupoEstudoFormPage> {
                                         height: 120,
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
-                                          color: Colors.black26,
+                                          color: vm.avatarImageData != null
+                                          ?Colors.black26
+                                          : null,
                                           border: Border.all(
                                             color: Theme.of(
                                               context,

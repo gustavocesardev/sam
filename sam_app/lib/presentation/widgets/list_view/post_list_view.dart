@@ -6,11 +6,7 @@ class PostListView extends StatelessWidget {
   final FeedViewModel vm;
   final ScrollController controller;
 
-  const PostListView({
-    super.key, 
-    required this.vm,
-    required this.controller,
-  });
+  const PostListView({super.key, required this.vm, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +26,7 @@ class PostListView extends StatelessWidget {
           } else {
             return const Center(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 40, top: 25),
+                padding: EdgeInsets.only(bottom: 25, top: 10),
                 child: Text(
                   'Parece que você chegou ao fim',
                   style: TextStyle(color: Colors.white70, fontSize: 14),

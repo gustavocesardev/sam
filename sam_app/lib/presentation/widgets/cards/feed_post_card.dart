@@ -46,16 +46,22 @@ class _FeedPostCardState extends State<FeedPostCard> {
           name: widget.name,
           cursoInfo: widget.cursoInfo,
           avatarBytes: widget.avatarHash != null
-              ? _imageCacheService.getCachedImageBytes(widget.imageUrlFromHash(widget.avatarHash!))
+              ? _imageCacheService.getCachedImageBytes(
+                  widget.imageUrlFromHash(widget.avatarHash!),
+                )
               : null,
           imagesBytes: widget.imageHashes
-              .map((hash) => _imageCacheService.getCachedImageBytes(widget.imageUrlFromHash(hash)))
+              .map(
+                (hash) => _imageCacheService.getCachedImageBytes(
+                  widget.imageUrlFromHash(hash),
+                ),
+              )
               .whereType<Uint8List>()
               .toList(),
           comments: widget.comments,
           likes: widget.likes,
         ),
-      )
+      ),
     );
   }
 
@@ -77,22 +83,19 @@ class _FeedPostCardState extends State<FeedPostCard> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 /// Avatar
                 CachedAvatar(
                   avatarHash: widget.avatarHash,
                   avatarColor: widget.avatarColor,
                   imageUrlFromHash: widget.imageUrlFromHash,
-                  imageCacheService: _imageCacheService
+                  imageCacheService: _imageCacheService,
                 ),
                 const SizedBox(width: 12),
 
-                /// Coluna da direita: Nome, curso, conteúdo, imagens, etc.
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       /// Nome + curso + opções
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,11 +106,17 @@ class _FeedPostCardState extends State<FeedPostCard> {
                               children: [
                                 Text(
                                   widget.name,
-                                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                                 Text(
                                   widget.cursoInfo,
-                                  style: const TextStyle(color: Colors.white60, fontSize: 12),
+                                  style: const TextStyle(
+                                    color: Colors.white60,
+                                    fontSize: 12,
+                                  ),
                                 ),
                               ],
                             ),
@@ -122,7 +131,10 @@ class _FeedPostCardState extends State<FeedPostCard> {
                       Text(
                         widget.content,
                         textAlign: TextAlign.justify,
-                        style: const TextStyle(color: Colors.white, height: 1.4),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          height: 1.4,
+                        ),
                       ),
 
                       /// Imagens do post
@@ -138,7 +150,9 @@ class _FeedPostCardState extends State<FeedPostCard> {
                           )
                         else
                           CachedPostImagesGrid(
-                            urls: images.map((hash) => widget.imageUrlFromHash(hash)).toList(),
+                            urls: images
+                                .map((hash) => widget.imageUrlFromHash(hash))
+                                .toList(),
                             onImageTap: _openPostImages,
                             imageCacheService: _imageCacheService,
                             height: 180,
@@ -154,12 +168,26 @@ class _FeedPostCardState extends State<FeedPostCard> {
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.mode_comment_outlined, color: Colors.white54, size: 20),
+                              const Icon(
+                                Icons.mode_comment_outlined,
+                                color: Colors.white54,
+                                size: 20,
+                              ),
                               const SizedBox(width: 4),
-                              Text('${widget.comments}', style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                              Text(
+                                '${widget.comments}',
+                                style: const TextStyle(
+                                  color: Colors.white54,
+                                  fontSize: 12,
+                                ),
+                              ),
                             ],
                           ),
-                          const Icon(Icons.favorite_border, color: Colors.white54, size: 20),
+                          const Icon(
+                            Icons.favorite_border,
+                            color: Colors.white54,
+                            size: 20,
+                          ),
                         ],
                       ),
                     ],
@@ -169,6 +197,7 @@ class _FeedPostCardState extends State<FeedPostCard> {
             ),
           ),
 
+          SizedBox(height: 12),
           const Divider(color: Colors.white12, height: 1),
         ],
       ),

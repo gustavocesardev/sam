@@ -6,7 +6,6 @@ typedef ArtigoFetcher = Future<List<ArtigoModel>> Function({
   required Map<String, dynamic>? filters,
 });
 
-// TODO: Refinar reload da listagem
 class ArtigosViewmodel extends ChangeNotifier {
   final ArtigoFetcher fetchArtigos;
 

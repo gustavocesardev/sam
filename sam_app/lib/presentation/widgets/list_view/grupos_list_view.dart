@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sam_app/domain/viewmodels/grupo_estudo/grupos_estudo_viewmodel.dart';
 import 'package:sam_app/presentation/pages/grupos/grupo_estudo_form_page.dart';
+import 'package:sam_app/presentation/pages/grupos/grupo_estudo_page.dart';
 import 'package:sam_app/presentation/widgets/cards/grupo_card.dart';
 import 'package:sam_app/shared/utils/storage_utils.dart';
 
@@ -56,10 +57,10 @@ class GruposListView extends StatelessWidget {
         final grupo = vm.grupos[index];
         return GestureDetector(
           onTap: () async {
-            if (isCriado) {
-              final userId = await StorageUtils.getUserId();
-              if (userId == null) return;
+            final userId = await StorageUtils.getUserId();
+            if (userId == null) return;
 
+            if (isCriado) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -72,6 +73,19 @@ class GruposListView extends StatelessWidget {
                 if (value == true) {
                   vm.loadInitial();
                 }
+              });
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => GrupoEstudoPage(
+                    idUsuario: userId,
+                    idGrupoEstudo: grupo.id,
+                    idMembro: grupo.idMembro,
+                  ),
+                ),
+              ).then((_) {
+                vm.loadInitial();
               });
             }
           },
