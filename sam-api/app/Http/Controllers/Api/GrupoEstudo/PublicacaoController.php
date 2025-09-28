@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\GrupoEstudo;
 use App\Application\Factories\AuthenticatedUserFactory;
 use App\Application\Services\GrupoEstudo\GrupoEstudoService;
 use App\Application\Services\GrupoEstudo\InteracoesService;
+use App\Application\Services\GrupoEstudo\MembroService;
 use App\Application\Services\GrupoEstudo\PublicacaoService;
 
 use App\Domain\Exceptions\AppException;
@@ -24,6 +25,7 @@ class PublicacaoController extends Controller
     public function __construct(
         private PublicacaoService $publicacaoService,
         private GrupoEstudoService $grupoEstudoService,
+        private MembroService $membroService,
         private InteracoesService $interacoesService
     ) {}
 
@@ -43,17 +45,20 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function show(string $id): JsonResponse
+    public function show(int $idGrupoEstudo, int $idPublicacao): JsonResponse
     {
         try {
 
             $user = AuthenticatedUserFactory::fromAuth();
-            $publicacao = $this->publicacaoService->find($id);
 
+            $publicacao = $this->publicacaoService->find($idPublicacao);
+            $membro = $this->membroService->findByUsuarioAndGrupo($user, $idGrupoEstudo);
             $this->interacoesService->registrarVisualizacao($publicacao, $user);
 
+            $publicacao = $this->publicacaoService->marcarCurtida($publicacao, $membro->id);
+
             return ApiResponse::success(
-                new PublicacaoResource($publicacao), 
+                new PublicacaoResource(resource: $publicacao), 
                 'Detalhes da publicação.', 
                 Response::HTTP_OK
             );
@@ -139,6 +144,29 @@ class PublicacaoController extends Controller
             );
 
         } catch (AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function listPublicacoesVinculadas(Request $request, int $idGrupoEstudo, int $idPublicacao): JsonResponse
+    {
+        try {
+
+            $user = AuthenticatedUserFactory::fromAuth();
+
+            $limite = $request->get('limite', 15);
+            $page = $request->get('page', 1);
+
+            $grupoEstudo = $this->grupoEstudoService->find($idGrupoEstudo);
+            $publicacoes = $this->publicacaoService->listPublicacoesVinculadas($user, $idPublicacao, $grupoEstudo, $limite, $page);
+
+            return ApiResponse::success(
+                PublicacaoResource::collection($publicacoes),
+                'Publicações do grupo de estudo vinculadas',
+                Response::HTTP_OK
+            );
+
+        } catch(AppException $exception) {
             return ApiResponse::error($exception);
         }
     }

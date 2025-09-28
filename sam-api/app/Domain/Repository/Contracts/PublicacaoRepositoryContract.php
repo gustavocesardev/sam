@@ -17,4 +17,6 @@ interface PublicacaoRepositoryContract
     public function searchByIds(array $ids): Collection;
     public function searchMostPopularPublicacoes(int $idReferencia, array $excluirIds = [], int $limite = 10): Collection;
     public function searchWithReacaoAndVisualizacao(array $ids): Collection;
+    public function searchVinculadas(int $idPublicacao, int $limite = 10, int $page = 1): Collection;
+    public function hasReacao(int $idReferencia, int $idPublicacao): bool;
 }
