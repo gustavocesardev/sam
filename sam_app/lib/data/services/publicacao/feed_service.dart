@@ -46,4 +46,22 @@ class FeedService {
     final list = response['content'] as List;
     return list.map((e) => PostModel.fromJson(e)).toList();
   }
+
+  Future<List<PostModel>> fetchFeedCurtidas({int page = 1,}) async {
+    String endpoint = '/feed/usuario/curtidas?page=$page&limite=7';
+
+    final response = await _http.get(endpoint);
+
+    final list = response['content'] as List;
+    return list.map((e) => PostModel.fromJson(e)).toList();
+  }
+
+  Future<List<PostModel>> fetchFeedUsuario({int page = 1,}) async {
+    String endpoint = '/feed/usuario?page=$page&limite=7';
+
+    final response = await _http.get(endpoint);
+
+    final list = response['content'] as List;
+    return list.map((e) => PostModel.fromJson(e)).toList();
+  }
 }

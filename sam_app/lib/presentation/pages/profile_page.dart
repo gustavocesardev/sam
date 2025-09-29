@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sam_app/data/enums/tipo_autor_publicacao.dart';
 import 'package:sam_app/data/models/post_model.dart';
-import 'package:sam_app/data/models/user_model.dart';
+import 'package:sam_app/data/models/user_detail_model.dart';
+import 'package:sam_app/data/repositories/publicacao/feed_repository.dart';
 import 'package:sam_app/data/services/user_service.dart';
-import 'package:sam_app/data/storage/auth_storage_service.dart';
+import 'package:sam_app/domain/viewmodels/publicacao/feed_curtidas_viewmodel.dart';
+import 'package:sam_app/domain/viewmodels/publicacao/feed_usuario_viewmodel.dart';
+import 'package:sam_app/presentation/pages/feed/lists/feed_curtidas_page.dart';
+import 'package:sam_app/presentation/pages/feed/lists/feed_usuario_page.dart';
 import 'package:sam_app/presentation/widgets/app_bar/simple_app_bar.dart';
-import 'package:sam_app/presentation/widgets/cards/feed_post_card.dart';
 import 'package:sam_app/presentation/widgets/tabs/custom_tab_bar.dart';
 import 'package:sam_app/shared/constants.dart';
 
@@ -22,6 +26,7 @@ class _ProfilePageState extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final UserService _userService = UserService();
+  int _currentIndex = 0;
 
   bool isLoading = true;
   String? name;
@@ -38,6 +43,13 @@ class _ProfilePageState extends State<ProfilePage>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        setState(() {
+          _currentIndex = _tabController.index;
+        });
+      }
+    });
     _loadUserProfile();
   }
 
@@ -45,80 +57,18 @@ class _ProfilePageState extends State<ProfilePage>
     setState(() => isLoading = true);
 
     try {
-      // pega user logado do storage
-      final storedUser = await AuthStorageService.getStoredUser();
-      if (storedUser != null) {
-        // consulta backend para dados mais atuais
-        final UserModel? currentUser = await _userService.getUser(
-          widget.userId,
-        );
+      final UserDetailModel? currentUser = await _userService.getUserDetails(
+        widget.userId,
+      );
 
-        setState(() {
-          name = currentUser?.nome;
-          role =
-              "${storedUser.curso.periodo}° ${storedUser.curso.nomeCurso}";
-          avatarUrl = "$baseUrl/file/image/${currentUser!.avatarEncrypted}";
-          postsCount = 5; // TODO: puxar real
-          articlesCount = 17; // TODO: puxar real
-          commentsCount = 3; // TODO: puxar real
-
-          // simulação de posts
-          posts = [
-            PostModel(
-              id: 1,
-              nome: name!,
-              curso: role!,
-              texto: 'A palestra de segurança da informação foi ótima!',
-              imagens: [],
-              criadoEm: '2025-08-31',
-              curtidas: 42,
-              comentarios: 5,
-              avatarEncrypted: currentUser.avatarEncrypted,
-              curtido: false
-            ),
-            PostModel(
-              id: 1,
-              nome: name!,
-              curso: role!,
-              texto:
-                  'Os estudos de DDD contribuiram muito para minha visão de arquitetura de software!',
-              imagens: [],
-              criadoEm: '2025-08-31',
-              curtidas: 42,
-              comentarios: 5,
-              avatarEncrypted: currentUser.avatarEncrypted,
-              curtido: false
-            ),
-            PostModel(
-              id: 1,
-              nome: name!,
-              curso: role!,
-              texto: 'Será que essa boom! da IA não é apenas questão de bolha?',
-              imagens: [],
-              criadoEm: '2025-08-31',
-              curtidas: 42,
-              comentarios: 10,
-              avatarEncrypted: currentUser.avatarEncrypted,
-              curtido: false
-            ),
-            PostModel(
-              id: 1,
-              nome: name!,
-              curso: role!,
-              texto:
-                  'A palestra de segurança de análise de dados foi ótima mas poderia ter tratado conteúdos mais recentes!',
-              imagens: [],
-              criadoEm: '2025-08-31',
-              curtidas: 42,
-              comentarios: 99,
-              avatarEncrypted: currentUser.avatarEncrypted,
-              curtido: false
-            ),
-          ];
-
-          likedPosts = List.from(posts);
-        });
-      }
+      setState(() {
+        name = currentUser?.nome;
+        role = currentUser?.nomeCurso;
+        avatarUrl = "$baseUrl/file/image/${currentUser!.avatarEncrypted}";
+        postsCount = currentUser.totalPublicacoes;
+        articlesCount = currentUser.totalArtigos;
+        commentsCount = currentUser.totalComentarios;
+      });
     } finally {
       setState(() => isLoading = false);
     }
@@ -132,142 +82,89 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: SimpleAppBar(textAppBar: 'Perfil'),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 5),
+    final List<Widget> tabsContent = [
+      FeedUsuarioPage(
+        idAutor: widget.userId,
+        tipoAutorPublicacao: TipoAutorPublicacao.usuario,
+      ),
+      FeedCurtidasPage(
+        idAutor: widget.userId,
+        tipoAutorPublicacao: TipoAutorPublicacao.usuario,
+      ),
+    ];
 
-                  /// Cabeçalho com Avatar + Infos
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => FeedUsuarioViewmodel(FeedRepository()),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => FeedCurtidasViewmodel(FeedRepository()),
+        ),
+      ],
+      child: Scaffold(
+        appBar: SimpleAppBar(textAppBar: 'Perfil'),
+        body: Column(
+          children: [
+            /// Cabeçalho com avatar e stats
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: avatarUrl != null
+                        ? NetworkImage(avatarUrl!)
+                        : null,
+                    child: avatarUrl == null
+                        ? const Icon(Icons.person, size: 40)
+                        : null,
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    // <- faz a coluna ocupar todo o espaço restante
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundImage: avatarUrl != null
-                              ? NetworkImage(avatarUrl!)
-                              : null,
-                          backgroundColor: Colors.grey[600],
-                          child: avatarUrl == null
-                              ? const Icon(Icons.person, size: 40)
-                              : null,
+                        Text(
+                          name ?? '',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                name ?? '',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                role ?? '',
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 13,
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  _buildStat('Publicações', postsCount ?? 0),
-                                  _buildStat('Artigos', articlesCount ?? 0),
-                                  _buildStat('Comentários', commentsCount ?? 0),
-                                ],
-                              ),
-                            ],
-                          ),
+                        Text(
+                          role ?? '',
+                          style: const TextStyle(color: Colors.grey),
+                        ),
+                        const SizedBox(height: 18),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment
+                              .spaceBetween, // distribui os stats uniformemente
+                          children: [
+                            _buildStat('Publicações', postsCount ?? 0),
+                            _buildStat('Artigos', articlesCount ?? 0),
+                            _buildStat('Comentários', commentsCount ?? 0),
+                          ],
                         ),
                       ],
                     ),
                   ),
-
-                  const SizedBox(height: 30),
-
-                  /// Tabs
-                  Column(
-                    children: [
-                      CustomTabBar(
-                        tabController: _tabController,
-                        tabs: const [
-                          Tab(text: 'Publicações'),
-                          Tab(text: 'Curtidas'),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 600,
-                        child: TabBarView(
-                          controller: _tabController,
-                          children: [
-                            ListView.builder(
-                              padding: const EdgeInsets.all(8),
-                              itemCount: posts.length,
-                              itemBuilder: (context, index) {
-                                final post = posts[index];
-                                return FeedPostCard(
-                                  key: ValueKey(post.id),
-                                  idPublicacao: 1,
-                                  idGrupoEstudo: null,
-                                  name: post.nome,
-                                  cursoInfo: post.curso,
-                                  content: post.texto,
-                                  comments: post.comentarios,
-                                  likes: post.curtidas,
-                                  avatarColor:
-                                      Colors.primaries[index %
-                                          Colors.primaries.length],
-                                  imageHashes: post.imagens,
-                                  idAutor: 1,
-                                  tipoAutorPublicacao: TipoAutorPublicacao.usuario,
-                                  avatarHash: post.avatarEncrypted,
-                                );
-                              },
-                            ),
-                            ListView.builder(
-                              padding: const EdgeInsets.all(8),
-                              itemCount: likedPosts.length,
-                              itemBuilder: (context, index) {
-                                final post = likedPosts[index];
-                                return FeedPostCard(
-                                  key: ValueKey(post.id),
-                                  idPublicacao: 1,
-                                  idGrupoEstudo: null,
-                                  name: post.nome,
-                                  cursoInfo: post.curso,
-                                  content: post.texto,
-                                  comments: post.comentarios,
-                                  likes: post.curtidas,
-                                  avatarColor:
-                                      Colors.primaries[index %
-                                          Colors.primaries.length],
-                                  imageHashes: post.imagens,
-                                  idAutor: 1,
-                                  tipoAutorPublicacao: TipoAutorPublicacao.usuario,
-                                  avatarHash: post.avatarEncrypted,
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
+
+            /// Tabs
+            CustomTabBar(
+              tabController: _tabController,
+              tabs: const [
+                Tab(text: 'Publicações'),
+                Tab(text: 'Curtidas'),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+            Expanded(child: tabsContent[_currentIndex]),
+          ],
+        ),
+      ),
     );
   }
 

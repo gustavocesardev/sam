@@ -36,7 +36,7 @@ class PostModel {
           [],
       criadoEm: json['criado_em'],
       curtidas: json['qtde_curtidas'],
-      comentarios: json['qtde_comentarios'],
+      comentarios: json['qtde_comentarios'] ?? 0,
       curtido: json['curtido'],
       avatarEncrypted: json['foto_usuario'],
     );
