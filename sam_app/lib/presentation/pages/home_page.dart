@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   final UserService service = UserService();
 
   int _currentIndex = 0;
-  late UserModel? userModel;
+  UserModel? userModel;
 
   @override
   void initState() {
@@ -45,16 +45,22 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  final List<Widget> _pages = [
-    const FeedPage(),
-    const GruposEstudoPage(),
-
-    // Apenas para ocupar o centro da BottomBar :P
-    const FeedPage(),
-
-    const FormulariosPage(),
-    const ArtigosPage(),
-  ];
+  List<Widget> get _pages {
+    return [
+      FeedPage(
+        idAutor: userModel!.id,
+        tipoAutorPublicacao: TipoAutorPublicacao.usuario,
+      ),
+      const GruposEstudoPage(),
+      // Apenas para ocupar o centro da BottomBar :P
+      FeedPage(
+        idAutor: userModel!.id,
+        tipoAutorPublicacao: TipoAutorPublicacao.usuario,
+      ),
+      const FormulariosPage(),
+      const ArtigosPage(),
+    ];
+  }
 
   // Definindo os Icons e suas rotas para a bottom bar
   Map<int, FabConfigVO> get _fabConfigs {
@@ -101,6 +107,14 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (userModel == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: _pages[_currentIndex],

@@ -70,7 +70,11 @@ class _GrupoEstudoPageState extends State<GrupoEstudoPage> with SingleTickerProv
 
     final List<Widget> tabsContent = [
       idMembro != null
-          ? FeedGrupoPage(idGrupoEstudo: widget.idGrupoEstudo)
+          ? FeedGrupoPage(
+            idGrupoEstudo: widget.idGrupoEstudo,
+            idAutor: widget.idMembro!,
+            tipoAutorPublicacao: TipoAutorPublicacao.membro,
+          )
           : _buildJoinGroupPlaceholder(context),
       MembroListView(membros: vm.membros),
     ];

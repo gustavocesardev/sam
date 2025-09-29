@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:sam_app/data/enums/tipo_autor_publicacao.dart';
 import 'package:sam_app/presentation/pages/feed/lists/feed_curso_page.dart';
 import 'package:sam_app/presentation/pages/feed/lists/feed_geral_page.dart';
 import 'package:sam_app/presentation/widgets/app_bar/feed_app_bar.dart';
 
 class FeedPage extends StatefulWidget {
-  const FeedPage({super.key});
+  final int idAutor;
+  final TipoAutorPublicacao tipoAutorPublicacao;
+
+  const FeedPage({
+    super.key,
+    required this.idAutor,
+    required this.tipoAutorPublicacao
+  });
 
   @override
   State<FeedPage> createState() => _FeedPageState();
@@ -37,7 +45,10 @@ class _FeedPageState extends State<FeedPage>
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> tabsContent = [FeedGeralPage(), FeedCursoPage()];
+    final List<Widget> tabsContent = [
+      FeedGeralPage(idAutor: widget.idAutor, tipoAutorPublicacao: widget.tipoAutorPublicacao,),
+      FeedCursoPage(idAutor: widget.idAutor, tipoAutorPublicacao: widget.tipoAutorPublicacao,)
+    ];
 
     return Scaffold(
       appBar: FeedAppBar(tabController: _tabController),

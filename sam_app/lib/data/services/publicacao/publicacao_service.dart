@@ -48,4 +48,36 @@ class PublicacaoService {
       files: arquivos,
     );
   }
+
+  Future<Map<String, dynamic>> getPublicacao({
+    required int idPublicacao,
+    int? idGrupoEstudo,
+  }) async {
+    final String endpoint = idGrupoEstudo != null
+        ? '/grupo-estudo/$idGrupoEstudo/publicacao/$idPublicacao'
+        : '/publicacao/$idPublicacao';
+
+    return await _http.get(endpoint);
+  }
+
+  Future<void> addReacao({
+    required String chaveAutor,
+    required idPublicacao,
+  }) async {
+    final String endpoint = chaveAutor == 'id_usuario'
+        ? '/publicacao/$idPublicacao/reacao'
+        : '/grupo-estudo/publicacao/$idPublicacao/reacao';
+    await _http.post(endpoint);
+  }
+
+  Future<void> removerReacao({
+    required String chaveAutor,
+    required idPublicacao,
+  }) async {
+    final String endpoint = chaveAutor == 'id_usuario'
+        ? '/publicacao/$idPublicacao/reacao'
+        : '/grupo-estudo/publicacao/$idPublicacao/reacao';
+
+    await _http.delete(endpoint);
+  }
 }

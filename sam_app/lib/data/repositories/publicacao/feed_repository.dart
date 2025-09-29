@@ -15,4 +15,8 @@ class FeedRepository {
   Future<List<PostModel>> getFeedGrupoEstudo({required int idGrupoEstudo, int page = 1}) {
     return service.fetchFeedGrupoEstudo(idGrupoEstudo: idGrupoEstudo, page: page);
   }
+
+  Future<List<PostModel>> getVinculadas({required int idPublicacao, int? idGrupoEstudo, int page = 1}) {
+    return service.fetchVinculadas(idPublicacao: idPublicacao, idGrupoEstudo: idGrupoEstudo, page: page);
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sam_app/data/enums/tipo_autor_publicacao.dart';
 import 'package:sam_app/domain/viewmodels/publicacao/feed_viewmodel.dart';
 import 'package:sam_app/presentation/widgets/cards/feed_post_card.dart';
 
@@ -6,7 +7,18 @@ class PostListView extends StatelessWidget {
   final FeedViewModel vm;
   final ScrollController controller;
 
-  const PostListView({super.key, required this.vm, required this.controller});
+  final int? idGrupoEstudo;
+  final int idAutor;
+  final TipoAutorPublicacao tipoAutorPublicacao;
+
+  const PostListView({
+    super.key,
+    required this.vm,
+    required this.controller,
+    required this.idAutor,
+    required this.tipoAutorPublicacao,
+    this.idGrupoEstudo,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,13 +51,18 @@ class PostListView extends StatelessWidget {
         final post = vm.posts[index];
         return FeedPostCard(
           key: ValueKey(post.id),
+          idPublicacao: post.id,
+          idGrupoEstudo: idGrupoEstudo,
           name: post.nome,
           cursoInfo: post.curso,
           content: post.texto,
           comments: post.comentarios,
           likes: post.curtidas,
+          liked: post.curtido,
           avatarColor: Colors.primaries[index % Colors.primaries.length],
           imageHashes: post.imagens,
+          idAutor: idAutor,
+          tipoAutorPublicacao: tipoAutorPublicacao,
           avatarHash: post.avatarEncrypted,
         );
       },

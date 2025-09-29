@@ -30,7 +30,7 @@ class PostCreatePage extends StatelessWidget {
         builder: (context, vm, child) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Nova Publicação'),
+              title: const Text('Nova publicação'),
               actions: [
                 TextButton(
                   onPressed: vm.canPublish

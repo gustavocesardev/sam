@@ -19,7 +19,6 @@ import 'package:sam_app/domain/viewmodels/publicacao/feed_geral_viewmodel.dart';
 import 'package:sam_app/domain/viewmodels/splash_viewmodel.dart';
 import 'package:sam_app/presentation/pages/artigos/artigos_page.dart';
 
-import 'package:sam_app/presentation/pages/feed/feed_page.dart';
 import 'package:sam_app/presentation/pages/formularios/formularios_page.dart';
 import 'package:sam_app/presentation/pages/grupos/grupos_estudo_page.dart';
 import 'package:sam_app/presentation/pages/home_page.dart';
@@ -119,7 +118,6 @@ class MyApp extends StatelessWidget {
         AppRoutes.instituicoes: (_) => const InstituicoesPage(),
 
         AppRoutes.home: (_) => const HomePage(),
-        AppRoutes.feed: (_) => const FeedPage(),
 
         AppRoutes.gruposEstudo: (_) => const GruposEstudoPage(),
         AppRoutes.formularios: (_) => const FormulariosPage(),

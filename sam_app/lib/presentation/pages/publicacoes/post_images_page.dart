@@ -78,21 +78,6 @@ class _PostImagesPageState extends State<PostImagesPage> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
-          Row(
-            children: [
-              const Icon(Icons.mode_comment_outlined, size: 20),
-              const SizedBox(width: 4),
-              Text(widget.comments.toString()),
-            ],
-          ),
-          const SizedBox(width: 24),
-          Row(
-            children: [
-              const Icon(Icons.favorite_border, size: 20),
-              const SizedBox(width: 4),
-              Text(widget.likes.toString()),
-            ],
-          ),
           const Spacer(),
           Text('${currentPage + 1}/${widget.imagesBytes.length}'),
         ],

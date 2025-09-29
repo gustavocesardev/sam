@@ -1,3 +1,4 @@
+import 'package:sam_app/data/models/post_model.dart';
 import 'package:sam_app/data/requests/publicacao_request.dart';
 import 'package:sam_app/data/services/publicacao/publicacao_service.dart';
 
@@ -10,10 +11,39 @@ class PublicacaoRepository {
     required String chaveAutor,
     required PublicacaoRequest request,
   }) async {
+    await service.criarPublicacao(chaveAutor: chaveAutor, request: request);
+  }
 
-    await service.criarPublicacao(
+  Future<PostModel> getPublicacaoById(
+    int idPublicacao,
+    int? idGrupoEstudo,
+  ) async {
+    final data = await service.getPublicacao(
+      idPublicacao: idPublicacao,
+      idGrupoEstudo: idGrupoEstudo,
+    );
+
+    final content = data['content'] as Map<String, dynamic>;
+    return PostModel.fromJson(content);
+  }
+
+  Future<void> adicionarReacao({
+    required String chaveAutor,
+    required idPublicacao,
+  }) async {
+    return await service.addReacao(
       chaveAutor: chaveAutor,
-      request: request,
+      idPublicacao: idPublicacao,
+    );
+  }
+
+  Future<void> removerReacao({
+    required String chaveAutor,
+    required idPublicacao,
+  }) async {
+    return await service.removerReacao(
+      chaveAutor: chaveAutor,
+      idPublicacao: idPublicacao,
     );
   }
 }
