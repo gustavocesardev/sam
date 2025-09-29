@@ -51,6 +51,8 @@ class PublicacaoController extends Controller
 
             $this->interacoesService->registrarVisualizacao($publicacao, $user);
 
+            $publicacao = $this->publicacaoService->marcarCurtida($publicacao, $user->id());
+
             return ApiResponse::success(
                 new PublicacaoResource($publicacao), 
                 'Detalhes da publicação.', 
@@ -200,6 +202,28 @@ class PublicacaoController extends Controller
             return ApiResponse::success(
                 PublicacaoResource::collection($publicacoes), 
                 'Publicacações (Curtidas pelo usuário)', 
+                Response::HTTP_OK
+            );
+
+        } catch(AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function listPublicacoesVinculadas(Request $request, int $id): JsonResponse
+    {
+        try {
+
+            $user = AuthenticatedUserFactory::fromAuth();
+
+            $limite = $request->get('limite', 15);
+            $page = $request->get('page', 1);
+
+            $publicacoes = $this->publicacaoService->listPublicacoesVinculadas($user, $id, $limite, $page);
+
+            return ApiResponse::success(
+                PublicacaoResource::collection($publicacoes),
+                'Publicações vinculadas',
                 Response::HTTP_OK
             );
 

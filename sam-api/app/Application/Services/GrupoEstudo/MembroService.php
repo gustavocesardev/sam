@@ -22,6 +22,11 @@ class MembroService
         return $membro;
     }
 
+    public function findByUsuarioAndGrupo(AuthenticatedUser $user, int $idGrupoEstudo): Membro | null
+    {
+        return $this->membroRepository->findByUsuarioAndGrupo($user->id(), $idGrupoEstudo);
+    }
+
     public function store(array $data): Membro
     {
         $usuario = $this->userRepository->find($data['id_usuario']);

@@ -36,12 +36,14 @@ class PublicacaoService extends PublicavelServiceAbstract
 
     public function listFeedGeral(AuthenticatedUser $user, int $limite = 10): Collection
     {
-        return $this->recomendacaoService->recomendarFeed($user->getUser(), $limite);
+        $publicacoes = $this->recomendacaoService->recomendarFeed($user->getUser(), $limite);
+        return $this->marcarCurtidas($publicacoes, $user->id());
     }
 
     public function listFeedCurso(AuthenticatedUser $user, int $limite = 10): Collection
     {
-        return $this->recomendacaoService->recomendarFeedPorCurso($user->getUser(), $limite);
+        $publicacoes = $this->recomendacaoService->recomendarFeedPorCurso($user->getUser(), $limite);
+        return $this->marcarCurtidas($publicacoes, $user->id());
     }
 
     public function listPublicacoesCurtidas(AuthenticatedUser $user, int $limite = 15, int $page = 1): Collection
@@ -53,12 +55,34 @@ class PublicacaoService extends PublicavelServiceAbstract
                         ->filter()
                         ->values();
 
-        return $publicacoes;
+        return $this->marcarCurtidas($publicacoes, $user->id());
     }
 
     public function listPublicacoesUsuario(AuthenticatedUser $user, int $limite = 15, int $page = 1): Collection
     {
         $publicacoesUsuario = $this->publicacaoRepositoryEspecifico->searchByUsuario($user->id(), $limite, $page);
-        return $publicacoesUsuario;
+        return $this->marcarCurtidas($publicacoesUsuario, $user->id());
+    }
+
+    public function listPublicacoesVinculadas(AuthenticatedUser $user, int $idPublicacao, int $limite = 15, int $page = 1): Collection
+    {
+        $publicacoesVinculadas = $this->publicacaoRepositoryEspecifico->searchVinculadas($idPublicacao, $limite, $page);
+        return $this->marcarCurtidas($publicacoesVinculadas, $user->id());
+    }
+
+    public function marcarCurtida($publicacao, int $idUsuario)
+    {
+        $publicacao->curtido = $idUsuario
+            ? $this->publicacaoRepositoryEspecifico->hasReacao($idUsuario, $publicacao->id)
+            : false;
+
+        return $publicacao;
+    }
+
+    public function marcarCurtidas(Collection $publicacoes, int $idUsuario): Collection
+    {
+        return $publicacoes->map(function ($publicacao) use ($idUsuario) {
+            return $this->marcarCurtida($publicacao, $idUsuario);
+        });
     }
 }

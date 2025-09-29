@@ -32,7 +32,7 @@ class GrupoEstudoService
         $grupoEstudo = $this->grupoEstudoRepository->store($data);
 
         $this->atualizarImagem($grupoEstudo, $data['imagem']);
-        $this->atualizarImagemHeader($grupoEstudo, $data['imagem_header']);
+        $this->atualizarImagemHeader($grupoEstudo, imagem: $data['imagem_header']);
 
         $this->membroService->store([
             'id_usuario' => $grupoEstudo->id_usuario,
@@ -94,9 +94,14 @@ class GrupoEstudoService
         $membrosUsuario = $this->membroService->listarMembrosByUsuario($user, $limite, $page);
 
         $gruposEstudo = $membrosUsuario
-                        ->map(fn(Membro $membro) => $membro->grupoEstudo)
-                        ->filter()
-                        ->values();
+        ->filter(fn(Membro $membro) => $membro->grupoEstudo !== null)
+        ->map(function (Membro $membro) {
+            $grupo = $membro->grupoEstudo;
+            $grupo->id_membro = $membro->id;
+            return $grupo;
+        })
+        ->values();
+
 
         return $gruposEstudo;
     }

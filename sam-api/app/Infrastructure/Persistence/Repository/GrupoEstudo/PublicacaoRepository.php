@@ -4,6 +4,7 @@ namespace App\Infrastructure\Persistence\Repository\GrupoEstudo;
 
 use App\Domain\Model\Abstract\PublicacaoAbstract;
 use App\Domain\Model\GrupoEstudo\Publicacao;
+use App\Domain\Model\GrupoEstudo\PublicacaoReacao;
 use App\Domain\Repository\GrupoEstudo\PublicacaoRepositoryInterface;
 
 use Illuminate\Support\Collection;
@@ -46,7 +47,8 @@ class PublicacaoRepository implements PublicacaoRepositoryInterface
         ->whereHas('keywords', function ($query) use ($keywords) {
             $query->whereIn('keyword', $keywords);
         })
-        ->withCount(['publicacoesVinculadas as qtde_comentarios']);
+        ->withCount(['publicacoesVinculadas as qtde_comentarios'])
+        ->whereNull('id_publicacao_vinculada');
 
         if (!is_null($idGrupoEstudo))
         {
@@ -63,6 +65,7 @@ class PublicacaoRepository implements PublicacaoRepositoryInterface
         return Publicacao::with(['membro.user', 'membro.user.curso'])
             ->whereIn('id', $ids)
             ->withCount(['publicacoesVinculadas as qtde_comentarios'])
+            ->whereNull('id_publicacao_vinculada')
             ->get();
     }
 
@@ -75,6 +78,7 @@ class PublicacaoRepository implements PublicacaoRepositoryInterface
     {
         $query = Publicacao::with(['membro.user', 'membro.user.curso'])
             ->withCount(['publicacoesVinculadas as qtde_comentarios'])
+            ->whereNull('id_publicacao_vinculada')
             ->when(!empty($excluirIds), function ($query) use ($excluirIds) {
                 $query->whereNotIn('id', $excluirIds);
             });
@@ -87,5 +91,26 @@ class PublicacaoRepository implements PublicacaoRepositoryInterface
         }
 
         return $query->limit($limite)->get();
+    }
+
+    public function searchVinculadas(int $idPublicacao, int $limite = 10, int $page = 1): Collection
+    {
+        $offset = ($page - 1) * $limite;
+
+        return Publicacao::with(['membro.user', 'membro.user.curso'])
+            ->withCount(['publicacoesVinculadas as qtde_comentarios'])
+            ->where('id_publicacao_vinculada', $idPublicacao)
+            ->orderBy('created_at', 'desc')
+            ->skip($offset)
+            ->limit($limite)
+            ->get();
+    }
+
+    public function hasReacao(int $idMembro, int $idPublicacao): bool
+    {
+        return PublicacaoReacao::where('id_membro', $idMembro)
+            ->where('id_publicacao', $idPublicacao)
+            ->where('situacao', 'A')
+            ->exists();
     }
 }

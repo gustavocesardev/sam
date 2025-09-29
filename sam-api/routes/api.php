@@ -67,6 +67,8 @@ Route::middleware('auth:api')->prefix('publicacao')->group(function () {
     Route::delete('/{id}/reacao', [PublicacaoController::class, 'removerReacao']);
 
     Route::delete('{id}', [PublicacaoController::class, 'destroy']);
+
+    Route::get('{id}/vinculadas', [PublicacaoController::class, 'listPublicacoesVinculadas']);
 });
 
 // Rotas referente aos feeds
@@ -92,6 +94,9 @@ Route::middleware('auth:api')->prefix('grupo-estudo')->group(function () {
     Route::get('/grupos/ingressados', [GrupoEstudoController::class, 'indexGruposUsuarioIngressado']);
     Route::get('/grupos/criador', [GrupoEstudoController::class, 'indexGruposUsuarioCriador']);
     Route::get('/grupos/populares', [GrupoEstudoController::class, 'indexGruposPopularesNaoIngressados']);
+    
+    Route::get('/{idGrupoEstudo}/publicacao/{idPublicacao}', [GrupoEstudoPublicacaoController::class, 'show']);
+    Route::get('/{idGrupoEstudo}/publicacao/{idPublicacao}/vinculadas', [GrupoEstudoPublicacaoController::class, 'listPublicacoesVinculadas']);
 });
 
 Route::middleware('auth:api')->prefix('grupo-estudo/membro')->group(function () {
@@ -104,7 +109,7 @@ Route::middleware('auth:api')->prefix('grupo-estudo/publicacao')->group(function
     
     Route::post('/', [GrupoEstudoPublicacaoController::class, 'store']);
     Route::get('{id}', [GrupoEstudoPublicacaoController::class, 'show']);
-
+    
     Route::post('/{id}/reacao', [GrupoEstudoPublicacaoController::class, 'adicionarReacao']);
     Route::delete('/{id}/reacao', [GrupoEstudoPublicacaoController::class, 'removerReacao']);
     

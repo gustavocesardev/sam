@@ -47,6 +47,39 @@ class PublicacaoService extends PublicavelServiceAbstract
             );
         }
 
-        return $this->recomendacaoService->recomendarFeed($membro, $limite);
+        $publicacoes = $this->recomendacaoService->recomendarFeed($membro, $limite);
+        return $this->marcarCurtidas($publicacoes, $membro->id);
+    }
+
+    public function listPublicacoesVinculadas(AuthenticatedUser $user, int $idPublicacao, GrupoEstudo $grupoEstudo, int $limite = 15, int $page = 1): Collection
+    {
+        $membro = $this->membroRepository->findByUsuarioAndGrupo($user->id(), $grupoEstudo->id);
+
+        if (!$membro)
+        {
+            throw new MembroNotExistsException(
+                ErrorContext::GRUPO_ESTUDO_MEMBRO,
+                'Não foi possível gerar o feed pois o usuário não é ingressante do grupo solicitado.'
+            );
+        }
+
+        $publicacoesVinculadas = $this->publicacaoRepository->searchVinculadas($idPublicacao, $limite, $page);
+        return $this->marcarCurtidas($publicacoesVinculadas, $membro->id);
+    }
+
+    public function marcarCurtida($publicacao, int $idMembro)
+    {
+        $publicacao->curtido = $idMembro
+            ? $this->publicacaoRepository->hasReacao($idMembro, $publicacao->id)
+            : false;
+
+        return $publicacao;
+    }
+
+    public function marcarCurtidas(Collection $publicacoes, int $idMembro): Collection
+    {
+        return $publicacoes->map(function ($publicacao) use ($idMembro) {
+            return $this->marcarCurtida($publicacao, $idMembro);
+        });
     }
 }

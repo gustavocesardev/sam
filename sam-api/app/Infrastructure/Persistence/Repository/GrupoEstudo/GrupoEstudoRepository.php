@@ -43,25 +43,23 @@ class GrupoEstudoRepository implements GrupoEstudoRepositoryInterface
                 ->get();
     }
 
-    public function searchMostPopularNaoIngressadosByCurso(int $idUsuario, int $idCurso, int $limite = 15, $page = 1): Collection
+    public function searchMostPopularNaoIngressadosByCurso(int $idUsuario, int $idCurso, int $limite = 15, int $page = 1): Collection
     {
         $offset = ($page - 1) * $limite;
 
         return GrupoEstudo::withCount([
-                    'membros' => function ($query) {
-                        $query->where('situacao', 'A');
-                    }
-                ])
-                ->whereDoesntHave('membros', function($query) use ($idUsuario) {
-                    $query->where('id_usuario', $idUsuario)
-                        ->where('situacao', 'A');
-                })
-                ->whereHas('user', function ($query) use ($idCurso) {
-                    $query->where('id_curso', $idCurso);
-                })
-                ->orderByDesc('membros_count')
-                ->skip($offset)
-                ->limit($limite)
-                ->get();
+            'membros' => function ($query) {
+                $query->where('situacao', 'A');
+            }
+        ])
+        ->where('id_curso', $idCurso)
+        ->whereDoesntHave('membros', function($query) use ($idUsuario) {
+            $query->where('id_usuario', $idUsuario)
+                ->where('situacao', 'A');
+        })
+        ->orderByDesc('membros_count')
+        ->skip($offset)
+        ->limit($limite)
+        ->get();
     }
 }

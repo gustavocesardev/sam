@@ -30,7 +30,8 @@ class PublicacaoResource extends JsonResource
             'criado_em'               => $this->created_at->format('\à\s\ H:i \e\m d/m/Y'),
             'qtde_curtidas'           => $this->qtde_curtidas,
             'qtde_visualizacoes'      => $this->qtde_visualizacoes,
-            'qtde_comentarios'        => $this->qtde_comentarios
+            'qtde_comentarios'        => $this->qtde_comentarios,
+            'curtido'                 => $this->curtido
         ];
     }
 }
