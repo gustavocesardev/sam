@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:sam_app/domain/viewmodels/artigo/artigos_viewmodel.dart';
 import 'package:sam_app/presentation/pages/artigos/artigo_form_page.dart';
+import 'package:sam_app/presentation/pages/artigos/artigo_page.dart';
 import 'package:sam_app/presentation/widgets/cards/artigo_card.dart';
 import 'package:sam_app/shared/utils/storage_utils.dart';
 
 class ArtigosListView extends StatelessWidget {
   final ArtigosViewmodel vm;
   final ScrollController controller;
+  final bool isCriado;
 
   const ArtigosListView({
     super.key,
     required this.vm,
     required this.controller,
+    this.isCriado = false,
   });
 
   @override
@@ -27,7 +30,9 @@ class ArtigosListView extends StatelessWidget {
 
     return ListView.builder(
       controller: controller,
-      itemCount: vm.artigos.length + (vm.isLoadingMore || (vm.artigos.isNotEmpty && !vm.hasMore) ? 1 : 0),
+      itemCount:
+          vm.artigos.length +
+          (vm.isLoadingMore || (vm.artigos.isNotEmpty && !vm.hasMore) ? 1 : 0),
       padding: const EdgeInsets.symmetric(horizontal: 8),
       itemBuilder: (context, index) {
         if (index == vm.artigos.length) {
@@ -41,7 +46,12 @@ class ArtigosListView extends StatelessWidget {
           } else {
             return const Center(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 40, top: 10, left: 15, right: 15),
+                padding: EdgeInsets.only(
+                  bottom: 40,
+                  top: 10,
+                  left: 15,
+                  right: 15,
+                ),
                 child: Column(
                   children: [
                     Divider(color: Colors.white12, height: 1),
@@ -64,19 +74,27 @@ class ArtigosListView extends StatelessWidget {
             final userId = await StorageUtils.getUserId();
             if (userId == null) return;
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => ArtigoFormPage(
-                  idUsuario: userId,
-                  idArtigo: artigo.id,
+            if (isCriado) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      ArtigoFormPage(idUsuario: userId, idArtigo: artigo.id),
                 ),
-              ),
-            ).then((value) {
-              if (value == true) {
-                vm.loadInitial();
-              }
-            });
+              ).then((value) {
+                if (value == true) {
+                  vm.loadInitial();
+                }
+              });
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                     ArtigoPage(idArtigo: artigo.id)
+                ),
+              );
+            }
           },
           child: ArtigoCard(
             key: ValueKey(artigo.id),
@@ -84,7 +102,7 @@ class ArtigosListView extends StatelessWidget {
             titulo: artigo.titulo,
             autor: "${artigo.nome} - ${artigo.anoCurso}",
             descricao: vm.quillContentToPlainText(artigo.conteudo),
-          )
+          ),
         );
       },
     );

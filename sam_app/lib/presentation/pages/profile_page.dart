@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:sam_app/data/enums/tipo_autor_publicacao.dart';
 import 'package:sam_app/data/models/post_model.dart';
 import 'package:sam_app/data/models/user_model.dart';
 import 'package:sam_app/data/services/user_service.dart';
 import 'package:sam_app/data/storage/auth_storage_service.dart';
 import 'package:sam_app/presentation/widgets/app_bar/simple_app_bar.dart';
+import 'package:sam_app/presentation/widgets/cards/feed_post_card.dart';
 import 'package:sam_app/presentation/widgets/tabs/custom_tab_bar.dart';
 import 'package:sam_app/shared/constants.dart';
 
@@ -56,9 +58,9 @@ class _ProfilePageState extends State<ProfilePage>
           role =
               "${storedUser.curso.periodo}° ${storedUser.curso.nomeCurso}";
           avatarUrl = "$baseUrl/file/image/${currentUser!.avatarEncrypted}";
-          postsCount = 5;
-          articlesCount = 17;
-          commentsCount = 3;
+          postsCount = 5; // TODO: puxar real
+          articlesCount = 17; // TODO: puxar real
+          commentsCount = 3; // TODO: puxar real
 
           // simulação de posts
           posts = [
@@ -210,6 +212,54 @@ class _ProfilePageState extends State<ProfilePage>
                         child: TabBarView(
                           controller: _tabController,
                           children: [
+                            ListView.builder(
+                              padding: const EdgeInsets.all(8),
+                              itemCount: posts.length,
+                              itemBuilder: (context, index) {
+                                final post = posts[index];
+                                return FeedPostCard(
+                                  key: ValueKey(post.id),
+                                  idPublicacao: 1,
+                                  idGrupoEstudo: null,
+                                  name: post.nome,
+                                  cursoInfo: post.curso,
+                                  content: post.texto,
+                                  comments: post.comentarios,
+                                  likes: post.curtidas,
+                                  avatarColor:
+                                      Colors.primaries[index %
+                                          Colors.primaries.length],
+                                  imageHashes: post.imagens,
+                                  idAutor: 1,
+                                  tipoAutorPublicacao: TipoAutorPublicacao.usuario,
+                                  avatarHash: post.avatarEncrypted,
+                                );
+                              },
+                            ),
+                            ListView.builder(
+                              padding: const EdgeInsets.all(8),
+                              itemCount: likedPosts.length,
+                              itemBuilder: (context, index) {
+                                final post = likedPosts[index];
+                                return FeedPostCard(
+                                  key: ValueKey(post.id),
+                                  idPublicacao: 1,
+                                  idGrupoEstudo: null,
+                                  name: post.nome,
+                                  cursoInfo: post.curso,
+                                  content: post.texto,
+                                  comments: post.comentarios,
+                                  likes: post.curtidas,
+                                  avatarColor:
+                                      Colors.primaries[index %
+                                          Colors.primaries.length],
+                                  imageHashes: post.imagens,
+                                  idAutor: 1,
+                                  tipoAutorPublicacao: TipoAutorPublicacao.usuario,
+                                  avatarHash: post.avatarEncrypted,
+                                );
+                              },
+                            ),
                           ],
                         ),
                       ),

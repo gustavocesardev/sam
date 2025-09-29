@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sam_app/domain/viewmodels/formulario/formularios_viewmodel.dart';
 import 'package:sam_app/presentation/pages/formularios/formulario_form_page.dart';
+import 'package:sam_app/presentation/pages/formularios/formulario_page.dart';
 import 'package:sam_app/presentation/widgets/cards/form_card.dart';
 import 'package:sam_app/shared/utils/storage_utils.dart';
 
@@ -84,6 +85,11 @@ class FormulariosListView extends StatelessWidget {
                   vm.loadInitial();
                 }
               });
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => FormularioPage(idFormulario: form.id,)),
+              );
             }
           },
           child: FormCard(

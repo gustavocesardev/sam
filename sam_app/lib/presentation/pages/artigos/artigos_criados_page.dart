@@ -56,7 +56,7 @@ class _ArtigosCriadosPage extends State<ArtigosCriadosPage> {
               else
                 SizedBox(height: 12,),
                 Expanded(
-                  child: ArtigosListView(vm: vm, controller: _scrollController),
+                  child: ArtigosListView(vm: vm, controller: _scrollController, isCriado: true,),
                 ),
             ],
           ),
