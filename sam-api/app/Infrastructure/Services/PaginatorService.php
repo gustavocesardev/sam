@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 
 class PaginatorService
 {
-    public static function paginateCollection(Collection $items, int $perPage = 10, int $page = null)
+    public static function paginateCollection(Collection $items, int $perPage = 10, int $page = null): LengthAwarePaginator
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $total = $items->count();

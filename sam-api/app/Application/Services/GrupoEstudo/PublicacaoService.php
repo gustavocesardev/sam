@@ -2,106 +2,84 @@
 
 namespace App\Application\Services\GrupoEstudo;
 
-use App\Application\Contracts\CryptoServiceInterface;
-use App\Application\Contracts\ImageProcessorInterface;
-
+use App\Application\Contracts\Infrastructure\CryptoServiceInterface;
+use App\Application\Contracts\Infrastructure\ImageProcessorInterface;
 use App\Application\Services\Abstract\PublicavelServiceAbstract;
-use App\Domain\Services\KeywordService;
 
-use App\Domain\Enums\ErrorContext;
 use App\Domain\Exceptions\MembroNotExistsException;
-use App\Domain\Model\Abstract\PublicacaoAbstract;
-use App\Domain\Model\User;
-
+use App\Domain\Enums\ErrorContext;
+use App\Domain\Model\GrupoEstudo\GrupoEstudo;
+use App\Domain\Repository\GrupoEstudo\PublicacaoRepositoryInterface;
 use App\Domain\Repository\GrupoEstudo\MembroRepositoryInterface;
-use App\Domain\Repository\PublicacaoRepositoryInterface;
-use App\Domain\Repository\UserRepositoryInterface;
-use App\Domain\Repository\VisualizacaoRepositoryInterface;
-use App\Domain\Repository\ReacaoRepositoryInterface;
+use App\Domain\Services\Recomendacao\GrupoEstudo\KeywordService;
+use App\Domain\VO\Auth\AuthenticatedUser;
+
+use Illuminate\Support\Collection;
 
 class PublicacaoService extends PublicavelServiceAbstract
 {
     public function __construct(
         private MembroRepositoryInterface $membroRepository,
-        UserRepositoryInterface $userRepository,
+        private RecomendacaoService $recomendacaoService,
         PublicacaoRepositoryInterface $publicacaoRepository,
         KeywordService $keywordService,
-        VisualizacaoRepositoryInterface $visualizacaoRepository,
-        ReacaoRepositoryInterface $reacaoRepository,
         ImageProcessorInterface $imageProcessor,
         CryptoServiceInterface $cryptoService
     ) {
         parent::__construct(
             ErrorContext::GRUPO_ESTUDO_PUBLICACAO,
-            $userRepository,
             $publicacaoRepository,
             $keywordService,
-            $visualizacaoRepository,
-            $reacaoRepository,
             $imageProcessor,
             $cryptoService
         );
     }
 
-    protected function registrarVisualizacao(PublicacaoAbstract $publicacao, User $user)
+    public function listFeedGeral(AuthenticatedUser $user, GrupoEstudo $grupoEstudo, int $limite = 10): Collection
     {
-        $membro = $this->membroRepository->findByUsuarioAndGrupo($user->id, $publicacao->membro->grupoEstudo->id);
+        $membro = $this->membroRepository->findByUsuarioAndGrupo($user->id(), $grupoEstudo->id);
 
         if (!$membro)
         {
-            throw new MembroNotExistsException(ErrorContext::GRUPO_ESTUDO_MEMBRO);
+            throw new MembroNotExistsException(
+                ErrorContext::GRUPO_ESTUDO_MEMBRO,
+                'Não foi possível gerar o feed pois o usuário não é ingressante do grupo solicitado.'
+            );
         }
 
-        $this->visualizacaoRepository->store($publicacao->id, $membro->id);
-        $publicacao->adicionarVisualizacao();
+        $publicacoes = $this->recomendacaoService->recomendarFeed($membro, $limite);
+        return $this->marcarCurtidas($publicacoes, $membro->id);
     }
 
-    public function adicionarReacao(int $idPublicacao, User $user)
+    public function listPublicacoesVinculadas(AuthenticatedUser $user, int $idPublicacao, GrupoEstudo $grupoEstudo, int $limite = 15, int $page = 1): Collection
     {
-        $publicacao = $this->find($idPublicacao);
-        $membro = $this->membroRepository->findByUsuarioAndGrupo($user->id, $publicacao->membro->grupoEstudo->id);
+        $membro = $this->membroRepository->findByUsuarioAndGrupo($user->id(), $grupoEstudo->id);
 
         if (!$membro)
         {
-            throw new MembroNotExistsException(ErrorContext::GRUPO_ESTUDO_MEMBRO);
+            throw new MembroNotExistsException(
+                ErrorContext::GRUPO_ESTUDO_MEMBRO,
+                'Não foi possível gerar o feed pois o usuário não é ingressante do grupo solicitado.'
+            );
         }
 
-        $publicacaoReacao = $this->reacaoRepository->findByPublicacaoAndUsuario($publicacao->id, $membro->id);
-
-        if ($publicacaoReacao)
-        {
-            if ($publicacaoReacao->situacao == 'I')
-            {
-                $publicacaoReacao->ativar();
-                $publicacao->adicionarReacao();
-            }
-
-            return;
-        }
-
-        $this->reacaoRepository->savePublicacaoReacao($publicacao->id, $membro->id);
-        $publicacao->adicionarReacao();
+        $publicacoesVinculadas = $this->publicacaoRepository->searchVinculadas($idPublicacao, $limite, $page);
+        return $this->marcarCurtidas($publicacoesVinculadas, $membro->id);
     }
 
-    public function removerReacao(int $idPublicacao, User $user)
+    public function marcarCurtida($publicacao, int $idMembro)
     {
-        $publicacao = $this->find($idPublicacao);
-        $membro = $this->membroRepository->findByUsuarioAndGrupo($user->id, $publicacao->membro->grupoEstudo->id);
+        $publicacao->curtido = $idMembro
+            ? $this->publicacaoRepository->hasReacao($idMembro, $publicacao->id)
+            : false;
 
-        if (!$membro)
-        {
-            throw new MembroNotExistsException(ErrorContext::GRUPO_ESTUDO_MEMBRO);
-        }
+        return $publicacao;
+    }
 
-        $publicacaoReacao = $this->reacaoRepository->findByPublicacaoAndUsuario($publicacao->id, $membro->id);
-
-        if ($publicacaoReacao)
-        {
-            if ($publicacaoReacao->situacao == 'A')
-            {   
-                $publicacaoReacao->inativar();
-                $publicacao->removerReacao();
-            }
-        }
+    public function marcarCurtidas(Collection $publicacoes, int $idMembro): Collection
+    {
+        return $publicacoes->map(function ($publicacao) use ($idMembro) {
+            return $this->marcarCurtida($publicacao, $idMembro);
+        });
     }
 }

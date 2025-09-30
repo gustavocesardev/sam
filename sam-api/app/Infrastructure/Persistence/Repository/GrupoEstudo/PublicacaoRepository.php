@@ -4,16 +4,16 @@ namespace App\Infrastructure\Persistence\Repository\GrupoEstudo;
 
 use App\Domain\Model\Abstract\PublicacaoAbstract;
 use App\Domain\Model\GrupoEstudo\Publicacao;
-use App\Domain\Repository\PublicacaoRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
+use App\Domain\Model\GrupoEstudo\PublicacaoReacao;
+use App\Domain\Repository\GrupoEstudo\PublicacaoRepositoryInterface;
 
-use DB;
+use Illuminate\Support\Collection;
 
 class PublicacaoRepository implements PublicacaoRepositoryInterface
 {
     public function find(int $id): Publicacao
     {
-        return Publicacao::findOrFail($id);
+        return Publicacao::withCount(['publicacoesVinculadas as qtde_comentarios'])->findOrFail($id);
     }
 
     public function store(array $data): Publicacao
@@ -41,29 +41,20 @@ class PublicacaoRepository implements PublicacaoRepositoryInterface
         $publicacao->save();
     }
 
-    // Início dos métodos referentes as buscas para filtragem híbrida
-    public function searchKeywords(array $keywords, int $limite = 10): Collection
+    public function searchKeywords(int $idGrupoEstudo, array $keywords, int $limite = 10): Collection
     {
-        return Publicacao::whereHas('keywords', function ($query) use ($keywords) {
+        $query = Publicacao::with(['membro.user', 'membro.user.curso'])
+        ->whereHas('keywords', function ($query) use ($keywords) {
             $query->whereIn('keyword', $keywords);
         })
-        ->withCount(['reacoes as likes', 'visualizacoes as views'])
-        ->limit($limite)
-        ->get();
-    }
+        ->withCount(['publicacoesVinculadas as qtde_comentarios'])
+        ->whereNull('id_publicacao_vinculada');
 
-    public function searchKeywordsByCurso(int $idCurso, array $keywords, int $limite = 10): Collection
-    {
-        $query = Publicacao::whereHas('keywords', function ($query) use ($keywords) {
-            $query->whereIn('keyword', $keywords);
-        })
-        ->whereHas('membro.user.curso', function ($query) use ($idCurso) {
-            $query->where('id', $idCurso);
-        })
-        ->withCount(['reacoes as likes', 'visualizacoes as views']);
-
-        if (!empty($excludeIds)) {
-            $query->whereNotIn('id', $excludeIds);
+        if (!is_null($idGrupoEstudo))
+        {
+            $query->whereHas('membro.grupoEstudo', function ($query) use ($idGrupoEstudo) {
+                $query->where('id', $idGrupoEstudo);
+            });
         }
 
         return $query->limit($limite)->get();
@@ -71,8 +62,10 @@ class PublicacaoRepository implements PublicacaoRepositoryInterface
 
     public function searchByIds(array $ids): Collection
     {
-        return Publicacao::whereIn('id', $ids)
-            ->withCount(['reacoes as likes', 'visualizacoes as views'])
+        return Publicacao::with(['membro.user', 'membro.user.curso'])
+            ->whereIn('id', $ids)
+            ->withCount(['publicacoesVinculadas as qtde_comentarios'])
+            ->whereNull('id_publicacao_vinculada')
             ->get();
     }
 
@@ -81,26 +74,43 @@ class PublicacaoRepository implements PublicacaoRepositoryInterface
         return $this->searchByIds($ids);
     }
 
-    public function searchMostPopularPublicacoes(array $excluirIds = [], int $limite = 10): Collection
+    public function searchMostPopularPublicacoes(int $idGrupoEstudo, array $excluirIds = [], int $limite = 10): Collection
     {
-        return Publicacao::withCount(['reacoes as likes', 'visualizacoes as views'])
+        $query = Publicacao::with(['membro.user', 'membro.user.curso'])
+            ->withCount(['publicacoesVinculadas as qtde_comentarios'])
+            ->whereNull('id_publicacao_vinculada')
             ->when(!empty($excluirIds), function ($query) use ($excluirIds) {
                 $query->whereNotIn('id', $excluirIds);
-            })
+            });
+
+        if (!is_null($idGrupoEstudo))
+        {
+            $query->whereHas('membro.grupoEstudo', function ($query) use ($idGrupoEstudo) {
+                $query->where('id', $idGrupoEstudo);
+            });
+        }
+
+        return $query->limit($limite)->get();
+    }
+
+    public function searchVinculadas(int $idPublicacao, int $limite = 10, int $page = 1): Collection
+    {
+        $offset = ($page - 1) * $limite;
+
+        return Publicacao::with(['membro.user', 'membro.user.curso'])
+            ->withCount(['publicacoesVinculadas as qtde_comentarios'])
+            ->where('id_publicacao_vinculada', $idPublicacao)
+            ->orderBy('created_at', 'desc')
+            ->skip($offset)
             ->limit($limite)
             ->get();
     }
 
-    public function searchMostPopularPublicacoesByCurso(int $idCurso, array $excluirIds = [], int $limite = 10): Collection
+    public function hasReacao(int $idMembro, int $idPublicacao): bool
     {
-        return Publicacao::withCount(['reacoes as likes', 'visualizacoes as views'])
-            ->when(!empty($excluirIds), function ($query) use ($excluirIds) {
-                $query->whereNotIn('id', $excluirIds);
-            })
-            ->whereHas('membro.user.curso', function ($query) use ($idCurso) {
-                $query->where('id', $idCurso);
-            })
-            ->limit($limite)
-            ->get();
+        return PublicacaoReacao::where('id_membro', $idMembro)
+            ->where('id_publicacao', $idPublicacao)
+            ->where('situacao', 'A')
+            ->exists();
     }
 }

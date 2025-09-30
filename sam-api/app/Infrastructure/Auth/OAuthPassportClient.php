@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Auth;
 
-use App\Application\Contracts\OAuthClientInterface;
+use App\Application\Contracts\Infrastructure\OAuthClientInterface;
 
 use App\Domain\Exceptions\TokenException;
 use App\Domain\Enums\ErrorContext;

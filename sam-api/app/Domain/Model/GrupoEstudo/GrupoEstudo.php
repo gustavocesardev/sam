@@ -5,14 +5,20 @@ namespace App\Domain\Model\GrupoEstudo;
 use App\Domain\Model\Curso;
 use App\Domain\Model\User;
 
+use Database\Factories\GrupoEstudo\GrupoEstudoFactory;
+
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class GrupoEstudo extends Model
 {
+    use HasFactory;
+
     protected $table = 'grupo_estudo';
     
     protected $fillable = [
@@ -32,7 +38,7 @@ class GrupoEstudo extends Model
         'excluido_data' => 'date',
     ];
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
         
@@ -66,13 +72,24 @@ class GrupoEstudo extends Model
         return $this->belongsTo(Curso::class, 'id_curso');
     }
 
-    public function updateImagem(string $newPath): void
+    public function membros(): HasMany
+    {
+        return $this->hasMany(Membro::class, 'id_grupo_estudo')
+                    ->where('situacao', 'A');
+    }
+
+    public function getQtdeMembrosAtivosAttribute(): int
+    {
+        return $this->membros()->where('situacao', 'A')->count();
+    }
+
+    public function updateImagem(string $newPath = ''): void
     {
         $this->imagem = $newPath;
         $this->save();
     }
 
-    public function updateImagemHeader(string $newPath): void
+    public function updateImagemHeader(string $newPath = ''): void
     {
         $this->imagem_header = $newPath;
         $this->save();
@@ -86,8 +103,13 @@ class GrupoEstudo extends Model
         return $this->save();
     }
 
-    public function atualizar(): GrupoEstudo
+    public function reload(): GrupoEstudo
     {
         return $this->refresh();
+    }
+
+    protected static function newFactory(): GrupoEstudoFactory
+    {
+        return GrupoEstudoFactory::new();
     }
 }

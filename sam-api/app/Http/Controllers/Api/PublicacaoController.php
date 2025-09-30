@@ -2,24 +2,31 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Application\Factories\AuthenticatedUserFactory;
+use App\Application\Services\Publicacao\InteracoesService;
+use App\Application\Services\Publicacao\PublicacaoService;
 
-use App\Application\Services\PublicacaoService;
 use App\Domain\Exceptions\AppException;
+
+use App\Infrastructure\Services\PaginatorService;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\PublicacaoRequest;
 use App\Http\Resources\PublicacaoResource;
 use App\Http\Utils\ApiResponse;
 
-use App\Infrastructure\Services\PaginatorService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class PublicacaoController extends Controller
 {
-    public function __construct(private PublicacaoService $publicacaoService) {}
+    public function __construct(
+        private PublicacaoService $publicacaoService,
+        private InteracoesService $interacoesService
+    ) {}
 
-    public function store(PublicacaoRequest $request)
+    public function store(PublicacaoRequest $request): JsonResponse
     {
         try {
 
@@ -35,11 +42,17 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         try {
 
+            $user = AuthenticatedUserFactory::fromAuth();
             $publicacao = $this->publicacaoService->find($id);
+
+            $this->interacoesService->registrarVisualizacao($publicacao, $user);
+
+            $publicacao = $this->publicacaoService->marcarCurtida($publicacao, $user->id());
+
             return ApiResponse::success(
                 new PublicacaoResource($publicacao), 
                 'Detalhes da publicação.', 
@@ -51,11 +64,13 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function adicionarReacao(string $id)
+    public function adicionarReacao(string $id): JsonResponse
     {
         try {
 
-            $this->publicacaoService->adicionarReacao($id, auth()->user());
+            $user = AuthenticatedUserFactory::fromAuth();
+            $this->interacoesService->adicionarReacao($id, $user);
+
             return ApiResponse::success(
                 null, 
                 'Publicação curtida com sucesso.', 
@@ -67,10 +82,13 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function removerReacao(string $id)
+    public function removerReacao(string $id): JsonResponse
     {
         try {
-            $this->publicacaoService->removerReacao($id, auth()->user());
+
+            $user = AuthenticatedUserFactory::fromAuth();
+            $this->interacoesService->removerReacao($id, $user);
+
             return ApiResponse::success(
                 null, 
                 'Curtida removida com sucesso.', 
@@ -82,12 +100,14 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(string $id): JsonResponse
     {
         try {
 
+            $user = AuthenticatedUserFactory::fromAuth();
             $publicacao = $this->publicacaoService->find($id);
-            $this->publicacaoService->delete($publicacao, auth()->user());
+
+            $this->publicacaoService->delete($publicacao, $user);
 
             return ApiResponse::success(
                 null, 
@@ -100,15 +120,16 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function recomendar(Request $request)
+    public function recomendar(Request $request): JsonResponse
     {
         try {
+
+            $user = AuthenticatedUserFactory::fromAuth();
 
             $limite = $request->get('limite', 15);
             $page = $request->get('page', 1);
 
-            $recomendadas = $this->publicacaoService->listFeedGeral(auth()->user(), $limite * $page);
-
+            $recomendadas = $this->publicacaoService->listFeedGeral($user, $limite * $page);
             $paginated = PaginatorService::paginateCollection($recomendadas, $limite, $page);
 
             return ApiResponse::success(
@@ -122,20 +143,87 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function recomendarCurso(Request $request)
+    public function recomendarCurso(Request $request): JsonResponse
     {
         try {
+
+            $user = AuthenticatedUserFactory::fromAuth();
 
             $limite = $request->get('limite', 15);
             $page = $request->get('page', 1);
 
-            $recomendadas = $this->publicacaoService->listFeedCurso(auth()->user(), $limite * $page);
-
+            $recomendadas = $this->publicacaoService->listFeedCurso($user, $limite * $page);
             $paginated = PaginatorService::paginateCollection($recomendadas, $limite, $page);
 
             return ApiResponse::success(
                 PublicacaoResource::collection($paginated), 
                 'Publicacações (Feed Curso)', 
+                Response::HTTP_OK
+            );
+
+        } catch(AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function listPublicacoesUsuario(Request $request): JsonResponse
+    {
+        try {
+
+            $user = AuthenticatedUserFactory::fromAuth();
+
+            $limite = $request->get('limite', 15);
+            $page = $request->get('page', 1);
+
+            $publicacoes = $this->publicacaoService->listPublicacoesUsuario($user, $limite, $page);
+
+            return ApiResponse::success(
+                PublicacaoResource::collection($publicacoes), 
+                'Publicacações (Usuário)', 
+                Response::HTTP_OK
+            );
+
+        } catch(AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function listPublicacoesCurtidasUsuario(Request $request): JsonResponse
+    {
+        try {
+
+            $user = AuthenticatedUserFactory::fromAuth();
+
+            $limite = $request->get('limite', 15);
+            $page = $request->get('page', 1);
+
+            $publicacoes = $this->publicacaoService->listPublicacoesCurtidas($user, $limite, $page);
+
+            return ApiResponse::success(
+                PublicacaoResource::collection($publicacoes), 
+                'Publicacações (Curtidas pelo usuário)', 
+                Response::HTTP_OK
+            );
+
+        } catch(AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function listPublicacoesVinculadas(Request $request, int $id): JsonResponse
+    {
+        try {
+
+            $user = AuthenticatedUserFactory::fromAuth();
+
+            $limite = $request->get('limite', 15);
+            $page = $request->get('page', 1);
+
+            $publicacoes = $this->publicacaoService->listPublicacoesVinculadas($user, $id, $limite, $page);
+
+            return ApiResponse::success(
+                PublicacaoResource::collection($publicacoes),
+                'Publicações vinculadas',
                 Response::HTTP_OK
             );
 

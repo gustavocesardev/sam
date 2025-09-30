@@ -2,8 +2,8 @@
 
 namespace App\Application\Services;
 
-use App\Application\Contracts\CryptoServiceInterface;
-use App\Application\Contracts\ImageProcessorInterface;
+use App\Application\Contracts\Infrastructure\CryptoServiceInterface;
+use App\Application\Contracts\Infrastructure\ImageProcessorInterface;
 
 use App\Domain\Enums\ErrorContext;
 use App\Domain\Exceptions\AnoMaximoException;
@@ -42,6 +42,11 @@ class UserService
         return $this->userRepository->findByEmail($email);
     }
 
+    public function findWithDetails(int $id): User
+    {
+        return $this->userRepository->findWithCountArtigoPublicacao($id);
+    }
+
     public function store(array $data): User
     {
         $this->validarEmail($data['id_instituicao'], $data['email']);
@@ -60,23 +65,36 @@ class UserService
 
         $this->userRepository->update($id, $data);
 
-        // TODO: Caso não mandar nenhuma imagem, tratar como se tivesse excluindo a antiga
-        $this->atualizarFotoDePerfil($user, $data['foto_perfil']);
-        
-        return $user->atualizar();
+        if (array_key_exists('foto_perfil', $data))
+        {
+            if ($data['foto_perfil'] instanceof UploadedFile)
+            {
+                $this->atualizarFotoDePerfil($user, $data['foto_perfil']);
+                return $user->reload();
+            } 
+
+            $this->removerFotoDePerfil($user);
+            return $user->reload();
+        }
+
+        return $user->reload();
     }
 
     public function atualizarFotoDePerfil(User $user, UploadedFile $imagem): void
     {
-        if (!empty($user->foto_perfil))
-        {
-            $this->imageProcessor->excluirArquivo($user->foto_perfil);
-        }
-
         $path = $this->imageProcessor->storeImage($imagem, $user->getBasePath());
         $hashPath = $this->cryptoService->encryptUrl($path);
 
         $user->updateFotoPerfil($hashPath);
+    }
+
+    public function removerFotoDePerfil(User $user): void
+    {
+        if (!empty($user->foto_perfil))
+        {
+            $this->imageProcessor->excluirArquivo($user->foto_perfil);
+            $user->updateFotoPerfil();
+        }
     }
 
     public function delete(int $id): bool

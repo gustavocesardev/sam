@@ -2,11 +2,14 @@
 
 namespace App\Domain\Model;
 
-use Carbon\Carbon;
 use Database\Factories\CursoFactory;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+use Carbon\Carbon;
 
 class Curso extends Model
 {
@@ -29,7 +32,7 @@ class Curso extends Model
         'excluido_data' => 'date'
     ];
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
         
@@ -38,12 +41,12 @@ class Curso extends Model
         });
     }
 
-    public function instituicao()
+    public function instituicao(): BelongsTo
     {
         return $this->belongsTo(Instituicao::class, 'id_instituicao');
     }
 
-    public function setNomeCursoAttribute($value)
+    public function setNomeCursoAttribute($value): void
     {
         $this->attributes['nome_curso'] = ucfirst(strtolower($value)); 
     }
@@ -56,7 +59,7 @@ class Curso extends Model
         return $this->save();
     }
 
-    protected static function newFactory()
+    protected static function newFactory(): CursoFactory
     {
         return CursoFactory::new();
     }

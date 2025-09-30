@@ -28,6 +28,7 @@ abstract class PublicacaoAbstract extends Model
     public function updateImagens(array $newPaths): void
     {
         $this->imagens = $newPaths;
+        $this->save();
     }
 
     public function excluir(): bool
@@ -38,9 +39,9 @@ abstract class PublicacaoAbstract extends Model
         return $this->save();
     }
 
-    public function atualizar(): PublicacaoAbstract
+    public function reload(): PublicacaoAbstract
     {
-        return $this->refresh();
+        return $this->refresh()->loadCount(['publicacoesVinculadas as qtde_comentarios']);
     }
 
     public function adicionarReacao(): void
@@ -61,6 +62,7 @@ abstract class PublicacaoAbstract extends Model
     public function adicionarVisualizacao(): void
     {
         $this->qtde_visualizacoes += 1;
+        $this->save();
     }
 
     public abstract function getBasePath(): string;

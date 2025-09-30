@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\GrupoEstudo;
 
+use App\Application\Factories\AuthenticatedUserFactory;
 use App\Application\Services\GrupoEstudo\GrupoEstudoService;
+
 use App\Domain\Exceptions\AppException;
 
 use App\Http\Controllers\Controller;
@@ -10,13 +12,15 @@ use App\Http\Requests\Store\GrupoEstudo\GrupoEstudoRequest;
 use App\Http\Resources\GrupoEstudo\GrupoEstudoResource;
 use App\Http\Utils\ApiResponse;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class GrupoEstudoController extends Controller
 {
     public function __construct(private GrupoEstudoService $grupoEstudoService) {}
 
-    public function store(GrupoEstudoRequest $request)
+    public function store(GrupoEstudoRequest $request): JsonResponse
     {
         try {
 
@@ -32,7 +36,7 @@ class GrupoEstudoController extends Controller
         }
     }
 
-    public function update(GrupoEstudoRequest $request, string $id)
+    public function update(GrupoEstudoRequest $request, string $id): JsonResponse
     {
         try {
 
@@ -48,7 +52,7 @@ class GrupoEstudoController extends Controller
         }
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         try {
 
@@ -64,11 +68,13 @@ class GrupoEstudoController extends Controller
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(string $id): JsonResponse
     {
         try {
 
-            $this->grupoEstudoService->delete($id, auth()->user());
+            $user = AuthenticatedUserFactory::fromAuth();
+            $this->grupoEstudoService->delete($id, $user);
+            
             return ApiResponse::success(
                 null, 
                 'Grupo de estudo excluido com sucesso', 
@@ -76,6 +82,72 @@ class GrupoEstudoController extends Controller
             );
 
         } catch(AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function indexGruposUsuarioIngressado(Request $request): JsonResponse
+    {
+        try {
+            
+            $user = AuthenticatedUserFactory::fromAuth();
+
+            $limite = $request->get('limit', default: 15);
+            $page = $request->get('page', default: 1);
+
+            $gruposEstudo = $this->grupoEstudoService->listarGruposIngressadosUsuario($user, $limite, $page);
+
+            return ApiResponse::success(
+                GrupoEstudoResource::collection($gruposEstudo), 
+                'Grupos de estudo (Ingressados pelo usuário)', 
+                Response::HTTP_OK
+            );
+
+        } catch (AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function indexGruposUsuarioCriador(Request $request): JsonResponse
+    {
+        try {
+
+            $user = AuthenticatedUserFactory::fromAuth();
+
+            $limite = $request->get('limit', default: 15);
+            $page = $request->get('page', default: 1);
+
+            $gruposEstudo = $this->grupoEstudoService->listarGruposUsuarioCriador($user, $limite, $page);
+
+            return ApiResponse::success(
+                GrupoEstudoResource::collection($gruposEstudo), 
+                'Grupos de estudo (Criados pelo usuário)', 
+                Response::HTTP_OK
+            );
+            
+        } catch (AppException $exception) {
+            return ApiResponse::error($exception);
+        }
+    }
+
+    public function indexGruposPopularesNaoIngressados(Request $request): JsonResponse
+    {
+        try {
+
+            $user = AuthenticatedUserFactory::fromAuth();
+
+            $limite = $request->get('limit', default: 15);
+            $page = $request->get('page', default: 1);
+
+            $gruposEstudo = $this->grupoEstudoService->listarGruposPopularesNaoIngressados($user, $limite, $page);
+
+            return ApiResponse::success(
+                GrupoEstudoResource::collection($gruposEstudo), 
+                'Grupos de estudo (Populares)', 
+                Response::HTTP_OK
+            );
+            
+        } catch (AppException $exception) {
             return ApiResponse::error($exception);
         }
     }

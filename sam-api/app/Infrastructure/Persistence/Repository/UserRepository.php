@@ -4,6 +4,7 @@ namespace App\Infrastructure\Persistence\Repository;
 
 use App\Domain\Model\User;
 use App\Domain\Repository\UserRepositoryInterface;
+
 use Illuminate\Support\Collection;
 
 class UserRepository implements UserRepositoryInterface
@@ -18,6 +19,13 @@ class UserRepository implements UserRepositoryInterface
         return User::with('curso')->findOrFail($id);
     }
 
+    public function findWithCountArtigoPublicacao(int $id): User
+    {
+        return User::with('curso')
+        ->withCount(['artigos', 'publicacoes'])
+        ->findOrFail($id);
+    }
+
     public function findAll(): Collection
     {
         return User::all();
@@ -25,7 +33,9 @@ class UserRepository implements UserRepositoryInterface
 
     public function findByEmail(string $email): ?User
     {
-        return User::where('email', $email)->first();
+        return User::with(['curso.instituicao'])
+               ->where('email', $email)
+               ->first();
     }
 
     public function store(array $data): User

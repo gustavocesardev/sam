@@ -2,24 +2,27 @@
 
 namespace App\Application\Services\GrupoEstudo;
 
-use App\Application\Contracts\CryptoServiceInterface;
-use App\Application\Contracts\ImageProcessorInterface;
+use App\Application\Contracts\Infrastructure\CryptoServiceInterface;
+use App\Application\Contracts\Infrastructure\ImageProcessorInterface;
 
 use App\Domain\Model\GrupoEstudo\GrupoEstudo;
-use App\Domain\Model\User;
+use App\Domain\Model\GrupoEstudo\Membro;
 use App\Domain\Repository\GrupoEstudo\GrupoEstudoRepositoryInterface;
+use App\Domain\VO\Auth\AuthenticatedUser;
 
+use Illuminate\Support\Collection;
 use Illuminate\Http\UploadedFile;
 
 class GrupoEstudoService
 {
     public function __construct(
+        private MembroService $membroService,
         private GrupoEstudoRepositoryInterface $grupoEstudoRepository,
         private ImageProcessorInterface $imageProcessor,
         private CryptoServiceInterface $cryptoService
     ) {}
     
-    public function find(int $id): GrupoEstudo
+    public function find(int $id): GrupoEstudo | null
     {
         return $this->grupoEstudoRepository->find($id);
     }
@@ -29,9 +32,14 @@ class GrupoEstudoService
         $grupoEstudo = $this->grupoEstudoRepository->store($data);
 
         $this->atualizarImagem($grupoEstudo, $data['imagem']);
-        $this->atualizarImagemHeader($grupoEstudo, $data['imagem_header']);
+        $this->atualizarImagemHeader($grupoEstudo, imagem: $data['imagem_header']);
 
-        return $grupoEstudo->atualizar();
+        $this->membroService->store([
+            'id_usuario' => $grupoEstudo->id_usuario,
+            'id_grupo_estudo' => $grupoEstudo->id,
+        ]);
+
+        return $grupoEstudo->reload();
     }
 
     public function update(int $id, array $data): GrupoEstudo
@@ -41,10 +49,10 @@ class GrupoEstudoService
         $this->atualizarImagem($grupoEstudo, $data['imagem']);
         $this->atualizarImagemHeader($grupoEstudo, $data['imagem_header']);
 
-        return $grupoEstudo->atualizar();
+        return $grupoEstudo->reload();
     }
 
-    public function atualizarImagem(GrupoEstudo $grupoEstudo, UploadedFile $imagem)
+    public function atualizarImagem(GrupoEstudo $grupoEstudo, UploadedFile $imagem): void
     {
         if (!empty($grupoEstudo->imagem))
         {
@@ -57,7 +65,7 @@ class GrupoEstudoService
         $grupoEstudo->updateImagem($hashPath);
     }
 
-    public function atualizarImagemHeader(GrupoEstudo $grupoEstudo, UploadedFile $imagem)
+    public function atualizarImagemHeader(GrupoEstudo $grupoEstudo, UploadedFile $imagem): void
     {
         if (!empty($grupoEstudo->imagem_header))
         {
@@ -70,14 +78,46 @@ class GrupoEstudoService
         $grupoEstudo->updateImagemHeader($hashPath);
     }
 
-    public function delete(int $id, User $usuario)
+    public function delete(int $id, AuthenticatedUser $user): void
     {
         $grupoEstudo = $this->find(id: $id);
 
-        if ($grupoEstudo->id_usuario == $usuario->id)
+        if ($grupoEstudo->id_usuario == $user->id())
         {
             $this->imageProcessor->excluirDiretorio($grupoEstudo->getBasePath());
             $grupoEstudo->excluir();
         }
+    }
+
+    public function listarGruposIngressadosUsuario(AuthenticatedUser $user, $limite = 15, $page = 1): Collection
+    {
+        $membrosUsuario = $this->membroService->listarMembrosByUsuario($user, $limite, $page);
+
+        $gruposEstudo = $membrosUsuario
+        ->filter(fn(Membro $membro) => $membro->grupoEstudo !== null)
+        ->map(function (Membro $membro) {
+            $grupo = $membro->grupoEstudo;
+            $grupo->id_membro = $membro->id;
+            return $grupo;
+        })
+        ->values();
+
+
+        return $gruposEstudo;
+    }
+
+    public function listarGruposUsuarioCriador(AuthenticatedUser $user, int $limite = 15, $page = 1): Collection
+    {
+        return $this->grupoEstudoRepository->searchByUsuarioCriador($user->id(), $limite, $page);
+    }
+
+    public function listarGruposPopularesNaoIngressados(AuthenticatedUser $user, int $limite = 15, $page = 1): Collection
+    {
+        return $this->grupoEstudoRepository->searchMostPopularNaoIngressadosByCurso(
+            $user->id(),
+            $user->getIdCurso(), 
+            $limite,
+            $page
+        );
     }
 }

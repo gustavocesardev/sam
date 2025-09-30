@@ -4,11 +4,16 @@ namespace App\Domain\Model\GrupoEstudo;
 
 use App\Domain\Model\User;
 
+use Database\Factories\GrupoEstudo\MembroFactory;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Membro extends Model
 {
+    use HasFactory;
+
     protected $table = 'grupo_estudo_membro';
     
     protected $fillable = [
@@ -27,20 +32,13 @@ class Membro extends Model
         return $this->belongsTo(GrupoEstudo::class, 'id_grupo_estudo');
     }
 
-    public function inativar(): bool
-    {
-        $this->situacao = 'I';
-        return $this->save();
-    }
-
-    public function ativar(): bool
-    {
-        $this->situacao = 'A';
-        return $this->save();
-    }
-
-    public function atualizar()
+    public function reload(): Membro
     {
         return $this->refresh();
+    }
+
+    protected static function newFactory(): MembroFactory
+    {
+        return MembroFactory::new();
     }
 }

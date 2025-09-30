@@ -24,7 +24,7 @@ class SendVerifyEmailJob
         $this->data = $data;
     }
 
-    public function handle()
+    public function handle(): void
     {
         Mail::to($this->email)->send(new VerifyEmail($this->data));
     }

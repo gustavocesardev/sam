@@ -4,12 +4,17 @@ namespace App\Domain\Model\GrupoEstudo;
 
 use App\Domain\Model\Abstract\PublicacaoAbstract;
 
+use Database\Factories\GrupoEstudo\PublicacaoFactory;
+
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Publicacao extends PublicacaoAbstract
 {
+    use HasFactory;
+
     protected $table = 'grupo_estudo_publicacao';
     
     protected $fillable = [
@@ -27,6 +32,11 @@ class Publicacao extends PublicacaoAbstract
         return $this->id_membro;
     }
 
+    public function getIdGrupoEstudo(): int
+    {
+        return $this->membro->grupoEstudo->id;
+    }
+
     protected static function boot(): void
     {
         parent::boot();
@@ -40,7 +50,6 @@ class Publicacao extends PublicacaoAbstract
     {
         return $this->belongsTo(Membro::class, 'id_membro');
     }
-
     
     public function publicacaoVinculada(): BelongsTo
     {
@@ -57,8 +66,18 @@ class Publicacao extends PublicacaoAbstract
         return $this->hasMany(PublicacaoReacao::class, 'id_publicacao');
     }
 
+    public function publicacoesVinculadas()
+    {
+        return $this->hasMany(Publicacao::class, 'id_publicacao_vinculada');
+    }
+
     public function visualizacoes(): HasMany
     {
         return $this->hasMany(PublicacaoVisualizacao::class, 'id_publicacao');
+    }
+
+    protected static function newFactory(): PublicacaoFactory
+    {
+        return PublicacaoFactory::new();
     }
 }

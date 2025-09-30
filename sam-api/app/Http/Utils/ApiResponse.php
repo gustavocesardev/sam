@@ -4,6 +4,7 @@ namespace App\Http\Utils;
 
 use App\Domain\Enums\ErrorContext;
 use App\Domain\Exceptions\AppException;
+
 use Illuminate\Http\JsonResponse;
 
 class ApiResponse

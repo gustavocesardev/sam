@@ -2,7 +2,9 @@
 
 namespace App\Infrastructure\Services;
 
-use App\Application\Contracts\ImageProcessorInterface;
+use App\Application\Contracts\Infrastructure\ImageProcessorInterface;
+
+use App\Infrastructure\Services\Abstract\FileProcessorService;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -10,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
-class ImageProcessorService implements ImageProcessorInterface
+class ImageProcessorService extends FileProcessorService implements ImageProcessorInterface
 {
     private ImageManager $manager;
 
@@ -39,29 +41,6 @@ class ImageProcessorService implements ImageProcessorInterface
             ->all();
     }
 
-    public function excluirArquivo(string $path): void
-    {
-        Storage::disk('public')->delete($path);
-    }
-
-    public function excluirDiretorio(string $path): void
-    {
-        if (Storage::disk('public')->exists($path))
-        {
-            $arquivos = Storage::disk('public')->files($path);
-            foreach ($arquivos as $arquivo) {
-                Storage::disk('public')->delete($arquivo);
-            }
-
-            $subDiretorios = Storage::disk('public')->directories($path);
-            foreach ($subDiretorios as $subDiretorio) {
-                $this->excluirDiretorio($subDiretorio); // Chama recursivamente
-            }
- 
-            Storage::disk('public')->deleteDirectory($path);
-        }
-    }
-
     private function armazenarImagem(UploadedFile $imagem, string $basePath): string
     {
         $filename = $this->gerarFilename($imagem);
@@ -71,11 +50,6 @@ class ImageProcessorService implements ImageProcessorInterface
         Storage::disk('public')->put($path, $conteudo);
 
         return $path;
-    }
-
-    private function gerarFilename(UploadedFile $image): string
-    {
-        return uniqid() . '.' . $image->getClientOriginalExtension();
     }
 
     private function prepararImagemPerfil(UploadedFile $image): string
@@ -95,10 +69,5 @@ class ImageProcessorService implements ImageProcessorInterface
         }
 
         return (string) $img->toJpeg(80);
-    }
-
-    private function resolvePath(string $basePath, string $filename): string
-    {
-        return trim($basePath, '/') . '/' . $filename;
     }
 }

@@ -20,11 +20,14 @@ class CursoRepository implements CursoRepositoryInterface
         return $curso;
     }
 
+    public function searchByInstituicao(int $idInstituicao): Collection
+    {
+        return Curso::where('id_instituicao', $idInstituicao)->get();
+    }
+
     public function store(array $data): Curso
     {
-        $curso = Curso::create($data);
-        $curso->refresh();
-        return $curso;
+        return Curso::create($data);
     }
 
     public function update(int $id, array $data): Curso

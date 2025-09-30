@@ -1,12 +1,19 @@
 <?php
 namespace App\Domain\Model;
 
-use Carbon\Carbon;
+use Database\Factories\InstituicaoFactory;
+
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+use Carbon\Carbon;
 
 class Instituicao extends Model
 {
+    use HasFactory;
+
     protected $table = 'instituicao';
 
     protected $fillable = [
@@ -29,7 +36,7 @@ class Instituicao extends Model
         'excluido_data' => 'date',
     ];
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
         
@@ -38,17 +45,17 @@ class Instituicao extends Model
         });
     }
 
-    public function cursos()
+    public function cursos(): HasMany
     {
         return $this->hasMany(Curso::class, 'id_instituicao');
     }
 
-    public function setRazaoSocialAttribute($value)
+    public function setRazaoSocialAttribute($value): void
     {
         $this->attributes['razao_social'] = strtoupper($value); 
     }
 
-    public function setTipoLogradouroAttribute($value)
+    public function setTipoLogradouroAttribute($value): void
     {
         $this->attributes['tipo_logradouro'] = strtoupper($value); 
     }
@@ -58,11 +65,27 @@ class Instituicao extends Model
         return "instituicoes/{$this->id}/imagem";
     }
 
+    public function updateImagem(string $newPath = ''): void
+    {
+        $this->imagem = $newPath;
+        $this->save();
+    }
+
+    public function reload(): Instituicao
+    {
+        return $this->refresh();
+    }
+
     public function excluir(): bool
     {
         $this->excluido = true;
         $this->excluido_data = Carbon::now();
 
         return $this->save();
+    }
+
+    protected static function newFactory(): InstituicaoFactory
+    {
+        return InstituicaoFactory::new();
     }
 }
