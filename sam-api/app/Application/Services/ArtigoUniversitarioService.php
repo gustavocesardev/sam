@@ -98,6 +98,11 @@ class ArtigoUniversitarioService
 
     private function atualizarPdf(ArtigoUniversitario $artigoUniversitario, UploadedFile $document): void
     {
+        if (!empty($artigoUniversitario->pdf))
+        {
+            $this->documentProcessor->excluirArquivo($artigoUniversitario->pdf);
+        }
+
         $path = $this->documentProcessor->storeDocument($document, $artigoUniversitario->getBasePath());
         $hashPath = $this->cryptoService->encryptUrl($path);
 
