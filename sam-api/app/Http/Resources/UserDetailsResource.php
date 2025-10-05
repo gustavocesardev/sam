@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserDetailsResource extends JsonResource
@@ -14,6 +15,9 @@ class UserDetailsResource extends JsonResource
      */
     public function toArray($request): array
     {
+        $periodoAnoAtual = ($this->ano_inicio_curso -  Carbon::now()->year) + 1;
+        $periodoAnoAtual = $periodoAnoAtual > 0 ? $periodoAnoAtual : 1;
+
         return [
             'id'                => $this->id,
             'id_curso'          => $this->id_curso,
@@ -28,12 +32,13 @@ class UserDetailsResource extends JsonResource
             'updated_at'        => $this->updated_at->format('\à\s\ H:i \e\m d/m/Y'),
 
             'curso' => [
-                'nome' => $this->curso->nome_curso,
+                'nome' => "{$periodoAnoAtual}° {$this->curso->nome_curso}",
             ],
 
             'contadores' => [
                 'artigos' => $this->artigos_count,
-                'publicacoes' => $this->publicacoes_count
+                'publicacoes' => $this->publicacoes_count,
+                'comentarios' => $this->comentarios_count
             ]
         ];
     }

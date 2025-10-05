@@ -36,7 +36,8 @@ class ArtigoUniversitarioService
             {
                 throw new AppException(
                     'O atributo conteudo não é um JSON válido.',
-                    ErrorContext::ARTIGO
+                    ErrorContext::ARTIGO,
+                    500
                 );
             }
 
@@ -70,7 +71,8 @@ class ArtigoUniversitarioService
             {
                 throw new AppException(
                     'O atributo conteudo não é um JSON válido.',
-                    ErrorContext::ARTIGO
+                    ErrorContext::ARTIGO,
+                    500
                 );
             }
 

@@ -22,7 +22,7 @@ class FormularioResource extends JsonResource
             'id'           => $this->id,
             'id_usuario'   => $this->id_usuario,
             'nome'         => $this->usuario->name,
-            'periodo'      => "{$periodoAnoAtual}° ANO", 
+            'periodo'      => "{$periodoAnoAtual}° Período", 
             'curso'        => $this->usuario->curso->nome_curso,
             'titulo'       => $this->titulo,
             'descricao'    => $this->descricao,

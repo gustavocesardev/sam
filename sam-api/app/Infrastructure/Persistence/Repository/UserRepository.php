@@ -22,9 +22,18 @@ class UserRepository implements UserRepositoryInterface
     public function findWithCountArtigoPublicacao(int $id): User
     {
         return User::with('curso')
-        ->withCount(['artigos', 'publicacoes'])
-        ->findOrFail($id);
+            ->withCount([
+                'artigos',
+                'publicacoes as publicacoes_count' => function ($query) {
+                    $query->whereNull('id_publicacao_vinculada');
+                },
+                'publicacoes as comentarios_count' => function ($query) {
+                    $query->whereNotNull('id_publicacao_vinculada');
+                },
+            ])
+            ->findOrFail($id);
     }
+
 
     public function findAll(): Collection
     {
