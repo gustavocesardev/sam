@@ -41,9 +41,9 @@ class _FeedAppBarState extends State<FeedAppBar> {
 
       setState(() {
         userId = user.id; 
-        userImageUrl = "$baseUrl/file/image/${currentUser?.avatarEncrypted}";
-        instituicaoImageUrl =
-            "$baseUrl/file/image/${user.instituicao.imagemInstituicao}";
+        userImageUrl = currentUser?.avatarEncrypted != null ? "$baseUrl/file/image/${currentUser?.avatarEncrypted}" : null;
+        instituicaoImageUrl = user.instituicao.imagemInstituicao.isNotEmpty ?
+            "$baseUrl/file/image/${user.instituicao.imagemInstituicao}" : null;
       });
     }
   }
@@ -110,10 +110,10 @@ class _FeedAppBarState extends State<FeedAppBar> {
                         fit: BoxFit.contain,
                         alignment: Alignment.center,
                         errorBuilder: (_, __, ___) => Container(
-                          color: Colors.grey[700],
-                          child: const Icon(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          child: Icon(
                             Icons.image_not_supported,
-                            color: Colors.white54,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ),
                       ),

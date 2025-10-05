@@ -31,7 +31,7 @@ class UserModel {
       idCurso: json['id_curso'],
       nome: json['name'],
       email: json['email'],
-      biografia: json['biografia'],
+      biografia: json['biografia'] ?? '',
       situacao: json['situacao'],
       anoInicioCurso: json['ano_inicio_curso'],
       anoFimCurso: json['ano_fim_curso'],
