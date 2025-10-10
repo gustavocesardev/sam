@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sam_app/core/routing/app_routes.dart';
 import 'package:sam_app/domain/viewmodels/login_viewmodel.dart';
-import 'package:sam_app/presentation/pages/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -23,7 +22,11 @@ class _LoginPageState extends State<LoginPage> {
 
     final error = vm.errorMessage;
     if (error == null) {
-      Navigator.pushReplacementNamed(context, AppRoutes.home);
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.home,
+        (route) => false,
+      );
     }
   }
 
@@ -119,9 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(color: Colors.white70),
                     ),
                     TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, AppRoutes.instituicoes);
-                      },
+                      onPressed: () {},
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: Size(125, 40),
@@ -129,9 +130,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushNamedAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (_) => RegisterPage()),
+                            AppRoutes.instituicoes,
+                            (route) => false,
                           );
                         },
                         child: const Text('Cadastre-se agora'),

@@ -20,12 +20,7 @@ class ArtigosListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (vm.artigos.isEmpty && !vm.isLoading) {
-      return const Center(
-        child: Text(
-          'Nenhum artigo encontrado :(',
-          style: TextStyle(color: Colors.white70, fontSize: 16),
-        ),
-      );
+      return const Center(child: Text('Nenhum artigo encontrado :('));
     }
 
     return ListView.builder(

@@ -46,6 +46,11 @@ class _FeedCursoPageState extends State<FeedCursoPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    if (viewModel.posts.isEmpty) {
+      return const Center(child: Text('Nenhuma publicação encontrada :('));
+    }
+
     return Consumer<FeedCursoViewmodel>(
       builder: (context, vm, _) {
         return RefreshIndicator(

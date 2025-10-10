@@ -29,6 +29,8 @@ import 'data/storage/auth_storage_service.dart';
 import 'domain/viewmodels/login_viewmodel.dart';
 import 'presentation/pages/splash_page.dart';
 
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final storageService = await AuthStorageService.init();
@@ -123,7 +125,13 @@ class MyApp extends StatelessWidget {
         AppRoutes.formularios: (_) => const FormulariosPage(),
         AppRoutes.artigos: (_) => const ArtigosPage(),
       },
-      localizationsDelegates: const [FlutterQuillLocalizations.delegate],
+      localizationsDelegates: const [
+        FlutterQuillLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        FlutterQuillLocalizations.delegate,
+      ],
       supportedLocales: const [Locale('en'), Locale('pt')],
     );
   }

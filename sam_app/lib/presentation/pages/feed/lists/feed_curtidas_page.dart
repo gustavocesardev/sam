@@ -46,6 +46,10 @@ class _FeedCurtidasPageState extends State<FeedCurtidasPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (viewModel.posts.isEmpty) {
+      return const Center(child: Text('Nenhuma publicação encontrada :('));
+    }
+
     return Consumer<FeedCurtidasViewmodel>(
       builder: (context, vm, _) {
         return RefreshIndicator(

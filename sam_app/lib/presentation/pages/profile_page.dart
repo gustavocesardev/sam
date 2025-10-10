@@ -5,11 +5,11 @@ import 'package:sam_app/data/models/post_model.dart';
 import 'package:sam_app/data/models/user_detail_model.dart';
 import 'package:sam_app/data/repositories/publicacao/feed_repository.dart';
 import 'package:sam_app/data/services/user_service.dart';
+import 'package:sam_app/data/storage/auth_storage_service.dart';
 import 'package:sam_app/domain/viewmodels/publicacao/feed_curtidas_viewmodel.dart';
 import 'package:sam_app/domain/viewmodels/publicacao/feed_usuario_viewmodel.dart';
 import 'package:sam_app/presentation/pages/feed/lists/feed_curtidas_page.dart';
 import 'package:sam_app/presentation/pages/feed/lists/feed_usuario_page.dart';
-import 'package:sam_app/presentation/widgets/app_bar/simple_app_bar.dart';
 import 'package:sam_app/presentation/widgets/tabs/custom_tab_bar.dart';
 import 'package:sam_app/shared/constants.dart';
 
@@ -26,15 +26,18 @@ class _ProfilePageState extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final UserService _userService = UserService();
-  int _currentIndex = 0;
 
+  int _currentIndex = 0;
   bool isLoading = true;
+  bool _isLoggingOut = false;
+
   String? name;
   String? role;
   String? avatarUrl;
   int? postsCount;
   int? articlesCount;
   int? commentsCount;
+  int? loggedUserId;
 
   List<PostModel> posts = [];
   List<PostModel> likedPosts = [];
@@ -51,20 +54,21 @@ class _ProfilePageState extends State<ProfilePage>
       }
     });
     _loadUserProfile();
+    _loadLoggedUser();
   }
 
   Future<void> _loadUserProfile() async {
     setState(() => isLoading = true);
-
     try {
-      final UserDetailModel? currentUser = await _userService.getUserDetails(
-        widget.userId,
-      );
+      final UserDetailModel? currentUser =
+          await _userService.getUserDetails(widget.userId);
 
       setState(() {
         name = currentUser?.nome;
         role = currentUser?.nomeCurso;
-        avatarUrl = "$baseUrl/file/image/${currentUser!.avatarEncrypted}";
+        avatarUrl = currentUser!.avatarEncrypted != null
+            ? "$baseUrl/file/image/${currentUser.avatarEncrypted}"
+            : null;
         postsCount = currentUser.totalPublicacoes;
         articlesCount = currentUser.totalArtigos;
         commentsCount = currentUser.totalComentarios;
@@ -72,6 +76,30 @@ class _ProfilePageState extends State<ProfilePage>
     } finally {
       setState(() => isLoading = false);
     }
+  }
+
+  Future<void> _loadLoggedUser() async {
+    final user = await AuthStorageService.getStoredUser();
+    if (mounted) {
+      setState(() => loggedUserId = user?.id);
+    }
+  }
+
+  Future<void> _logout() async {
+    setState(() => _isLoggingOut = true);
+
+    final storage = await AuthStorageService.init();
+    storage.clear();
+
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    if (!mounted) return;
+
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      '/login', // ou AppRoutes.login
+      (route) => false,
+    );
   }
 
   @override
@@ -102,68 +130,92 @@ class _ProfilePageState extends State<ProfilePage>
           create: (_) => FeedCurtidasViewmodel(FeedRepository()),
         ),
       ],
-      child: Scaffold(
-        appBar: SimpleAppBar(textAppBar: 'Perfil'),
-        body: Column(
-          children: [
-            /// Cabeçalho com avatar e stats
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: avatarUrl != null
-                        ? NetworkImage(avatarUrl!)
-                        : null,
-                    child: avatarUrl == null
-                        ? const Icon(Icons.person, size: 40)
-                        : null,
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: Text('Perfil'),
+              actions: [
+                if (loggedUserId != null && loggedUserId == widget.userId)
+                  IconButton(
+                    icon: const Icon(Icons.logout, color: Color.fromRGBO(211, 47, 47, 1),),
+                    onPressed: _logout,
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    // <- faz a coluna ocupar todo o espaço restante
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          name ?? '',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          role ?? '',
-                          style: const TextStyle(color: Colors.grey),
-                        ),
-                        const SizedBox(height: 18),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment
-                              .spaceBetween, // distribui os stats uniformemente
-                          children: [
-                            _buildStat('Publicações', postsCount ?? 0),
-                            _buildStat('Artigos', articlesCount ?? 0),
-                            _buildStat('Comentários', commentsCount ?? 0),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            /// Tabs
-            CustomTabBar(
-              tabController: _tabController,
-              tabs: const [
-                Tab(text: 'Publicações'),
-                Tab(text: 'Curtidas'),
               ],
             ),
+            body: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundColor: Theme.of(context).colorScheme.secondary,
+                        backgroundImage: avatarUrl != null
+                            ? NetworkImage(avatarUrl!)
+                            : null,
+                        child: avatarUrl == null
+                            ? Icon(
+                                Icons.person,
+                                size: 60,
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                              )
+                            : null,
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              name ?? '',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              role ?? '',
+                              style: const TextStyle(color: Colors.grey),
+                            ),
+                            const SizedBox(height: 18),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _buildStat('Publicações', postsCount ?? 0),
+                                _buildStat('Artigos', articlesCount ?? 0),
+                                _buildStat('Comentários', commentsCount ?? 0),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                CustomTabBar(
+                  tabController: _tabController,
+                  tabs: const [
+                    Tab(text: 'Publicações'),
+                    Tab(text: 'Curtidas'),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Expanded(child: tabsContent[_currentIndex]),
+              ],
+            ),
+          ),
 
-            const SizedBox(height: 16),
-            Expanded(child: tabsContent[_currentIndex]),
-          ],
-        ),
+          if (isLoading || _isLoggingOut)
+            Positioned.fill(
+              child: Container(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: const Center(child: CircularProgressIndicator()),
+              ),
+            ),
+        ],
       ),
     );
   }

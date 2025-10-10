@@ -123,7 +123,7 @@ class HttpService {
   }
 
   Map<String, dynamic> _handleResponse(http.Response response) {
-    final decoded = jsonDecode(response.body);
+    final decoded = jsonDecode(utf8.decode(response.bodyBytes));
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return decoded;
     } else {

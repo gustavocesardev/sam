@@ -46,6 +46,11 @@ class _FeedGeralPageState extends State<FeedGeralPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    if (viewModel.posts.isEmpty) {
+      return const Center(child: Text('Nenhuma publicação encontrada :('));
+    }
+
     return Consumer<FeedGeralViewmodel>(
       builder: (context, vm, _) {
         return RefreshIndicator(

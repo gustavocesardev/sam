@@ -11,14 +11,9 @@ class MembroListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (membros.isEmpty) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Text(
-            "Nenhum membro encontrado.",
-            style: TextStyle(color: Colors.white70),
-          ),
-        ),
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: const Center(child: Text('Nenhum membro encontrado :(')),
       );
     }
 
