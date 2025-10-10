@@ -21,7 +21,7 @@ class PublicacaoResource extends JsonResource
         return [
             'id_publicacao'           => $this->id,
             'id_publicacao_vinculada' => $this->id_publicacao_vinculada,
-            'id_usuario'              => $this->user->id,
+            'id_usuario'              => $this->membro->user->id,
             'id_membro'               => $this->id_membro,
             'foto_usuario'            => $this->membro->user->foto_perfil,
             'nome'                    => $this->membro->user->name,
