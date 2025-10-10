@@ -82,6 +82,11 @@ class UserService
 
     public function atualizarFotoDePerfil(User $user, UploadedFile $imagem): void
     {
+        if (!empty($user->foto_perfil))
+        {
+            $this->imageProcessor->excluirArquivo($user->foto_perfil);
+        }
+
         $path = $this->imageProcessor->storeImage($imagem, $user->getBasePath());
         $hashPath = $this->cryptoService->encryptUrl($path);
 
@@ -99,6 +104,9 @@ class UserService
 
     public function delete(int $id): bool
     {
+        $user = $this->userRepository->find($id);
+        $this->imageProcessor->excluirDiretorio($user->getBasePath());
+
         return $this->userRepository->delete($id);
     }
 

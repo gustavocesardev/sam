@@ -3,7 +3,7 @@ class UserDetailModel {
   final int idCurso;
   final String nome;
   final String email;
-  final String biografia;
+  final String? biografia;
   final String situacao;
   final int anoInicioCurso;
   final int anoFimCurso;
@@ -50,9 +50,9 @@ class UserDetailModel {
       criadoEm: json['created_at'],
       atualizadoEm: json['updated_at'],
       nomeCurso: curso['nome'],
-      totalArtigos: contadores['artigos'],
-      totalPublicacoes: contadores['publicacoes'],
-      totalComentarios: contadores['comentarios'],
+      totalArtigos: contadores['artigos'] ?? 0,
+      totalPublicacoes: contadores['publicacoes'] ?? 0,
+      totalComentarios: contadores['comentarios'] ?? 0,
     );
   }
 }

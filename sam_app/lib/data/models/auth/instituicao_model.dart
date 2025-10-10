@@ -11,12 +11,21 @@ class InstituicaoModel {
     required this.dominioInstituicao,
   });
 
-  factory InstituicaoModel.fromMap(Map<String, dynamic> map) {
+  factory InstituicaoModel.fromAuthJson(Map<String, dynamic> json) {
     return InstituicaoModel(
-      idInstituicao: map['id_instituicao'],
-      nomeInstituicao: map['nome_instituicao'],
-      imagemInstituicao: map['imagem_instituicao'],
-      dominioInstituicao: map['dominio_instituicao'],
+      idInstituicao: json['id_instituicao'],
+      nomeInstituicao: json['nome_instituicao'],
+      imagemInstituicao: json['imagem_instituicao'],
+      dominioInstituicao: json['dominio_instituicao'],
+    );
+  }
+
+  factory InstituicaoModel.fromJson(Map<String, dynamic> json) {
+    return InstituicaoModel(
+      idInstituicao: json['id'],
+      nomeInstituicao: json['razao_social'],
+      imagemInstituicao: json['imagem'],
+      dominioInstituicao: json['dominio'],
     );
   }
 

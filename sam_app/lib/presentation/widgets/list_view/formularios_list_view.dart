@@ -20,12 +20,7 @@ class FormulariosListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (vm.forms.isEmpty && !vm.isLoading) {
-      return const Center(
-        child: Text(
-          'Nenhum formulário encontrado :(',
-          style: TextStyle(color: Colors.white70, fontSize: 16),
-        ),
-      );
+      return const Center(child: Text('Nenhum formulário encontrado :('));
     }
 
     return ListView.builder(

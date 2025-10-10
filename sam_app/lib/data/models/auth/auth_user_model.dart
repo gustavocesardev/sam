@@ -19,7 +19,7 @@ class AuthUserModel {
       id: map['id'],
       email: map['email'],
       curso: CursoModel.fromMap(map['curso']),
-      instituicao: InstituicaoModel.fromMap(map['instituicao']),
+      instituicao: InstituicaoModel.fromAuthJson(map['instituicao']),
     );
   }
 

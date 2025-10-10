@@ -31,8 +31,29 @@ class GrupoEstudoService
     {
         $grupoEstudo = $this->grupoEstudoRepository->store($data);
 
-        $this->atualizarImagem($grupoEstudo, $data['imagem']);
-        $this->atualizarImagemHeader($grupoEstudo, imagem: $data['imagem_header']);
+        if (array_key_exists('imagem', $data))
+        {
+            if ($data['imagem'] instanceof UploadedFile)
+            {
+                $this->atualizarImagem($grupoEstudo, $data['imagem']);
+
+            } else {
+
+                $this->removerImagem($grupoEstudo);
+            }
+        }
+
+        if (array_key_exists('imagem_header', $data))
+        {
+            if ($data['imagem_header'] instanceof UploadedFile)
+            {
+                $this->atualizarImagemHeader($grupoEstudo, $data['imagem_header']);
+
+            } else {
+
+                $this->removerImagemHeader($grupoEstudo);
+            }
+        }
 
         $this->membroService->store([
             'id_usuario' => $grupoEstudo->id_usuario,
@@ -46,8 +67,29 @@ class GrupoEstudoService
     {
         $grupoEstudo = $this->grupoEstudoRepository->update($id, $data);
 
-        $this->atualizarImagem($grupoEstudo, $data['imagem']);
-        $this->atualizarImagemHeader($grupoEstudo, $data['imagem_header']);
+        if (array_key_exists('imagem', $data))
+        {
+            if ($data['imagem'] instanceof UploadedFile)
+            {
+                $this->atualizarImagem($grupoEstudo, $data['imagem']);
+
+            } else {
+
+                $this->removerImagem($grupoEstudo);
+            }
+        }
+
+        if (array_key_exists('imagem_header', $data))
+        {
+            if ($data['imagem_header'] instanceof UploadedFile)
+            {
+                $this->atualizarImagemHeader($grupoEstudo, $data['imagem_header']);
+
+            } else {
+
+                $this->removerImagemHeader($grupoEstudo);
+            }
+        }
 
         return $grupoEstudo->reload();
     }
@@ -78,6 +120,24 @@ class GrupoEstudoService
         $grupoEstudo->updateImagemHeader($hashPath);
     }
 
+    private function removerImagem(GrupoEstudo $grupoEstudo): void
+    {
+        if (!empty($grupoEstudo->imagem))
+        {
+            $this->imageProcessor->excluirArquivo($grupoEstudo->imagem);
+            $grupoEstudo->updateImagem();
+        }
+    }
+
+    private function removerImagemHeader(GrupoEstudo $grupoEstudo): void
+    {
+        if (!empty($grupoEstudo->imagem_header))
+        {
+            $this->imageProcessor->excluirArquivo($grupoEstudo->imagem_header);
+            $grupoEstudo->updateImagemHeader();
+        }
+    }
+
     public function delete(int $id, AuthenticatedUser $user): void
     {
         $grupoEstudo = $this->find(id: $id);
@@ -101,7 +161,6 @@ class GrupoEstudoService
             return $grupo;
         })
         ->values();
-
 
         return $gruposEstudo;
     }

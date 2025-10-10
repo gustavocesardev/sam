@@ -41,7 +41,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       if (!mounted) return;
 
       setState(() {
-        userImageUrl = "$baseUrl/file/image/${currentUser?.avatarEncrypted}";
+        userImageUrl = currentUser?.avatarEncrypted != null ? "$baseUrl/file/image/${currentUser?.avatarEncrypted}" : null;
       });
     }
   }
@@ -57,13 +57,16 @@ class _CustomAppBarState extends State<CustomAppBar> {
           Align(
             alignment: Alignment.centerLeft,
             child: CircleAvatar(
-              backgroundColor: Theme.of(context).colorScheme.secondary,
               radius: 18,
-              backgroundImage: userImageUrl != null
-                  ? NetworkImage(userImageUrl!)
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              backgroundImage: userImageUrl != null ? NetworkImage(userImageUrl!) : null,
+              child: userImageUrl == null
+                  ? Icon(
+                      Icons.person,
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                    )
                   : null,
-              child: userImageUrl == null ? const Icon(Icons.person) : null,
-            ),
+            )
           ),
           Align(
             alignment: Alignment.center,

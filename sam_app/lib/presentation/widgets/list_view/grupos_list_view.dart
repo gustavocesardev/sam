@@ -20,12 +20,7 @@ class GruposListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (vm.grupos.isEmpty && !vm.isLoading) {
-      return const Center(
-        child: Text(
-          'Nenhum grupo encontrado :(',
-          style: TextStyle(color: Colors.white70, fontSize: 16),
-        ),
-      );
+      return const Center(child: Text('Nenhum grupo encontrado :('));
     }
 
     return ListView.builder(

@@ -73,6 +73,11 @@ class InstituicaoService
 
     private function atualizarImagem(Instituicao $instituicao, UploadedFile $imagem): void
     {
+        if (!empty($instituicao->imagem))
+        {
+            $this->imageProcessor->excluirArquivo($instituicao->imagem);
+        }
+
         $path = $this->imageProcessor->storeImage($imagem, $instituicao->getBasePath());
         $hashPath = $this->cryptoService->encryptUrl($path);
 
