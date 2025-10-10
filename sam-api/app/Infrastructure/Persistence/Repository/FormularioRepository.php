@@ -21,7 +21,6 @@ class FormularioRepository implements FormularioRepositoryInterface
         return Formulario::with(['usuario', 'usuario.curso'])
                 ->where('id_usuario', $idUsuario)
                 ->where('situacao', 'A')
-                ->whereDate('data_limite', '>=', Carbon::today())
                 ->skip($offset)
                 ->limit($limite)
                 ->get();
