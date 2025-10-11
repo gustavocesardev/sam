@@ -8,8 +8,11 @@ import 'package:sam_app/data/services/user_service.dart';
 import 'package:sam_app/data/storage/auth_storage_service.dart';
 import 'package:sam_app/domain/viewmodels/publicacao/feed_curtidas_viewmodel.dart';
 import 'package:sam_app/domain/viewmodels/publicacao/feed_usuario_viewmodel.dart';
+import 'package:sam_app/domain/viewmodels/user_edit_viewmodel.dart';
 import 'package:sam_app/presentation/pages/feed/lists/feed_curtidas_page.dart';
 import 'package:sam_app/presentation/pages/feed/lists/feed_usuario_page.dart';
+import 'package:sam_app/presentation/pages/user_edit_page.dart';
+import 'package:sam_app/presentation/widgets/app_bar/simple_app_bar.dart';
 import 'package:sam_app/presentation/widgets/tabs/custom_tab_bar.dart';
 import 'package:sam_app/shared/constants.dart';
 
@@ -33,6 +36,8 @@ class _ProfilePageState extends State<ProfilePage>
 
   String? name;
   String? role;
+  String? biografia;
+  String? criadoEm;
   String? avatarUrl;
   int? postsCount;
   int? articlesCount;
@@ -60,12 +65,15 @@ class _ProfilePageState extends State<ProfilePage>
   Future<void> _loadUserProfile() async {
     setState(() => isLoading = true);
     try {
-      final UserDetailModel? currentUser =
-          await _userService.getUserDetails(widget.userId);
+      final UserDetailModel? currentUser = await _userService.getUserDetails(
+        widget.userId,
+      );
 
       setState(() {
         name = currentUser?.nome;
         role = currentUser?.nomeCurso;
+        biografia = currentUser?.biografia;
+        criadoEm = currentUser?.criadoEm;
         avatarUrl = currentUser!.avatarEncrypted != null
             ? "$baseUrl/file/image/${currentUser.avatarEncrypted}"
             : null;
@@ -95,11 +103,7 @@ class _ProfilePageState extends State<ProfilePage>
 
     if (!mounted) return;
 
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      '/login', // ou AppRoutes.login
-      (route) => false,
-    );
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
   }
 
   @override
@@ -133,12 +137,56 @@ class _ProfilePageState extends State<ProfilePage>
       child: Stack(
         children: [
           Scaffold(
-            appBar: AppBar(
-              title: Text('Perfil'),
+            appBar: SimpleAppBar(
+              textAppBar: 'Perfil',
               actions: [
                 if (loggedUserId != null && loggedUserId == widget.userId)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 1,
+                        ),
+                        backgroundColor: Theme.of(
+                          context,
+                        ).scaffoldBackgroundColor,
+                      ),
+                      onPressed: () async {
+                        final updated = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ChangeNotifierProvider(
+                              create: (_) => UserEditViewmodel(),
+                              child: UserEditPage(userId: widget.userId),
+                            ),
+                          ),
+                        );
+                        if (updated == true) _loadUserProfile();
+                      },
+                      child: Text(
+                        'Editar perfil',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                SizedBox(width: 15),
+                if (loggedUserId != null && loggedUserId == widget.userId)
                   IconButton(
-                    icon: const Icon(Icons.logout, color: Color.fromRGBO(211, 47, 47, 1),),
+                    icon: const Icon(
+                      Icons.logout,
+                      color: Color.fromRGBO(211, 47, 47, 1),
+                    ),
                     onPressed: _logout,
                   ),
               ],
@@ -147,54 +195,133 @@ class _ProfilePageState extends State<ProfilePage>
               children: [
                 Padding(
                   padding: const EdgeInsets.all(20),
-                  child: Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Theme.of(context).colorScheme.secondary,
-                        backgroundImage: avatarUrl != null
-                            ? NetworkImage(avatarUrl!)
-                            : null,
-                        child: avatarUrl == null
-                            ? Icon(
-                                Icons.person,
-                                size: 60,
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                              )
-                            : null,
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              name ?? '',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              role ?? '',
-                              style: const TextStyle(color: Colors.grey),
-                            ),
-                            const SizedBox(height: 18),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.secondary,
+                            child: avatarUrl != null
+                                ? ClipOval(
+                                    child: Image.network(
+                                      avatarUrl!,
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                      loadingBuilder: (context, child, loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        }
+                                        return SizedBox(
+                                          width: 100,
+                                          height: 100,
+                                          child: Center(
+                                            child: CircularProgressIndicator(
+                                              value:
+                                                  loadingProgress
+                                                          .expectedTotalBytes !=
+                                                      null
+                                                  ? loadingProgress
+                                                            .cumulativeBytesLoaded /
+                                                        loadingProgress
+                                                            .expectedTotalBytes!
+                                                  : null,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                            return Icon(
+                                              Icons.person,
+                                              size: 60,
+                                              color: Theme.of(
+                                                context,
+                                              ).scaffoldBackgroundColor,
+                                            );
+                                          },
+                                    ),
+                                  )
+                                : Icon(
+                                    Icons.person,
+                                    size: 60,
+                                    color: Theme.of(
+                                      context,
+                                    ).scaffoldBackgroundColor,
+                                  ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _buildStat('Publicações', postsCount ?? 0),
-                                _buildStat('Artigos', articlesCount ?? 0),
-                                _buildStat('Comentários', commentsCount ?? 0),
+                                Text(
+                                  name ?? '',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  role ?? '',
+                                  style: const TextStyle(color: Colors.grey),
+                                ),
+                                const SizedBox(height: 18),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    _buildStat('Publicações', postsCount ?? 0),
+                                    _buildStat('Artigos', articlesCount ?? 0),
+                                    _buildStat(
+                                      'Comentários',
+                                      commentsCount ?? 0,
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
+                      if (biografia != null && biografia!.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 24.0),
+                          child: Text(
+                            biografia!,
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(color: Colors.white, fontSize: 14),
+                          ),
+                        ),
+                      if (criadoEm != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 24.0),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.calendar_today,
+                                size: 16,
+                                color: Colors.grey,
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                'Entrou $criadoEm',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
+                if (criadoEm == null) const SizedBox(height: 5),
                 CustomTabBar(
                   tabController: _tabController,
                   tabs: const [

@@ -61,6 +61,7 @@ class _FeedGrupoPageState extends State<FeedGrupoPage> {
             color: Theme.of(context).colorScheme.secondary,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             child: PostListView(
+              feedKey: 'feedGrupo',
               vm: vm,
               controller: _scrollController,
               idGrupoEstudo: widget.idGrupoEstudo,

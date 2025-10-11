@@ -6,6 +6,7 @@ import 'package:sam_app/domain/viewmodels/publicacao/feed_viewmodel.dart';
 
 class PostViewmodel extends FeedViewModel {
   final int idPublicacao;
+  final int idUsuario;
   final int? idGrupoEstudo;
   final int idAutor;
   final TipoAutorPublicacao tipoAutorPublicacao;
@@ -19,6 +20,7 @@ class PostViewmodel extends FeedViewModel {
     required FeedRepository feedRepo,
     required this.publicacaoRepo,
     required this.idPublicacao,
+    required this.idUsuario,
     required this.idGrupoEstudo,
     required this.idAutor,
     required this.tipoAutorPublicacao

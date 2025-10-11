@@ -47,10 +47,6 @@ class _FeedCursoPageState extends State<FeedCursoPage> {
   @override
   Widget build(BuildContext context) {
 
-    if (viewModel.posts.isEmpty) {
-      return const Center(child: Text('Nenhuma publicação encontrada :('));
-    }
-
     return Consumer<FeedCursoViewmodel>(
       builder: (context, vm, _) {
         return RefreshIndicator(
@@ -58,6 +54,7 @@ class _FeedCursoPageState extends State<FeedCursoPage> {
           color: Theme.of(context).colorScheme.secondary,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           child: PostListView(
+            feedKey: 'feedCurso',
             vm: vm,
             controller: _scrollController,
             idAutor: widget.idAutor,

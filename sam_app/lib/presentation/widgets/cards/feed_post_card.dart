@@ -5,6 +5,7 @@ import 'package:sam_app/data/cache/image_cache_service.dart';
 import 'package:sam_app/data/enums/tipo_autor_publicacao.dart';
 import 'package:sam_app/data/repositories/publicacao/publicacao_repository.dart';
 import 'package:sam_app/data/services/publicacao/publicacao_service.dart';
+import 'package:sam_app/presentation/pages/profile_page.dart';
 import 'package:sam_app/presentation/pages/publicacoes/post_images_page.dart';
 import 'package:sam_app/presentation/pages/publicacoes/post_page.dart';
 import 'package:sam_app/presentation/widgets/cached/cached_avatar.dart';
@@ -14,6 +15,7 @@ import 'package:sam_app/shared/constants.dart';
 
 class FeedPostCard extends StatefulWidget {
   final int idPublicacao;
+  final int idUsuario;
   final int? idGrupoEstudo;
   final String name;
   final String cursoInfo;
@@ -27,6 +29,7 @@ class FeedPostCard extends StatefulWidget {
   final int idAutor;
   final TipoAutorPublicacao tipoAutorPublicacao;
   final bool openDetails;
+  final bool moreActions;
 
   final PublicacaoRepository publicacaoRepository = PublicacaoRepository(
     PublicacaoService(),
@@ -35,6 +38,7 @@ class FeedPostCard extends StatefulWidget {
   FeedPostCard({
     super.key,
     required this.idPublicacao,
+    required this.idUsuario,
     required this.idGrupoEstudo,
     required this.name,
     required this.cursoInfo,
@@ -47,6 +51,7 @@ class FeedPostCard extends StatefulWidget {
     required this.tipoAutorPublicacao,
     this.liked = false,
     this.openDetails = true,
+    this.moreActions = false,
     this.avatarHash,
   });
 
@@ -92,6 +97,7 @@ class _FeedPostCardState extends State<FeedPostCard> {
       MaterialPageRoute(
         builder: (_) => PostPage(
           idPublicacao: widget.idPublicacao,
+          idUsuario: widget.idUsuario,
           idGrupoEstudo: widget.idGrupoEstudo,
           idAutor: widget.idAutor,
           tipoAutorPublicacao: widget.tipoAutorPublicacao,
@@ -109,119 +115,140 @@ class _FeedPostCardState extends State<FeedPostCard> {
       onTap: _openPostPage,
       child: Card(
         color: Theme.of(context).scaffoldBackgroundColor,
-        margin: const EdgeInsets.only(bottom: 16),
+        margin: const EdgeInsets.only(top: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.all(12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column(
                 children: [
-                  CachedAvatar(
-                    avatarHash: widget.avatarHash,
-                    avatarColor: widget.avatarColor,
-                    imageUrlFromHash: widget.imageUrlFromHash,
-                    imageCacheService: _imageCacheService,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ProfilePage(userId: widget.idUsuario),
+                            ),
+                          );
+                        },
+                        child: CachedAvatar(
+                          avatarHash: widget.avatarHash,
+                          avatarColor: widget.avatarColor,
+                          imageUrlFromHash: widget.imageUrlFromHash,
+                          imageCacheService: _imageCacheService,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    widget.name,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        widget.name,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      Text(
+                                        widget.cursoInfo,
+                                        style: const TextStyle(
+                                          color: Colors.white60,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    widget.cursoInfo,
-                                    style: const TextStyle(
-                                      color: Colors.white60,
-                                      fontSize: 12,
-                                    ),
+                                ),
+                                if (widget.moreActions)
+                                  const Icon(
+                                    Icons.more_horiz,
+                                    color: Colors.white70,
                                   ),
-                                ],
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              widget.content,
+                              textAlign: TextAlign.justify,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                height: 1.4,
                               ),
                             ),
-                            const Icon(Icons.more_horiz, color: Colors.white70),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          widget.content,
-                          textAlign: TextAlign.justify,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            height: 1.4,
-                          ),
-                        ),
-                        if (widget.imageHashes.isNotEmpty) ...[
-                          const SizedBox(height: 12),
-                          if (imageCount == 1)
-                            CachedPostImage(
-                              url: widget.imageUrlFromHash(images[0]),
-                              height: 180,
-                              borderRadius: BorderRadius.circular(8),
-                              onTap: _openPostImages,
-                              imageCacheService: _imageCacheService,
-                            )
-                          else
-                            CachedPostImagesGrid(
-                              urls: images
-                                  .map((hash) => widget.imageUrlFromHash(hash))
-                                  .toList(),
-                              onImageTap: _openPostImages,
-                              imageCacheService: _imageCacheService,
-                              height: 180,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                        ],
-                        const SizedBox(height: 12),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.mode_comment_outlined,
-                                  color: Colors.white54,
-                                  size: 20,
+                            if (widget.imageHashes.isNotEmpty) ...[
+                              const SizedBox(height: 12),
+                              if (imageCount == 1)
+                                CachedPostImage(
+                                  url: widget.imageUrlFromHash(images[0]),
+                                  height: 180,
+                                  borderRadius: BorderRadius.circular(8),
+                                  onTap: _openPostImages,
+                                  imageCacheService: _imageCacheService,
+                                )
+                              else
+                                CachedPostImagesGrid(
+                                  urls: images
+                                      .map(
+                                        (hash) => widget.imageUrlFromHash(hash),
+                                      )
+                                      .toList(),
+                                  onImageTap: _openPostImages,
+                                  imageCacheService: _imageCacheService,
+                                  height: 180,
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  '${widget.comments}',
-                                  style: const TextStyle(
-                                    color: Colors.white54,
-                                    fontSize: 12,
-                                  ),
+                            ],
+                            const SizedBox(height: 12),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.mode_comment_outlined,
+                                      color: Colors.white54,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      '${widget.comments}',
+                                      style: const TextStyle(
+                                        color: Colors.white54,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                _LikeButton(
+                                  liked: widget.liked,
+                                  idPublicacao: widget.idPublicacao,
+                                  tipoAutorPublicacao:
+                                      widget.tipoAutorPublicacao,
                                 ),
                               ],
                             ),
-                            _LikeButton(
-                              liked: widget.liked,
-                              idPublicacao: widget.idPublicacao,
-                              tipoAutorPublicacao: widget.tipoAutorPublicacao,
-                            ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 12),
             const Divider(color: Colors.white12, height: 1),
           ],
         ),

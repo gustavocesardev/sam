@@ -42,7 +42,7 @@ class ArtigosExplorarViewmodel extends ArtigosViewmodel {
     notifyListeners();
 
     _debounce?.cancel();
-    _debounce = Timer(const Duration(seconds: 2), _applyFilters);
+    _applyFilters();
   }
 
   Future<void> _applyFilters() async {

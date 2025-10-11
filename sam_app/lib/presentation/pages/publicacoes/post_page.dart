@@ -11,6 +11,7 @@ import 'package:sam_app/presentation/widgets/cards/feed_post_card.dart';
 
 class PostPage extends StatelessWidget {
   final int idPublicacao;
+  final int idUsuario;
   final int? idGrupoEstudo;
 
   final int idAutor;
@@ -19,6 +20,7 @@ class PostPage extends StatelessWidget {
   const PostPage({
     super.key,
     required this.idPublicacao,
+    required this.idUsuario,
     required this.idGrupoEstudo,
     required this.idAutor,
     required this.tipoAutorPublicacao
@@ -34,6 +36,7 @@ class PostPage extends StatelessWidget {
           feedRepo: feedRepo,
           publicacaoRepo: publicacaoRepo,
           idPublicacao: idPublicacao,
+          idUsuario: idUsuario,
           idGrupoEstudo: idGrupoEstudo,
           idAutor: idAutor,
           tipoAutorPublicacao: tipoAutorPublicacao
@@ -112,6 +115,7 @@ class _PostPageBodyState extends State<_PostPageBody> {
                             FeedPostCard(
                               key: ValueKey(vm.publicacao.id),
                               idPublicacao: vm.publicacao.id,
+                              idUsuario: vm.idUsuario,
                               idGrupoEstudo: vm.idGrupoEstudo,
                               name: vm.publicacao.nome,
                               cursoInfo: vm.publicacao.curso,
@@ -165,6 +169,7 @@ class _PostPageBodyState extends State<_PostPageBody> {
                         key: ValueKey(post.id),
                         idPublicacao: post.id,
                         idGrupoEstudo: vm.idGrupoEstudo,
+                        idUsuario: post.idUsuario,
                         name: post.nome,
                         cursoInfo: post.curso,
                         content: post.texto,

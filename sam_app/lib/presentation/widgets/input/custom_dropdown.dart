@@ -2,22 +2,24 @@ import 'package:flutter/material.dart';
 
 class CustomDropdown<T> extends StatelessWidget {
   final T? valorSelecionado;
-  final ValueChanged<T?> onChanged;
+  final ValueChanged<T?>? onChanged;
   final List<DropdownMenuItem<T>> itens;
   final String? label;
+  final bool enabled;
 
   const CustomDropdown({
     super.key,
     required this.valorSelecionado,
-    required this.onChanged,
     required this.itens,
+    this.onChanged,
     this.label,
+    this.enabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Valor padrão é a primeira opção da lista, se valorSelecionado for null
-    final T? valorInicial = valorSelecionado ?? (itens.isNotEmpty ? itens.first.value : null);
+    final T? valorInicial =
+        valorSelecionado ?? (itens.isNotEmpty ? itens.first.value : null);
 
     return DropdownButtonFormField<T>(
       value: valorInicial,
@@ -27,10 +29,11 @@ class CustomDropdown<T> extends StatelessWidget {
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: Theme.of(context)
-                .inputDecorationTheme
-                .enabledBorder!
-                .borderSide
-                .color,
+                    .inputDecorationTheme
+                    .enabledBorder
+                    ?.borderSide
+                    .color ??
+                Colors.grey,
             width: 0.75,
           ),
         ),
@@ -40,11 +43,18 @@ class CustomDropdown<T> extends StatelessWidget {
             width: 1,
           ),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+        disabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey.shade400,
+            width: 0.75,
+          ),
+        ),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       ),
       dropdownColor: Theme.of(context).scaffoldBackgroundColor,
       items: itens,
-      onChanged: onChanged,
+      onChanged: enabled ? onChanged : null,
     );
   }
 }

@@ -3,9 +3,10 @@ import 'package:sam_app/data/enums/tipo_autor_publicacao.dart';
 import 'package:sam_app/domain/viewmodels/publicacao/feed_viewmodel.dart';
 import 'package:sam_app/presentation/widgets/cards/feed_post_card.dart';
 
-class PostListView extends StatelessWidget {
+class PostListView extends StatefulWidget {
   final FeedViewModel vm;
   final ScrollController controller;
+  final String feedKey;
 
   final int? idGrupoEstudo;
   final int idAutor;
@@ -17,28 +18,55 @@ class PostListView extends StatelessWidget {
     required this.controller,
     required this.idAutor,
     required this.tipoAutorPublicacao,
+    required this.feedKey,
     this.idGrupoEstudo,
   });
 
   @override
+  State<PostListView> createState() => _PostListViewState();
+}
+
+class _PostListViewState extends State<PostListView>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
+    final vm = widget.vm;
+
+    if (vm.isLoading && vm.posts.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (vm.posts.isEmpty) {
+      return const Center(
+        child: Text(
+          'Nenhuma publicação encontrada :(',
+          style: TextStyle(color: Colors.white70, fontSize: 16),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+
     return ListView.builder(
-      controller: controller,
+      key: PageStorageKey(widget.feedKey),
+      controller: widget.controller,
       padding: const EdgeInsets.all(4),
       itemCount: vm.posts.length + (vm.isLoading || !vm.hasMore ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == vm.posts.length) {
           if (vm.isLoading) {
-            return const Center(
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: CircularProgressIndicator(),
-              ),
+            return const Padding(
+              padding: EdgeInsets.all(16),
+              child: Center(child: CircularProgressIndicator()),
             );
           } else {
-            return const Center(
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 25, top: 10),
+            return const Padding(
+              padding: EdgeInsets.only(bottom: 25, top: 10),
+              child: Center(
                 child: Text(
                   'Parece que você chegou ao fim',
                   style: TextStyle(color: Colors.white70, fontSize: 14),
@@ -52,7 +80,8 @@ class PostListView extends StatelessWidget {
         return FeedPostCard(
           key: ValueKey(post.id),
           idPublicacao: post.id,
-          idGrupoEstudo: idGrupoEstudo,
+          idUsuario: post.idUsuario,
+          idGrupoEstudo: widget.idGrupoEstudo,
           name: post.nome,
           cursoInfo: post.curso,
           content: post.texto,
@@ -61,8 +90,8 @@ class PostListView extends StatelessWidget {
           liked: post.curtido,
           avatarColor: Colors.primaries[index % Colors.primaries.length],
           imageHashes: post.imagens,
-          idAutor: idAutor,
-          tipoAutorPublicacao: tipoAutorPublicacao,
+          idAutor: widget.idAutor,
+          tipoAutorPublicacao: widget.tipoAutorPublicacao,
           avatarHash: post.avatarEncrypted,
         );
       },
