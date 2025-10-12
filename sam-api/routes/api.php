@@ -77,8 +77,8 @@ Route::middleware('auth:api')->prefix('feed')->group(function () {
     Route::get('/curso', [PublicacaoController::class, 'recomendarCurso']);
     Route::get('/grupo-estudo/{id}', [GrupoEstudoPublicacaoController::class, 'recomendar']);
 
-    Route::get('/usuario', [PublicacaoController::class, 'listPublicacoesUsuario']);
-    Route::get('/usuario/curtidas', [PublicacaoController::class, 'listPublicacoesCurtidasUsuario']);
+    Route::get('/usuario/{idUsuario}', [PublicacaoController::class, 'listPublicacoesUsuario']);
+    Route::get('/usuario/{idUsuario}/curtidas', [PublicacaoController::class, 'listPublicacoesCurtidasUsuario']);
 });
 
 // Rotas referentes ao grupo de estudo

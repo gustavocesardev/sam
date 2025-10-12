@@ -166,7 +166,7 @@ class PublicacaoController extends Controller
         }
     }
 
-    public function listPublicacoesUsuario(Request $request): JsonResponse
+    public function listPublicacoesUsuario(Request $request, int $idUsuario): JsonResponse
     {
         try {
 
@@ -175,20 +175,20 @@ class PublicacaoController extends Controller
             $limite = $request->get('limite', 15);
             $page = $request->get('page', 1);
 
-            $publicacoes = $this->publicacaoService->listPublicacoesUsuario($user, $limite, $page);
+            $publicacoes = $this->publicacaoService->listPublicacoesUsuario($user, $idUsuario, $limite, $page);
 
             return ApiResponse::success(
-                PublicacaoResource::collection($publicacoes), 
-                'Publicacações (Usuário)', 
+                PublicacaoResource::collection($publicacoes),
+                'Publicações do usuário',
                 Response::HTTP_OK
             );
 
-        } catch(AppException $exception) {
+        } catch (AppException $exception) {
             return ApiResponse::error($exception);
         }
     }
 
-    public function listPublicacoesCurtidasUsuario(Request $request): JsonResponse
+    public function listPublicacoesCurtidasUsuario(Request $request, int $idUsuario): JsonResponse
     {
         try {
 
@@ -197,15 +197,15 @@ class PublicacaoController extends Controller
             $limite = $request->get('limite', 15);
             $page = $request->get('page', 1);
 
-            $publicacoes = $this->publicacaoService->listPublicacoesCurtidas($user, $limite, $page);
+            $publicacoes = $this->publicacaoService->listPublicacoesCurtidas($user, $idUsuario, $limite, $page);
 
             return ApiResponse::success(
-                PublicacaoResource::collection($publicacoes), 
-                'Publicacações (Curtidas pelo usuário)', 
+                PublicacaoResource::collection($publicacoes),
+                'Publicações curtidas pelo usuário',
                 Response::HTTP_OK
             );
 
-        } catch(AppException $exception) {
+        } catch (AppException $exception) {
             return ApiResponse::error($exception);
         }
     }
