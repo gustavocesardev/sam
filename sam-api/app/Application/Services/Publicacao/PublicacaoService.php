@@ -46,9 +46,9 @@ class PublicacaoService extends PublicavelServiceAbstract
         return $this->marcarCurtidas($publicacoes, $user->id());
     }
 
-    public function listPublicacoesCurtidas(AuthenticatedUser $user, int $limite = 15, int $page = 1): Collection
+    public function listPublicacoesCurtidas(AuthenticatedUser $user, int $idUsuario, int $limite = 15, int $page = 1): Collection
     {
-        $curtidasUsuario = $this->publicacaoReacaoRepository->searchByUsuario($user->id(), $limite, $page);
+        $curtidasUsuario = $this->publicacaoReacaoRepository->searchByUsuario($idUsuario, $limite, $page);
 
         $publicacoes = $curtidasUsuario
                         ->map(fn(PublicacaoReacao $reacao) => $reacao->publicacao)
@@ -58,9 +58,9 @@ class PublicacaoService extends PublicavelServiceAbstract
         return $this->marcarCurtidas($publicacoes, $user->id());
     }
 
-    public function listPublicacoesUsuario(AuthenticatedUser $user, int $limite = 15, int $page = 1): Collection
+    public function listPublicacoesUsuario(AuthenticatedUser $user, int $idUsuario, int $limite = 15, int $page = 1): Collection
     {
-        $publicacoesUsuario = $this->publicacaoRepositoryEspecifico->searchByUsuario($user->id(), $limite, $page);
+        $publicacoesUsuario = $this->publicacaoRepositoryEspecifico->searchByUsuario($idUsuario, $limite, $page);
         return $this->marcarCurtidas($publicacoesUsuario, $user->id());
     }
 
