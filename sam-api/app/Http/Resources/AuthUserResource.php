@@ -15,7 +15,7 @@ class AuthUserResource extends JsonResource
      */
     public function toArray($request): array
     {
-        $periodoAnoAtual = ($this->ano_inicio_curso -  Carbon::now()->year) + 1;
+        $periodoAnoAtual = (Carbon::now()->year - $this->ano_inicio_curso) + 1;
         $periodoAnoAtual = $periodoAnoAtual > 0 ? $periodoAnoAtual : 1;
 
         return [

@@ -15,7 +15,7 @@ class ArtigoUniversitarioResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $periodoAnoAtual = ($this->usuario->ano_inicio_curso -  Carbon::now()->year) + 1;
+        $periodoAnoAtual = (Carbon::now()->year - $this->usuario->ano_inicio_curso) + 1;
         $periodoAnoAtual = $periodoAnoAtual > 0 ? $periodoAnoAtual : 1;
 
         return [
