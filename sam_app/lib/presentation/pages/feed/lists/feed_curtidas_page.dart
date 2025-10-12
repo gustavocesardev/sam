@@ -46,9 +46,6 @@ class _FeedCurtidasPageState extends State<FeedCurtidasPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (viewModel.posts.isEmpty) {
-      return const Center(child: Text('Nenhuma publicação encontrada :('));
-    }
 
     return Consumer<FeedCurtidasViewmodel>(
       builder: (context, vm, _) {
@@ -57,6 +54,7 @@ class _FeedCurtidasPageState extends State<FeedCurtidasPage> {
           color: Theme.of(context).colorScheme.secondary,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           child: PostListView(
+            feedKey: 'feedCurtidas',
             vm: vm,
             controller: _scrollController,
             idAutor: widget.idAutor,

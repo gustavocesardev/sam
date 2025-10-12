@@ -1,5 +1,6 @@
 class PostModel {
   final int id;
+  final int idUsuario;
   final String nome;
   final String curso;
   final String texto;
@@ -12,6 +13,7 @@ class PostModel {
 
   PostModel({
     required this.id,
+    required this.idUsuario,
     required this.nome,
     required this.curso,
     required this.texto,
@@ -25,7 +27,8 @@ class PostModel {
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
-      id: json["id_publicacao"],
+      id: json['id_publicacao'],
+      idUsuario: json['id_usuario'],
       nome: json['nome'],
       curso: json['curso'],
       texto: json['texto'],

@@ -3,6 +3,7 @@ import 'package:palette_generator/palette_generator.dart';
 import 'package:sam_app/data/models/auth/instituicao_model.dart';
 import 'package:sam_app/data/repositories/instituicao_repository.dart';
 import 'package:sam_app/presentation/pages/register_page.dart';
+import 'package:sam_app/presentation/widgets/app_bar/simple_app_bar.dart';
 import 'package:sam_app/shared/constants.dart';
 
 class InstituicoesPage extends StatefulWidget {
@@ -57,6 +58,7 @@ class _InstituicoesPageState extends State<InstituicoesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: SimpleAppBar(textAppBar: ''),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : Padding(
@@ -130,7 +132,7 @@ class _InstituicoesPageState extends State<InstituicoesPage> {
                                     const SizedBox(width: 16),
                                     Expanded(
                                       child: Text(
-                                        inst.nomeInstituicao,
+                                        inst.nomeInstituicao.toUpperCase(),
                                         style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,

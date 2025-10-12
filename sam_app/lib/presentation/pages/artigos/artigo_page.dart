@@ -92,16 +92,17 @@ class _ArtigoPageState extends State<ArtigoPage> {
             padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 6,
               children: [
                 _buildField(
                   'Título',
                   a.titulo,
-                  valueFontSize: 28,
+                  valueFontSize: 18,
                   isBold: true,
                 ),
                 _buildField('Autor', a.nome),
                 _buildField('Hashtags', a.palavrasChave),
-                const SizedBox(height: 16),
+                const SizedBox(height: 4),
                 Text(
                   'Conteúdo',
                   style: TextStyle(
@@ -110,14 +111,12 @@ class _ArtigoPageState extends State<ArtigoPage> {
                     color: Colors.white54,
                   ),
                 ),
-                const SizedBox(height: 8),
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: quill.QuillEditor.basic(
-                    // Use o .basic()
                     controller: vm.conteudoController!,
                     config: quill.QuillEditorConfig(
-                      scrollable: false, // Desativa a rolagem interna do editor
+                      scrollable: false,
                       autoFocus: false,
                       expands: false,
                       padding: EdgeInsets.zero,
@@ -126,7 +125,7 @@ class _ArtigoPageState extends State<ArtigoPage> {
                     focusNode: FocusNode(),
                   ),
                 ),
-                const SizedBox(height: 28),
+                const SizedBox(height: 38),
                 if (a.pdf != null)
                   SizedBox(
                     width: double.infinity,

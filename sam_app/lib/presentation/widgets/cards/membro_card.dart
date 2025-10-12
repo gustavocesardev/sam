@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sam_app/data/cache/image_cache_service.dart';
+import 'package:sam_app/presentation/pages/profile_page.dart';
 import 'package:sam_app/presentation/widgets/cached/cached_avatar.dart';
 import 'package:sam_app/data/models/membro_model.dart';
 import 'package:sam_app/shared/constants.dart';
@@ -27,12 +28,23 @@ class MembroCard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CachedAvatar(
-                  avatarHash: membro.fotoPerfilHash,
-                  avatarColor: avatarColor,
-                  imageUrlFromHash: imageUrlFromHash,
-                  imageCacheService: _imageCacheService,
-                ),
+                InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ProfilePage(userId: membro.idUsuario),
+                        ),
+                      );
+                    },
+                    child: CachedAvatar(
+                      avatarHash: membro.fotoPerfilHash,
+                      avatarColor: avatarColor,
+                      imageUrlFromHash: imageUrlFromHash,
+                      imageCacheService: _imageCacheService,
+                    ),
+                  ),
+
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(

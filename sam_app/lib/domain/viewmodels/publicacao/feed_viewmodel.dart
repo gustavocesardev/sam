@@ -8,7 +8,7 @@ class FeedViewModel extends ChangeNotifier {
 
   FeedViewModel({required this.fetchPosts});
 
-  List<PostModel> _posts = [];
+  final List<PostModel> _posts = [];
   List<PostModel> get posts => _posts;
 
   bool _isLoading = false;
@@ -16,16 +16,14 @@ class FeedViewModel extends ChangeNotifier {
 
   int _page = 1;
   bool _hasMore = true;
+  bool get hasMore => _hasMore;
 
   Future<void> loadInitial() async {
-    _page = 1;
-    _posts = [];
-    _hasMore = true;
-    await loadMore();
-  }
+    if (_isLoading) return;
 
-  Future<void> loadMore() async {
-    if (_isLoading || !_hasMore) return;
+    _page = 1;
+    _hasMore = true;
+    _posts.clear();
 
     _isLoading = true;
     notifyListeners();
@@ -39,5 +37,22 @@ class FeedViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get hasMore => _hasMore;
+  Future<void> loadMore() async {
+    if (_isLoading || !_hasMore) return;
+
+    _isLoading = true;
+    notifyListeners();
+
+    final newPosts = await fetchPosts(page: _page);
+
+    if (newPosts.isEmpty) {
+      _hasMore = false;
+    } else {
+      _posts.addAll(newPosts);
+      _page++;
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
 }

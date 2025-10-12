@@ -47,10 +47,6 @@ class _FeedGeralPageState extends State<FeedGeralPage> {
   @override
   Widget build(BuildContext context) {
 
-    if (viewModel.posts.isEmpty) {
-      return const Center(child: Text('Nenhuma publicação encontrada :('));
-    }
-
     return Consumer<FeedGeralViewmodel>(
       builder: (context, vm, _) {
         return RefreshIndicator(
@@ -58,6 +54,7 @@ class _FeedGeralPageState extends State<FeedGeralPage> {
           color: Theme.of(context).colorScheme.secondary,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           child: PostListView(
+            feedKey: 'feed',
             vm: vm,
             controller: _scrollController,
             idAutor: widget.idAutor,

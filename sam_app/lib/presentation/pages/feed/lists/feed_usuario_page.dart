@@ -49,13 +49,10 @@ class _FeedUsuarioPageState extends State<FeedUsuarioPage> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (vm.posts.isEmpty) {
-          return const Center(child: Text("Nenhuma publicação encontrada"));
-        }
-
         return RefreshIndicator(
           onRefresh: () async => vm.loadInitial(),
           child: PostListView(
+            feedKey: 'feedCurso',
             vm: vm,
             controller: _scrollController,
             idAutor: widget.idAutor,

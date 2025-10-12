@@ -60,7 +60,7 @@ class FormulariosExplorarViewmodel extends FormulariosViewmodel {
 
   void _debounceFilters() {
     _debounce?.cancel();
-    _debounce = Timer(const Duration(seconds: 2), _applyFilters);
+    _applyFilters();
   }
 
   Future<void> _applyFilters() async {

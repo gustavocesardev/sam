@@ -32,30 +32,40 @@ class _FormularioPageState extends State<FormularioPage> {
     super.dispose();
   }
 
-  Widget _buildField(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-              color: Colors.white54,
+  Widget _buildField(
+      String label,
+      String value, {
+      double valueFontSize = 16,
+      Color valueColor = Colors.white,
+      bool isBold = false,
+    }) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+                color: Colors.white60,
+              ),
             ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            value,
-            style: const TextStyle(fontSize: 16, color: Colors.white),
-            textAlign: TextAlign.justify,
-          ),
-        ],
-      ),
-    );
-  }
+            const SizedBox(height: 6),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: valueFontSize,
+                color: valueColor,
+                fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+              ),
+              textAlign: TextAlign.justify,
+            ),
+          ],
+        ),
+      );
+    }
 
   Future<void> _launchURL(String url) async {
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
@@ -99,10 +109,11 @@ class _FormularioPageState extends State<FormularioPage> {
           return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
             child: Column(
+              spacing: 6,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildField('Título', f.titulo),
-                _buildField('Autor', f.nome),
+                _buildField('Título', f.titulo, valueFontSize: 18, isBold: true),
+                _buildField('Autor', f.nome, isBold: true),
                 _buildField('Curso', f.curso),
                 _buildField('Período', f.periodo),
                 _buildField('Descrição', f.descricao),
