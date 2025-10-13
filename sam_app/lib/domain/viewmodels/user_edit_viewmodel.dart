@@ -17,6 +17,7 @@ class UserEditViewmodel extends ChangeNotifier {
   bool isLoading = false;
   bool isLoadingUpdate = false;
   bool showCropper = false;
+  bool isCropping = false;
 
   UserDetailModel? user;
 
@@ -26,14 +27,11 @@ class UserEditViewmodel extends ChangeNotifier {
   final CropController cropController = CropController();
   final ImagePicker _picker = ImagePicker();
 
-  // --- VARIÁVEIS DE AVATAR ---
   File? avatarFile;
   Uint8List? avatarImageData;
   Uint8List? imageToCrop;
   bool isCroppingAvatar = true;
   String? avatarHash;
-
-  // --------------------------------------------------------------
 
   Future<void> loadUser(int id) async {
     isLoading = true;
@@ -73,7 +71,6 @@ class UserEditViewmodel extends ChangeNotifier {
     return file;
   }
 
-  // --- SELECIONAR IMAGEM ---
   Future<void> pickImageAsAvatar() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile == null) return;
@@ -85,12 +82,13 @@ class UserEditViewmodel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // --- QUANDO FINALIZA O RECORTE ---
   void onCropped(CropResult result) async {
+    isCropping = true;
     if (result is CropSuccess) {
       avatarImageData = result.croppedImage;
       avatarFile = await _uint8ListToFile(result.croppedImage, 'avatar.png');
       showCropper = false;
+      isCropping = false;
       imageToCrop = null;
       notifyListeners();
     } else if (result is CropFailure) {}

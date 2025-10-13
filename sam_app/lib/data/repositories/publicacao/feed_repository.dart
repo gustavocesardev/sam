@@ -20,11 +20,11 @@ class FeedRepository {
     return service.fetchVinculadas(idPublicacao: idPublicacao, idGrupoEstudo: idGrupoEstudo, page: page);
   }
 
-  Future<List<PostModel>> getFeedUsuario({int page = 1}) {
-    return service.fetchFeedUsuario(page: page);
+  Future<List<PostModel>> getFeedUsuario({required int idUsuario, int page = 1}) {
+    return service.fetchFeedUsuario(idUsuario: idUsuario, page: page);
   }
 
-  Future<List<PostModel>> getCurtidas({int page = 1}) {
-    return service.fetchFeedCurtidas( page: page);
+  Future<List<PostModel>> getCurtidas({required int idUsuario, int page = 1}) {
+    return service.fetchFeedCurtidas(idUsuario: idUsuario, page: page);
   }
 }

@@ -51,8 +51,10 @@ class _FeedUsuarioPageState extends State<FeedUsuarioPage> {
 
         return RefreshIndicator(
           onRefresh: () async => vm.loadInitial(),
+          color: Theme.of(context).colorScheme.secondary,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           child: PostListView(
-            feedKey: 'feedCurso',
+            feedKey: 'feedUsuario',
             vm: vm,
             controller: _scrollController,
             idAutor: widget.idAutor,

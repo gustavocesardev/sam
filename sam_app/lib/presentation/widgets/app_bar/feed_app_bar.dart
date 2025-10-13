@@ -34,7 +34,6 @@ class _FeedAppBarState extends State<FeedAppBar> {
   Future<void> _loadUser() async {
     final user = await AuthStorageService.getStoredUser();
     if (user != null) {
-      // Recuperando foto de perfil atual do usuário
       final UserModel? currentUser = await service.getUser(user.id);
 
       if (!mounted) return;
@@ -69,7 +68,9 @@ class _FeedAppBarState extends State<FeedAppBar> {
                       MaterialPageRoute(
                         builder: (_) => ProfilePage(userId: userId!),
                       ),
-                    );
+                    ).then((_) {
+                      _loadUser();
+                    });
                   }
                 },
                 child: CircleAvatar(

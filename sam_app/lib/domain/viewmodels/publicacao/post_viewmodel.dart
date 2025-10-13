@@ -25,7 +25,7 @@ class PostViewmodel extends FeedViewModel {
     required this.idAutor,
     required this.tipoAutorPublicacao
   }) : super(
-          fetchPosts: ({int page = 1}) => feedRepo.getVinculadas(
+          fetchPosts: ({int? idUsuario, int page = 1}) => feedRepo.getVinculadas(
             idPublicacao: idPublicacao,
             idGrupoEstudo: idGrupoEstudo,
             page: page,

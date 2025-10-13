@@ -33,7 +33,7 @@ class PostCreatePage extends StatelessWidget {
               title: const Text('Nova publicação'),
               actions: [
                 TextButton(
-                  onPressed: vm.canPublish
+                  onPressed: vm.canPublish && !vm.isLoading
                       ? () async {
                           try {
                             await vm.publish(context);
@@ -48,7 +48,19 @@ class PostCreatePage extends StatelessWidget {
                           }
                         }
                       : null,
-                  child: const Text('Publicar', style: TextStyle(color: Colors.white)),
+                  child: vm.isLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
+                      : const Text(
+                          'Publicar',
+                          style: TextStyle(color: Colors.white),
+                        ),
                 ),
               ],
             ),

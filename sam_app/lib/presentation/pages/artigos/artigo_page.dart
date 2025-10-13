@@ -100,8 +100,9 @@ class _ArtigoPageState extends State<ArtigoPage> {
                   valueFontSize: 18,
                   isBold: true,
                 ),
-                _buildField('Autor', a.nome),
-                _buildField('Hashtags', a.palavrasChave),
+                _buildField('Autor', a.nome, isBold: true),
+                _buildField('Curso', a.anoCurso),
+                _buildField('Hashtags', a.palavrasChave, valueColor: Theme.of(context).colorScheme.secondary),
                 const SizedBox(height: 4),
                 Text(
                   'Conteúdo',
@@ -156,6 +157,7 @@ class _ArtigoPageState extends State<ArtigoPage> {
                             ),
                     ),
                   ),
+                  const SizedBox(height: 20),
               ],
             ),
           );

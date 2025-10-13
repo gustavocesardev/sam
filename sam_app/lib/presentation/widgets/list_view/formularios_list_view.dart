@@ -10,11 +10,14 @@ class FormulariosListView extends StatelessWidget {
   final ScrollController controller;
   final bool isCriado;
 
+  final ScrollPhysics physics;
+
   const FormulariosListView({
     super.key,
     required this.vm,
     required this.controller,
     this.isCriado = false,
+    this.physics = const AlwaysScrollableScrollPhysics(),
   });
 
   @override
@@ -25,6 +28,7 @@ class FormulariosListView extends StatelessWidget {
 
     return ListView.builder(
       controller: controller,
+      physics: physics,
       itemCount: vm.forms.length + (vm.isLoading || !vm.hasMore ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == vm.forms.length) {

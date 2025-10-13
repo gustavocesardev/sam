@@ -132,7 +132,7 @@ class _PostPageBodyState extends State<_PostPageBody> {
                             ),
                             if (vm.posts.isNotEmpty)
                               const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 16),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -146,7 +146,6 @@ class _PostPageBodyState extends State<_PostPageBody> {
                                   ],
                                 ),
                               ),
-                            const SizedBox(height: 14),
                           ],
                         );
                       }
@@ -180,8 +179,16 @@ class _PostPageBodyState extends State<_PostPageBody> {
                             .primaries[(index - 1) % Colors.primaries.length],
                         imageHashes: post.imagens,
                         idAutor: vm.idAutor,
-                             tipoAutorPublicacao: vm.tipoAutorPublicacao,
+                        tipoAutorPublicacao: vm.tipoAutorPublicacao,
                         avatarHash: post.avatarEncrypted,
+                        onDelete: () {
+                          setState(() {
+                            vm.posts.removeAt(index - 1);
+                          });
+                        },
+                        moreActions: (vm.tipoAutorPublicacao.atributo == TipoAutorPublicacao.membro.atributo)
+                        ? (post.idMembro == vm.idAutor)
+                        : (post.idUsuario == vm.idAutor),
                       );
                     },
                   ),

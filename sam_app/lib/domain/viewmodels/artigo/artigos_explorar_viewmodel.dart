@@ -26,13 +26,19 @@ class ArtigosExplorarViewmodel extends ArtigosViewmodel {
   }
 
   void setTitulo(String? value) {
+    if (value == _titulo) return;
     _titulo = value;
-    _startFiltering();
+    if (value != null && value.trim().isNotEmpty) {
+      _startFiltering();
+    }
   }
 
   void setHashtags(String? value) {
+    if (value == _hashtags) return;
     _hashtags = value;
-    _startFiltering();
+    if (value != null && value.trim().isNotEmpty) {
+      _startFiltering();
+    }
   }
 
   Timer? _debounce;

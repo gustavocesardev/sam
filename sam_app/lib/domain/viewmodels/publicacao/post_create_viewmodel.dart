@@ -21,6 +21,8 @@ class PostCreateViewmodel extends ChangeNotifier {
   final UserService _userService = UserService();
   final PublicacaoService _publicacaoService = PublicacaoService();
 
+  bool isLoading = false;
+
   bool _isPickingImage = false;
 
   String? userImageUrl;
@@ -87,6 +89,10 @@ class PostCreateViewmodel extends ChangeNotifier {
   Future<void> publish(BuildContext context) async {
     if (!canPublish) return;
 
+    if (isLoading) return;
+    isLoading = true;
+    notifyListeners();
+
     final repository = PublicacaoRepository(_publicacaoService);
 
     try {
@@ -104,6 +110,7 @@ class PostCreateViewmodel extends ChangeNotifier {
         request: request,
       );
 
+      isLoading = false;
       textController.clear();
       images.clear();
       notifyListeners();

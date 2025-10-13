@@ -34,7 +34,7 @@ class _ArtigosPageState extends State<ArtigosPage>
   Widget build(BuildContext context) {
     final List<Widget> tabsContent = [
       ArtigosCriadosPage(),
-          ArtigosExplorarPage(),
+      ArtigosExplorarPage(),
     ];
 
     return Scaffold(

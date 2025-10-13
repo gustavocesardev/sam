@@ -60,6 +60,17 @@ class PublicacaoService {
     return await _http.get(endpoint);
   }
 
+  Future<void> excluirPublicacao({
+    required String chaveAutor,
+    required idPublicacao,
+  }) async {
+    final String endpoint = chaveAutor == 'id_usuario'
+        ? '/publicacao/$idPublicacao'
+        : '/grupo-estudo/publicacao/$idPublicacao';
+
+    await _http.delete(endpoint);
+  }
+
   Future<void> addReacao({
     required String chaveAutor,
     required idPublicacao,

@@ -12,6 +12,8 @@ class PostListView extends StatefulWidget {
   final int idAutor;
   final TipoAutorPublicacao tipoAutorPublicacao;
 
+  final ScrollPhysics physics;
+
   const PostListView({
     super.key,
     required this.vm,
@@ -19,6 +21,7 @@ class PostListView extends StatefulWidget {
     required this.idAutor,
     required this.tipoAutorPublicacao,
     required this.feedKey,
+    this.physics = const AlwaysScrollableScrollPhysics(),
     this.idGrupoEstudo,
   });
 
@@ -53,6 +56,7 @@ class _PostListViewState extends State<PostListView>
 
     return ListView.builder(
       key: PageStorageKey(widget.feedKey),
+      physics: widget.physics,
       controller: widget.controller,
       padding: const EdgeInsets.all(4),
       itemCount: vm.posts.length + (vm.isLoading || !vm.hasMore ? 1 : 0),
@@ -93,6 +97,14 @@ class _PostListViewState extends State<PostListView>
           idAutor: widget.idAutor,
           tipoAutorPublicacao: widget.tipoAutorPublicacao,
           avatarHash: post.avatarEncrypted,
+          onDelete: () {
+            setState(() {
+              vm.posts.removeAt(index);
+            });
+          },
+          moreActions: (widget.tipoAutorPublicacao.atributo == TipoAutorPublicacao.membro.atributo)
+            ? (post.idMembro == widget.idAutor)
+            : (post.idUsuario == widget.idAutor)
         );
       },
     );

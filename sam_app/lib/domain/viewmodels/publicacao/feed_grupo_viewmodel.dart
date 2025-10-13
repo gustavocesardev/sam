@@ -8,7 +8,7 @@ class FeedGrupoViewmodel extends FeedViewModel {
     required FeedRepository repo,
     required this.idGrupoEstudo,
   }) : super(
-          fetchPosts: ({int page = 1}) =>
+          fetchPosts: ({int? idUsuario, int page = 1}) =>
               repo.getFeedGrupoEstudo(idGrupoEstudo: idGrupoEstudo, page: page),
         );
 }

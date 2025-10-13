@@ -1,6 +1,7 @@
 class PostModel {
   final int id;
   final int idUsuario;
+  final int? idMembro;
   final String nome;
   final String curso;
   final String texto;
@@ -14,6 +15,7 @@ class PostModel {
   PostModel({
     required this.id,
     required this.idUsuario,
+    required this.idMembro,
     required this.nome,
     required this.curso,
     required this.texto,
@@ -29,6 +31,7 @@ class PostModel {
     return PostModel(
       id: json['id_publicacao'],
       idUsuario: json['id_usuario'],
+      idMembro: json['id_membro'],
       nome: json['nome'],
       curso: json['curso'],
       texto: json['texto'],

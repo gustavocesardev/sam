@@ -19,6 +19,7 @@ class ArtigoFormPage extends StatefulWidget {
 
 class _ArtigoFormPageState extends State<ArtigoFormPage> {
   late final ArtigoFormViewModel vm;
+  bool _isDownloadingPdf = false;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -161,32 +162,55 @@ class _ArtigoFormPageState extends State<ArtigoFormPage> {
                     ),
                     const SizedBox(height: 20),
                     vm.pdfUrl != null
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              const SizedBox(height: 55),
-                              TextButton.icon(
-                                icon: Icon(Icons.download),
-                                label: Text('Baixar PDF atual'),
-                                onPressed: () {
+                    ? SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: _isDownloadingPdf
+                              ? null
+                              : () async {
+                                  setState(() => _isDownloadingPdf = true);
                                   try {
-                                    vm.service.downloadPdf(
+                                    await vm.service.downloadPdf(
                                       vm.pdfUrl!,
                                       vm.tituloController.text,
                                     );
                                   } catch (error) {
-                                    TopSnackBar.show(
-                                      context,
-                                      error.toString(),
-                                      color: Colors.red[700],
-                                    );
+                                    if (context.mounted) {
+                                      TopSnackBar.show(
+                                        context,
+                                        error.toString(),
+                                        color: Colors.red[700],
+                                      );
+                                    }
+                                  } finally {
+                                    if (mounted) setState(() => _isDownloadingPdf = false);
                                   }
                                 },
-                              ),
-                            ],
-                          )
-                        : const SizedBox(height: 50),
-                    const SizedBox(height: 20),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          child: _isDownloadingPdf
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(Icons.download),
+                                    SizedBox(width: 8),
+                                    Text('Baixar PDF atual'),
+                                  ],
+                                ),
+                        ),
+                      )
+                    : const SizedBox(height: 50),
+                    SizedBox(height: vm.pdfUrl != null ? 20 : 0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

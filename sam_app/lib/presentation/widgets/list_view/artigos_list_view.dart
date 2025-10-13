@@ -10,11 +10,14 @@ class ArtigosListView extends StatelessWidget {
   final ScrollController controller;
   final bool isCriado;
 
+  final ScrollPhysics physics;
+
   const ArtigosListView({
     super.key,
     required this.vm,
     required this.controller,
     this.isCriado = false,
+    this.physics = const AlwaysScrollableScrollPhysics(),
   });
 
   @override
@@ -25,6 +28,7 @@ class ArtigosListView extends StatelessWidget {
 
     return ListView.builder(
       controller: controller,
+      physics: physics,
       itemCount:
           vm.artigos.length +
           (vm.isLoadingMore || (vm.artigos.isNotEmpty && !vm.hasMore) ? 1 : 0),

@@ -72,7 +72,7 @@ class _GrupoEstudoPageState extends State<GrupoEstudoPage> with SingleTickerProv
       idMembro != null
           ? FeedGrupoPage(
             idGrupoEstudo: widget.idGrupoEstudo,
-            idAutor: widget.idMembro!,
+            idAutor: idMembro!,
             tipoAutorPublicacao: TipoAutorPublicacao.membro,
           )
           : _buildJoinGroupPlaceholder(context),

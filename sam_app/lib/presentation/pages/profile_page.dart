@@ -128,10 +128,10 @@ class _ProfilePageState extends State<ProfilePage>
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => FeedUsuarioViewmodel(FeedRepository()),
+          create: (_) => FeedUsuarioViewmodel(FeedRepository(), widget.userId),
         ),
         ChangeNotifierProvider(
-          create: (_) => FeedCurtidasViewmodel(FeedRepository()),
+          create: (_) => FeedCurtidasViewmodel(FeedRepository(), widget.userId),
         ),
       ],
       child: Stack(
