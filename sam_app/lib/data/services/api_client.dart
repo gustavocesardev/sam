@@ -6,10 +6,12 @@ class ApiClient {
 
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
-      return await _http.post('/login', body: {
-        'email': email,
-        'password': password,
-      });
+
+      return await _http.post(
+        '/login',
+        body: {'email': email, 'password': password},
+      );
+
     } catch (e) {
       if (e is ApiException) rethrow;
       throw ApiException('Erro ao realizar login.');
@@ -18,9 +20,12 @@ class ApiClient {
 
   Future<Map<String, dynamic>> refreshToken(String refreshToken) async {
     try {
-      return await _http.post('/refresh-token', body: {
-        'refresh_token': refreshToken,
-      });
+
+      return await _http.post(
+        '/refresh-token',
+        body: {'refresh_token': refreshToken},
+      );
+      
     } catch (e) {
       if (e is ApiException) rethrow;
       throw ApiException('Erro ao atualizar token.');

@@ -11,7 +11,7 @@ class FeedPage extends StatefulWidget {
   const FeedPage({
     super.key,
     required this.idAutor,
-    required this.tipoAutorPublicacao
+    required this.tipoAutorPublicacao,
   });
 
   @override
@@ -46,8 +46,14 @@ class _FeedPageState extends State<FeedPage>
   @override
   Widget build(BuildContext context) {
     final List<Widget> tabsContent = [
-      FeedGeralPage(idAutor: widget.idAutor, tipoAutorPublicacao: widget.tipoAutorPublicacao,),
-      FeedCursoPage(idAutor: widget.idAutor, tipoAutorPublicacao: widget.tipoAutorPublicacao,)
+      FeedGeralPage(
+        idAutor: widget.idAutor,
+        tipoAutorPublicacao: widget.tipoAutorPublicacao,
+      ),
+      FeedCursoPage(
+        idAutor: widget.idAutor,
+        tipoAutorPublicacao: widget.tipoAutorPublicacao,
+      ),
     ];
 
     return Scaffold(

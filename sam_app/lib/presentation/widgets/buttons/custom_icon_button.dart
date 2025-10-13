@@ -20,7 +20,6 @@ class CustomIconButton extends StatefulWidget {
 }
 
 class _CustomIconButtonIconState extends State<CustomIconButton> {
-
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(

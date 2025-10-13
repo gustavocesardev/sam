@@ -79,6 +79,7 @@ class FormularioFormViewModel extends ChangeNotifier {
     final repository = FormularioRepository();
 
     try {
+
       final DateTime data = DateFormat(
         'dd/MM/yyyy',
       ).parse(dataLimiteController.text.trim());
@@ -104,6 +105,7 @@ class FormularioFormViewModel extends ChangeNotifier {
       tipoSelecionado = null;
 
       notifyListeners();
+      
     } catch (e) {
       rethrow;
     }

@@ -11,7 +11,7 @@ class FeedCurtidasPage extends StatefulWidget {
   const FeedCurtidasPage({
     super.key,
     required this.idAutor,
-    required this.tipoAutorPublicacao
+    required this.tipoAutorPublicacao,
   });
 
   @override
@@ -46,7 +46,6 @@ class _FeedCurtidasPageState extends State<FeedCurtidasPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Consumer<FeedCurtidasViewmodel>(
       builder: (context, vm, _) {
         return RefreshIndicator(

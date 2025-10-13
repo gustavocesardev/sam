@@ -14,7 +14,7 @@ class FeedGrupoPage extends StatefulWidget {
     super.key,
     required this.idGrupoEstudo,
     required this.idAutor,
-    required this.tipoAutorPublicacao
+    required this.tipoAutorPublicacao,
   });
 
   @override

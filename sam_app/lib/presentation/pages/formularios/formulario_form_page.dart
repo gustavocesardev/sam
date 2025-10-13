@@ -35,11 +35,13 @@ class _FormularioFormPageState extends State<FormularioFormPage> {
     if (text.isEmpty) return false;
 
     try {
+
       final parsed = DateFormat('dd/MM/yyyy').parse(text);
       final dateOnly = DateTime(parsed.year, parsed.month, parsed.day);
       final now = DateTime.now();
       final todayOnly = DateTime(now.year, now.month, now.day);
       return dateOnly.isBefore(todayOnly);
+
     } catch (_) {
       return false;
     }
@@ -96,7 +98,6 @@ class _FormularioFormPageState extends State<FormularioFormPage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // 🟥 Banner de aviso se expirado
                         if (somenteVisualizacao)
                           Container(
                             margin: const EdgeInsets.only(bottom: 40),
@@ -169,7 +170,6 @@ class _FormularioFormPageState extends State<FormularioFormPage> {
                         ),
                         const SizedBox(height: 28),
 
-                        // Campo de data limite
                         CustomDatePickerField(
                           controller: vm.dataLimiteController,
                           label: 'Data Limite*',
@@ -196,7 +196,6 @@ class _FormularioFormPageState extends State<FormularioFormPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // Botão de Excluir ou Cancelar
                         Expanded(
                           child: vm.idFormulario != null
                               ? (vm.isLoadingExclude
@@ -237,7 +236,6 @@ class _FormularioFormPageState extends State<FormularioFormPage> {
 
                         if (!somenteVisualizacao) const SizedBox(width: 16),
 
-                        // Botão Finalizar
                         if (!somenteVisualizacao)
                           Expanded(
                             child: vm.isLoading

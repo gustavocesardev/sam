@@ -28,19 +28,14 @@ class ArtigoCard extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         padding: const EdgeInsets.only(bottom: 12),
         decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(color: Colors.white12, width: 1),
-          ),
+          border: Border(bottom: BorderSide(color: Colors.white12, width: 1)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               dataPublicacao,
-              style: const TextStyle(
-                color: Colors.white60,
-                fontSize: 12,
-              ),
+              style: const TextStyle(color: Colors.white60, fontSize: 12),
             ),
             const SizedBox(height: 6),
             Text(
@@ -63,15 +58,12 @@ class ArtigoCard extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               descricao,
-              style: const TextStyle(
-                fontSize: 13,
-                color: Colors.white,
-              ),
+              style: const TextStyle(fontSize: 13, color: Colors.white),
               textAlign: TextAlign.justify,
               maxLines: 4,
               overflow: TextOverflow.ellipsis,
             ),
-            SizedBox(height: 12,)
+            SizedBox(height: 12),
           ],
         ),
       ),

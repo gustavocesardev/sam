@@ -27,7 +27,11 @@ class ArtigoViewmodel extends ChangeNotifier {
       document: quill.Document.fromJson(a.conteudo),
       selection: const TextSelection.collapsed(offset: 0),
     );
-    conteudoController?.formatText(0, conteudoController!.document.length, quill.Attribute.justifyAlignment);
+    conteudoController?.formatText(
+      0,
+      conteudoController!.document.length,
+      quill.Attribute.justifyAlignment,
+    );
 
     isLoading = false;
     notifyListeners();
@@ -39,7 +43,9 @@ class ArtigoViewmodel extends ChangeNotifier {
     isDownloadingPdf = true;
     notifyListeners();
     try {
+
       await service.downloadPdf(artigo!.pdf!, artigo!.titulo);
+      
     } finally {
       isDownloadingPdf = false;
       notifyListeners();

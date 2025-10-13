@@ -54,10 +54,14 @@ class _ArtigosCriadosPage extends State<ArtigosCriadosPage> {
                   child: Center(child: CircularProgressIndicator()),
                 )
               else
-                SizedBox(height: 12,),
-                Expanded(
-                  child: ArtigosListView(vm: vm, controller: _scrollController, isCriado: true,),
+                SizedBox(height: 12),
+              Expanded(
+                child: ArtigosListView(
+                  vm: vm,
+                  controller: _scrollController,
+                  isCriado: true,
                 ),
+              ),
             ],
           ),
         );

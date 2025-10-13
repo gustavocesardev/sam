@@ -23,7 +23,7 @@ class PostPage extends StatelessWidget {
     required this.idUsuario,
     required this.idGrupoEstudo,
     required this.idAutor,
-    required this.tipoAutorPublicacao
+    required this.tipoAutorPublicacao,
   });
 
   @override
@@ -39,7 +39,7 @@ class PostPage extends StatelessWidget {
           idUsuario: idUsuario,
           idGrupoEstudo: idGrupoEstudo,
           idAutor: idAutor,
-          tipoAutorPublicacao: tipoAutorPublicacao
+          tipoAutorPublicacao: tipoAutorPublicacao,
         );
         vm.loadPublicacao();
         vm.loadInitial();
@@ -75,14 +75,13 @@ class _PostPageBodyState extends State<_PostPageBody> {
   }
 
   void _onComentar(PostViewmodel vm) {
-
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => PostCreatePage(
           idAutor: vm.idAutor,
           tipoAutor: vm.tipoAutorPublicacao,
           idPublicacaoVinculada: vm.idPublicacao,
-        )
+        ),
       ),
     );
   }
@@ -128,11 +127,14 @@ class _PostPageBodyState extends State<_PostPageBody> {
                               avatarHash: vm.publicacao.avatarEncrypted,
                               idAutor: vm.idAutor,
                               tipoAutorPublicacao: vm.tipoAutorPublicacao,
-                              openDetails: false, 
+                              openDetails: false,
                             ),
                             if (vm.posts.isNotEmpty)
                               const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 16,
+                                ),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -186,9 +188,11 @@ class _PostPageBodyState extends State<_PostPageBody> {
                             vm.posts.removeAt(index - 1);
                           });
                         },
-                        moreActions: (vm.tipoAutorPublicacao.atributo == TipoAutorPublicacao.membro.atributo)
-                        ? (post.idMembro == vm.idAutor)
-                        : (post.idUsuario == vm.idAutor),
+                        moreActions:
+                            (vm.tipoAutorPublicacao.atributo ==
+                                TipoAutorPublicacao.membro.atributo)
+                            ? (post.idMembro == vm.idAutor)
+                            : (post.idUsuario == vm.idAutor),
                       );
                     },
                   ),

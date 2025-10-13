@@ -162,54 +162,61 @@ class _ArtigoFormPageState extends State<ArtigoFormPage> {
                     ),
                     const SizedBox(height: 20),
                     vm.pdfUrl != null
-                    ? SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: _isDownloadingPdf
-                              ? null
-                              : () async {
-                                  setState(() => _isDownloadingPdf = true);
-                                  try {
-                                    await vm.service.downloadPdf(
-                                      vm.pdfUrl!,
-                                      vm.tituloController.text,
-                                    );
-                                  } catch (error) {
-                                    if (context.mounted) {
-                                      TopSnackBar.show(
-                                        context,
-                                        error.toString(),
-                                        color: Colors.red[700],
-                                      );
-                                    }
-                                  } finally {
-                                    if (mounted) setState(() => _isDownloadingPdf = false);
-                                  }
-                                },
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
-                          child: _isDownloadingPdf
-                              ? const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Icon(Icons.download),
-                                    SizedBox(width: 8),
-                                    Text('Baixar PDF atual'),
-                                  ],
+                        ? SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: _isDownloadingPdf
+                                  ? null
+                                  : () async {
+                                      setState(() => _isDownloadingPdf = true);
+                                      try {
+                                        await vm.service.downloadPdf(
+                                          vm.pdfUrl!,
+                                          vm.tituloController.text,
+                                        );
+                                      } catch (error) {
+                                        if (context.mounted) {
+                                          TopSnackBar.show(
+                                            context,
+                                            error.toString(),
+                                            color: Colors.red[700],
+                                          );
+                                        }
+                                      } finally {
+                                        if (mounted) {
+                                          setState(
+                                            () => _isDownloadingPdf = false,
+                                          );
+                                        }
+                                      }
+                                    },
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
                                 ),
-                        ),
-                      )
-                    : const SizedBox(height: 50),
+                              ),
+                              child: _isDownloadingPdf
+                                  ? const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Icon(Icons.download),
+                                        SizedBox(width: 8),
+                                        Text('Baixar PDF atual'),
+                                      ],
+                                    ),
+                            ),
+                          )
+                        : const SizedBox(height: 50),
                     SizedBox(height: vm.pdfUrl != null ? 20 : 0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

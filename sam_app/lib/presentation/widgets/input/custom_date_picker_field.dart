@@ -25,7 +25,7 @@ class CustomDatePickerField extends StatelessWidget {
   });
 
   Future<void> _selectDate(BuildContext context) async {
-    if (readOnly) return; // bloqueia abertura se for somente visualização
+    if (readOnly) return;
 
     DateTime initial;
     if (controller.text.isNotEmpty) {
@@ -39,7 +39,11 @@ class CustomDatePickerField extends StatelessWidget {
     }
 
     final DateTime start = disablePastDates
-        ? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+        ? DateTime(
+            DateTime.now().year,
+            DateTime.now().month,
+            DateTime.now().day,
+          )
         : (firstDate ?? DateTime(2000));
     final DateTime end = lastDate ?? DateTime(2100);
 
@@ -61,14 +65,14 @@ class CustomDatePickerField extends StatelessWidget {
     return GestureDetector(
       onTap: readOnly ? null : () => _selectDate(context),
       child: AbsorbPointer(
-        absorbing: true, // 👈 impede qualquer interação direta com o campo
+        absorbing: true,
         child: CustomTextFormField(
           controller: controller,
           label: label,
           hint: hint,
           isRequired: true,
-          readOnly: true, // 👈 impede teclado
-          enabled: !readOnly, // desativa visualmente se for leitura
+          readOnly: true,
+          enabled: !readOnly,
         ),
       ),
     );

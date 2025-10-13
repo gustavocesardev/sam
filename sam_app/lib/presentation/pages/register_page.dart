@@ -65,6 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
     });
 
     try {
+
       await _registerService.register(
         name: _nameController.text,
         email: _emailController.text,
@@ -137,15 +138,27 @@ class _RegisterPageState extends State<RegisterPage> {
                       ],
                     ),
                     const SizedBox(height: 62),
-                    const Text('Crie sua conta', style: TextStyle(fontSize: 32)),
+                    const Text(
+                      'Crie sua conta',
+                      style: TextStyle(fontSize: 32),
+                    ),
                     const SizedBox(height: 16),
-                    Center(child: Text(widget.nomeInstituicao.toUpperCase(), style: TextStyle(fontSize: 12),)),
+                    Center(
+                      child: Text(
+                        widget.nomeInstituicao.toUpperCase(),
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
                     const SizedBox(height: 45),
                     TextFormField(
                       controller: _nameController,
-                      decoration: const InputDecoration(labelText: 'Nome completo'),
+                      decoration: const InputDecoration(
+                        labelText: 'Nome completo',
+                      ),
                       validator: (value) {
-                        if (value == null || value.isEmpty) return 'Digite seu nome';
+                        if (value == null || value.isEmpty) {
+                          return 'Digite seu nome';
+                        }
                         return null;
                       },
                     ),
@@ -157,7 +170,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             'Email institucional (${widget.dominioInstituicao})',
                       ),
                       validator: (value) {
-                        if (value == null || value.isEmpty) return 'Digite seu email';
+                        if (value == null || value.isEmpty) {
+                          return 'Digite seu email';
+                        }
                         if (!value.endsWith(widget.dominioInstituicao)) {
                           return 'Email deve ser do domínio ${widget.dominioInstituicao}';
                         }
@@ -189,12 +204,17 @@ class _RegisterPageState extends State<RegisterPage> {
                       value: _selectedAnoInicio,
                       items: anosInicio
                           .map(
-                            (ano) =>
-                                DropdownMenuItem(value: ano, child: Text('$ano')),
+                            (ano) => DropdownMenuItem(
+                              value: ano,
+                              child: Text('$ano'),
+                            ),
                           )
                           .toList(),
-                      onChanged: (val) => setState(() => _selectedAnoInicio = val),
-                      decoration: const InputDecoration(labelText: 'Ano de início'),
+                      onChanged: (val) =>
+                          setState(() => _selectedAnoInicio = val),
+                      decoration: const InputDecoration(
+                        labelText: 'Ano de início',
+                      ),
                       validator: (value) {
                         if (value == null) return 'Selecione o ano de início';
                         return null;
@@ -206,12 +226,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       value: _selectedAnoFim,
                       items: anosFim
                           .map(
-                            (ano) =>
-                                DropdownMenuItem(value: ano, child: Text('$ano')),
+                            (ano) => DropdownMenuItem(
+                              value: ano,
+                              child: Text('$ano'),
+                            ),
                           )
                           .toList(),
                       onChanged: (val) => setState(() => _selectedAnoFim = val),
-                      decoration: const InputDecoration(labelText: 'Ano de fim'),
+                      decoration: const InputDecoration(
+                        labelText: 'Ano de fim',
+                      ),
                       validator: (value) {
                         if (value == null) return 'Selecione o ano de fim';
                         return null;
@@ -223,8 +247,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       obscureText: true,
                       decoration: const InputDecoration(labelText: 'Senha'),
                       validator: (value) {
-                        if (value == null || value.isEmpty) return 'Digite sua senha';
-                        if (value.length < 6) return 'Senha deve ter ao menos 6 caracteres';
+                        if (value == null || value.isEmpty) {
+                          return 'Digite sua senha';
+                        }
+                        if (value.length < 6) {
+                          return 'Senha deve ter ao menos 6 caracteres';
+                        }
                         return null;
                       },
                     ),
@@ -232,10 +260,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     TextFormField(
                       controller: _confirmPasswordController,
                       obscureText: true,
-                      decoration: const InputDecoration(labelText: 'Confirmar senha'),
+                      decoration: const InputDecoration(
+                        labelText: 'Confirmar senha',
+                      ),
                       validator: (value) {
-                        if (value == null || value.isEmpty) return 'Confirme sua senha';
-                        if (value != _passwordController.text) return 'As senhas não conferem';
+                        if (value == null || value.isEmpty) {
+                          return 'Confirme sua senha';
+                        }
+                        if (value != _passwordController.text) {
+                          return 'As senhas não conferem';
+                        }
                         return null;
                       },
                     ),

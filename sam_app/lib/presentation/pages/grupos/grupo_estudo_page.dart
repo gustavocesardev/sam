@@ -25,7 +25,8 @@ class GrupoEstudoPage extends StatefulWidget {
   State<GrupoEstudoPage> createState() => _GrupoEstudoPageState();
 }
 
-class _GrupoEstudoPageState extends State<GrupoEstudoPage> with SingleTickerProviderStateMixin {
+class _GrupoEstudoPageState extends State<GrupoEstudoPage>
+    with SingleTickerProviderStateMixin {
   late GrupoEstudoViewModel vm;
   late TabController _tabController;
   int _currentIndex = 0;
@@ -71,10 +72,10 @@ class _GrupoEstudoPageState extends State<GrupoEstudoPage> with SingleTickerProv
     final List<Widget> tabsContent = [
       idMembro != null
           ? FeedGrupoPage(
-            idGrupoEstudo: widget.idGrupoEstudo,
-            idAutor: idMembro!,
-            tipoAutorPublicacao: TipoAutorPublicacao.membro,
-          )
+              idGrupoEstudo: widget.idGrupoEstudo,
+              idAutor: idMembro!,
+              tipoAutorPublicacao: TipoAutorPublicacao.membro,
+            )
           : _buildJoinGroupPlaceholder(context),
       MembroListView(membros: vm.membros),
     ];
@@ -112,7 +113,10 @@ class _GrupoEstudoPageState extends State<GrupoEstudoPage> with SingleTickerProv
             onBackPressed: () => Navigator.pop(context),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 4.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24.0,
+              vertical: 4.0,
+            ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -130,7 +134,9 @@ class _GrupoEstudoPageState extends State<GrupoEstudoPage> with SingleTickerProv
                       const SizedBox(height: 4),
                       Text(
                         grupo.hashtags,
-                        style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
                       ),
                     ],
                   ),
@@ -196,10 +202,7 @@ class _GrupoEstudoPageState extends State<GrupoEstudoPage> with SingleTickerProv
                 idMembro = novoIdMembro;
               });
 
-              TopSnackBar.show(
-                context,
-                'Você agora é membro do grupo!',
-              );
+              TopSnackBar.show(context, 'Você agora é membro do grupo!');
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).primaryColor,

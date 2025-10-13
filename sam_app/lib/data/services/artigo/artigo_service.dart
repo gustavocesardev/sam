@@ -72,22 +72,34 @@ class ArtigoService {
     await _http.delete('/artigo-universitario/$id');
   }
 
-  Future<void> downloadPdf(String url, String nomeArquivo, {int maxRetries = 10}) async {
+  Future<void> downloadPdf(
+    String url,
+    String nomeArquivo, {
+    int maxRetries = 10,
+  }) async {
     int attempt = 0;
     while (attempt < maxRetries) {
       final client = http.Client();
 
       try {
 
-        final request = http.Request('GET', Uri.parse('$baseUrl/file/document/$url'));
+        final request = http.Request(
+          'GET',
+          Uri.parse('$baseUrl/file/document/$url'),
+        );
         final streamedResponse = await client.send(request);
 
         if (streamedResponse.statusCode != 200) {
-          throw Exception('Falha ao baixar PDF: ${streamedResponse.statusCode}');
+          throw Exception(
+            'Falha ao baixar PDF: ${streamedResponse.statusCode}',
+          );
         }
 
         final dir = await getApplicationDocumentsDirectory();
-        final safeFileName = nomeArquivo.replaceAll(RegExp(r'[\\/:*?"<>|]'), '_');
+        final safeFileName = nomeArquivo.replaceAll(
+          RegExp(r'[\\/:*?"<>|]'),
+          '_',
+        );
         final file = File('${dir.path}/$safeFileName.pdf');
         final sink = file.openWrite();
 
@@ -96,16 +108,16 @@ class ArtigoService {
 
         await OpenFile.open(file.path);
         return;
-
+        
       } catch (e) {
-
         attempt++;
         if (attempt >= maxRetries) {
-          throw Exception('Falha ao baixar PDF após $maxRetries tentativas. Erro: $e');
+          throw Exception(
+            'Falha ao baixar PDF após $maxRetries tentativas. Erro: $e',
+          );
         }
-        
+
         await Future.delayed(const Duration(seconds: 2));
-        
       } finally {
         client.close();
       }

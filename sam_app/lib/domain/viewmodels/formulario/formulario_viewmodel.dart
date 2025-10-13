@@ -19,6 +19,7 @@ class FormularioViewmodel extends ChangeNotifier {
   Future<void> loadFormulario() async {
     setLoading(true);
     try {
+
       final repository = FormularioRepository();
       final f = await repository.index(id: idFormulario);
 
@@ -36,6 +37,7 @@ class FormularioViewmodel extends ChangeNotifier {
         dataLimite: DateFormat('yyyy-MM-dd').parse(f.dataLimite.toString()),
         criadoEm: f.criadoEm
       );
+      
     } catch (e) {
       formulario = null;
     }

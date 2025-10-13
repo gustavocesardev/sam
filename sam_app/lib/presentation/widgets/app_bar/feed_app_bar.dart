@@ -39,10 +39,13 @@ class _FeedAppBarState extends State<FeedAppBar> {
       if (!mounted) return;
 
       setState(() {
-        userId = user.id; 
-        userImageUrl = currentUser?.avatarEncrypted != null ? "$baseUrl/file/image/${currentUser?.avatarEncrypted}" : null;
-        instituicaoImageUrl = user.instituicao.imagemInstituicao.isNotEmpty ?
-            "$baseUrl/file/image/${user.instituicao.imagemInstituicao}" : null;
+        userId = user.id;
+        userImageUrl = currentUser?.avatarEncrypted != null
+            ? "$baseUrl/file/image/${currentUser?.avatarEncrypted}"
+            : null;
+        instituicaoImageUrl = user.instituicao.imagemInstituicao.isNotEmpty
+            ? "$baseUrl/file/image/${user.instituicao.imagemInstituicao}"
+            : null;
       });
     }
   }

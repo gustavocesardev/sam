@@ -27,17 +27,18 @@ class _InstituicoesPageState extends State<InstituicoesPage> {
 
   Future<void> _fetchInstituicoes() async {
     try {
+
       final result = await _repository.getInstituicoes();
       _instituicoes = result.cast<InstituicaoModel>();
 
-      // Extrair cores predominantes
+      /// Extrair cores predominantes
       for (var inst in _instituicoes) {
         final PaletteGenerator paletteGenerator =
             await PaletteGenerator.fromImageProvider(
               NetworkImage('$baseUrl/file/image/${inst.imagemInstituicao}'),
             );
 
-        // Usa a cor mais vibrante ou dominante
+        /// Usa a cor mais vibrante ou dominante
         _instituicaoColors[inst.idInstituicao] =
             paletteGenerator.dominantColor?.color ?? Colors.blue[900]!;
       }
@@ -45,6 +46,7 @@ class _InstituicoesPageState extends State<InstituicoesPage> {
       setState(() {
         _loading = false;
       });
+
     } catch (e) {
       setState(() => _loading = false);
       ScaffoldMessenger.of(context).showSnackBar(

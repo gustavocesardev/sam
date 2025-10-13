@@ -35,10 +35,12 @@ class FeedService {
     int? idGrupoEstudo,
     int page = 1,
   }) async {
-    String endpoint = '/publicacao/$idPublicacao/vinculadas?page=$page&limite=7';
+    String endpoint =
+        '/publicacao/$idPublicacao/vinculadas?page=$page&limite=7';
 
     if (idGrupoEstudo != null) {
-      endpoint = '/grupo-estudo/$idGrupoEstudo/publicacao/$idPublicacao/vinculadas?page=$page&limite=7';
+      endpoint =
+          '/grupo-estudo/$idGrupoEstudo/publicacao/$idPublicacao/vinculadas?page=$page&limite=7';
     }
 
     final response = await _http.get(endpoint);
@@ -47,7 +49,10 @@ class FeedService {
     return list.map((e) => PostModel.fromJson(e)).toList();
   }
 
-  Future<List<PostModel>> fetchFeedCurtidas({required int idUsuario, int page = 1,}) async {
+  Future<List<PostModel>> fetchFeedCurtidas({
+    required int idUsuario,
+    int page = 1,
+  }) async {
     String endpoint = '/feed/usuario/$idUsuario/curtidas?page=$page&limite=7';
 
     final response = await _http.get(endpoint);
@@ -56,7 +61,10 @@ class FeedService {
     return list.map((e) => PostModel.fromJson(e)).toList();
   }
 
-  Future<List<PostModel>> fetchFeedUsuario({required int idUsuario, int page = 1,}) async {
+  Future<List<PostModel>> fetchFeedUsuario({
+    required int idUsuario,
+    int page = 1,
+  }) async {
     String endpoint = '/feed/usuario/$idUsuario?page=$page&limite=7';
 
     final response = await _http.get(endpoint);

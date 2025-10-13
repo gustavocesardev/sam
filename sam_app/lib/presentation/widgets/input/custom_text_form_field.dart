@@ -7,8 +7,8 @@ class CustomTextFormField extends StatelessWidget {
   final bool isRequired;
   final int maxLines;
   final int? maxLength;
-  final bool readOnly; // 👈 Novo
-  final bool enabled;  // 👈 Novo
+  final bool readOnly;
+  final bool enabled;
 
   const CustomTextFormField({
     super.key,
@@ -50,11 +50,10 @@ class CustomTextFormField extends StatelessWidget {
         enabledBorder: OutlineInputBorder(
           borderRadius: borderRadius,
           borderSide: BorderSide(
-            color: Theme.of(context)
-                    .inputDecorationTheme
-                    .enabledBorder
-                    ?.borderSide
-                    .color ??
+            color:
+                Theme.of(
+                  context,
+                ).inputDecorationTheme.enabledBorder?.borderSide.color ??
                 Colors.grey,
             width: 0.75,
           ),
@@ -68,10 +67,7 @@ class CustomTextFormField extends StatelessWidget {
         ),
         disabledBorder: OutlineInputBorder(
           borderRadius: borderRadius,
-          borderSide: BorderSide(
-            color: Colors.grey.shade400,
-            width: 0.75,
-          ),
+          borderSide: BorderSide(color: Colors.grey.shade400, width: 0.75),
         ),
       ),
       validator: (value) {

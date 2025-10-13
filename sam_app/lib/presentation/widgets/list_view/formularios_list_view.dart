@@ -87,7 +87,9 @@ class FormulariosListView extends StatelessWidget {
             } else {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => FormularioPage(idFormulario: form.id,)),
+                MaterialPageRoute(
+                  builder: (_) => FormularioPage(idFormulario: form.id),
+                ),
               );
             }
           },

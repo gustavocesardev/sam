@@ -46,7 +46,6 @@ class _FeedGeralPageState extends State<FeedGeralPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Consumer<FeedGeralViewmodel>(
       builder: (context, vm, _) {
         return RefreshIndicator(

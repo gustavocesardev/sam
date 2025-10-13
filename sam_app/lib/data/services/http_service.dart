@@ -22,7 +22,10 @@ class HttpService {
     return _handleResponse(response);
   }
 
-  Future<Map<String, dynamic>> post(String endpoint, {Map<String, dynamic>? body}) async {
+  Future<Map<String, dynamic>> post(
+    String endpoint, {
+    Map<String, dynamic>? body,
+  }) async {
     final uri = Uri.parse('$baseUrl$endpoint');
     final token = await _getToken();
 
@@ -38,7 +41,10 @@ class HttpService {
     return _handleResponse(response);
   }
 
-  Future<Map<String, dynamic>> put(String endpoint, {Map<String, dynamic>? body}) async {
+  Future<Map<String, dynamic>> put(
+    String endpoint, {
+    Map<String, dynamic>? body,
+  }) async {
     final uri = Uri.parse('$baseUrl$endpoint');
     final token = await _getToken();
 
@@ -77,8 +83,7 @@ class HttpService {
     final uri = Uri.parse('$baseUrl$endpoint');
     final token = await _getToken();
 
-    final request = http.MultipartRequest('POST', uri)
-      ..fields.addAll(fields);
+    final request = http.MultipartRequest('POST', uri)..fields.addAll(fields);
 
     if (token != null) {
       request.headers['Authorization'] = 'Bearer $token';
@@ -99,9 +104,7 @@ class HttpService {
     final uri = Uri.parse(url);
     final response = await http.get(
       uri,
-      headers: {
-        if (token != null) 'Authorization': 'Bearer $token',
-      },
+      headers: {if (token != null) 'Authorization': 'Bearer $token'},
     );
 
     if (response.statusCode == 200) {
@@ -111,11 +114,16 @@ class HttpService {
     }
   }
 
-  Future<Uint8List> fetchImageWithRetry(String url, {Duration delay = const Duration(seconds: 1)}) async {
+  Future<Uint8List> fetchImageWithRetry(
+    String url, {
+    Duration delay = const Duration(seconds: 1),
+  }) async {
     while (true) {
       try {
+        
         final bytes = await HttpService().fetchImageBytes(url);
         return bytes;
+        
       } catch (e) {
         await Future.delayed(delay);
       }
@@ -127,7 +135,9 @@ class HttpService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return decoded;
     } else {
-      final message = ApiMessageUtils.extractMessageFromResponse(decoded['message']);
+      final message = ApiMessageUtils.extractMessageFromResponse(
+        decoded['message'],
+      );
       throw ApiException(message);
     }
   }

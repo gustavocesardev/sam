@@ -29,21 +29,21 @@ class MembroCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ProfilePage(userId: membro.idUsuario),
-                        ),
-                      );
-                    },
-                    child: CachedAvatar(
-                      avatarHash: membro.fotoPerfilHash,
-                      avatarColor: avatarColor,
-                      imageUrlFromHash: imageUrlFromHash,
-                      imageCacheService: _imageCacheService,
-                    ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ProfilePage(userId: membro.idUsuario),
+                      ),
+                    );
+                  },
+                  child: CachedAvatar(
+                    avatarHash: membro.fotoPerfilHash,
+                    avatarColor: avatarColor,
+                    imageUrlFromHash: imageUrlFromHash,
+                    imageCacheService: _imageCacheService,
                   ),
+                ),
 
                 const SizedBox(width: 12),
                 Expanded(

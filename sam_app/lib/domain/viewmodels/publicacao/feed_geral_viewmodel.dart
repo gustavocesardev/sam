@@ -3,5 +3,8 @@ import 'package:sam_app/domain/viewmodels/publicacao/feed_viewmodel.dart';
 
 class FeedGeralViewmodel extends FeedViewModel {
   FeedGeralViewmodel(FeedRepository repo)
-      : super(fetchPosts: ({int? idUsuario, int page = 1}) => repo.getFeed(page: page));
+    : super(
+        fetchPosts: ({int? idUsuario, int page = 1}) =>
+            repo.getFeed(page: page),
+      );
 }

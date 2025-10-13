@@ -6,8 +6,9 @@ import 'package:sam_app/domain/viewmodels/artigo/artigos_viewmodel.dart';
 class ArtigosExplorarViewmodel extends ArtigosViewmodel {
   ArtigosExplorarViewmodel(ArtigoRepository repo)
     : super(
-        fetchArtigos: ({required int page, required Map<String, dynamic>? filters}) =>
-            repo.getFiltrados(page: page, filtros: filters),
+        fetchArtigos:
+            ({required int page, required Map<String, dynamic>? filters}) =>
+                repo.getFiltrados(page: page, filtros: filters),
       );
 
   bool _isFiltering = false;

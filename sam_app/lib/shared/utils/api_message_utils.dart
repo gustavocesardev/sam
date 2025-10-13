@@ -1,4 +1,3 @@
-
 class ApiMessageUtils {
   static String extractMessageFromResponse(dynamic rawMessage) {
     if (rawMessage is String) {

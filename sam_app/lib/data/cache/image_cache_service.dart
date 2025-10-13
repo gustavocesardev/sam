@@ -2,11 +2,18 @@ import 'dart:collection';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
+/// Essa classe tem como objetivo efetuar o tratamento de imagens em um cache 
+/// local.
+/// 
+/// Para evitar a necessidade de requisitar as imagens das publicações a todo
+/// momento, foi criado um simples tratamento de cache com um limite baixo para
+/// recuperá-las sem precisar efetuar uma nova requisição e sem requerir muito
+/// espaço da memória do dispositivo.
 class ImageCacheService {
   final int _maxCacheSize = 25;
   final LinkedHashMap<String, Uint8List> _cache = LinkedHashMap();
 
-  /// Busca os bytes da imagem a partir da URL.
+  /// Efetuar a busca dos bytes da imagem a partir da URL.
   Future<Uint8List> fetchImageBytes(String url) async {
     
     if (_cache.containsKey(url)) {
@@ -22,9 +29,9 @@ class ImageCacheService {
       if (_cache.length >= _maxCacheSize) {
         _cache.remove(_cache.keys.first);
       }
-
       _cache[url] = response.bodyBytes;
       return response.bodyBytes;
+      
     } else {
       throw Exception('Erro ao carregar imagem');
     }

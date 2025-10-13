@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sam_app/data/models/artigo_model.dart';
 
-typedef ArtigoFetcher = Future<List<ArtigoModel>> Function({
-  required int page,
-  required Map<String, dynamic>? filters,
-});
+typedef ArtigoFetcher =
+    Future<List<ArtigoModel>> Function({
+      required int page,
+      required Map<String, dynamic>? filters,
+    });
 
 class ArtigosViewmodel extends ChangeNotifier {
   final ArtigoFetcher fetchArtigos;
@@ -34,7 +35,7 @@ class ArtigosViewmodel extends ChangeNotifier {
     _page = 1;
     _artigos = [];
     _hasMore = true;
-    
+
     _isLoadingInitial = true;
     notifyListeners();
 
@@ -87,6 +88,8 @@ class ArtigosViewmodel extends ChangeNotifier {
     }
 
     final text = buffer.toString().trim();
-    return text.length <= maxLength ? text : '${text.substring(0, maxLength)}...';
+    return text.length <= maxLength
+        ? text
+        : '${text.substring(0, maxLength)}...';
   }
 }

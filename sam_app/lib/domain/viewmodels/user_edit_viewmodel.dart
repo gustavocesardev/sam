@@ -38,6 +38,7 @@ class UserEditViewmodel extends ChangeNotifier {
     if (mounted) notifyListeners();
 
     try {
+
       user = await _repository.getUserDetails(id);
       nameController.text = user?.nome ?? '';
       bioController.text = user?.biografia ?? '';
@@ -56,6 +57,7 @@ class UserEditViewmodel extends ChangeNotifier {
           debugPrint('Erro ao carregar avatar: $e');
         }
       }
+
     } finally {
       if (mounted) {
         isLoading = false;
@@ -114,6 +116,7 @@ class UserEditViewmodel extends ChangeNotifier {
     notifyListeners();
 
     try {
+
       await _repository.updateUser(
         id: id,
         name: nameController.text,
@@ -122,6 +125,7 @@ class UserEditViewmodel extends ChangeNotifier {
         anoInicio: user!.anoInicioCurso,
         anoFim: user!.anoFimCurso,
       );
+      
     } finally {
       isLoadingUpdate = false;
       notifyListeners();
@@ -137,5 +141,6 @@ class UserEditViewmodel extends ChangeNotifier {
     bioController.dispose();
     super.dispose();
   }
+
   bool get mounted => !_disposed;
 }

@@ -4,11 +4,7 @@ class SimpleAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String textAppBar;
   final List<Widget>? actions;
 
-  const SimpleAppBar({
-    super.key,
-    required this.textAppBar,
-    this.actions,
-  });
+  const SimpleAppBar({super.key, required this.textAppBar, this.actions});
 
   @override
   Size get preferredSize => const Size.fromHeight(65);

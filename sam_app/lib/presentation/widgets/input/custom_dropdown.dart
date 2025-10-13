@@ -28,11 +28,10 @@ class CustomDropdown<T> extends StatelessWidget {
         border: const OutlineInputBorder(),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Theme.of(context)
-                    .inputDecorationTheme
-                    .enabledBorder
-                    ?.borderSide
-                    .color ??
+            color:
+                Theme.of(
+                  context,
+                ).inputDecorationTheme.enabledBorder?.borderSide.color ??
                 Colors.grey,
             width: 0.75,
           ),
@@ -44,13 +43,12 @@ class CustomDropdown<T> extends StatelessWidget {
           ),
         ),
         disabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.grey.shade400,
-            width: 0.75,
-          ),
+          borderSide: BorderSide(color: Colors.grey.shade400, width: 0.75),
         ),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 14,
+        ),
       ),
       dropdownColor: Theme.of(context).scaffoldBackgroundColor,
       items: itens,

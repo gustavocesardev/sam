@@ -37,7 +37,7 @@ void main() async {
   final feedRepository = FeedRepository();
   final grupoRepository = GruposEstudoRepository();
   final formRepository = FormularioRepository();
-  
+
   final artigoRepository = ArtigoRepository();
 
   runApp(
@@ -65,37 +65,37 @@ void main() async {
           create: (_) => FeedCursoViewmodel(feedRepository),
         ),
 
-        // Grupos ingressados
+        /// Grupos ingressados
         ChangeNotifierProvider<GruposIngressadosViewmodel>(
           create: (_) => GruposIngressadosViewmodel(grupoRepository),
         ),
 
-        // Grupos criados
+        /// Grupos criados
         ChangeNotifierProvider<GruposCriadosViewmodel>(
           create: (_) => GruposCriadosViewmodel(grupoRepository),
         ),
 
-        // Grupos populares
+        /// Grupos populares
         ChangeNotifierProvider<GruposPopularesViewmodel>(
           create: (_) => GruposPopularesViewmodel(grupoRepository),
         ),
 
-        // Formulários explorar
+        /// Formulários explorar
         ChangeNotifierProvider<FormulariosExplorarViewmodel>(
           create: (_) => FormulariosExplorarViewmodel(formRepository),
         ),
 
-        // Formulários criados
+        /// Formulários criados
         ChangeNotifierProvider<FormulariosCriadosViewmodel>(
           create: (_) => FormulariosCriadosViewmodel(formRepository),
         ),
 
-        // Artigos explorar
+        /// Artigos explorar
         ChangeNotifierProvider<ArtigosExplorarViewmodel>(
           create: (_) => ArtigosExplorarViewmodel(artigoRepository),
         ),
 
-        // Artigos criados
+        /// Artigos criados
         ChangeNotifierProvider<ArtigosCriadosViewmodel>(
           create: (_) => ArtigosCriadosViewmodel(artigoRepository),
         ),

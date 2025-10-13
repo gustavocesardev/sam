@@ -92,7 +92,6 @@ class GrupoEstudoSobrePage extends StatelessWidget {
 
             const SizedBox(height: 32),
 
-            // Botão Sair do grupo
             if (idMembro != null && idUsuario != grupo.idUsuario)
               ElevatedButton.icon(
                 onPressed: () async {
@@ -117,8 +116,10 @@ class GrupoEstudoSobrePage extends StatelessWidget {
                   }
                 },
                 icon: const Icon(Icons.exit_to_app, color: Colors.white),
-                label:
-                    const Text('Sair do grupo', style: TextStyle(color: Colors.white)),
+                label: const Text(
+                  'Sair do grupo',
+                  style: TextStyle(color: Colors.white),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red.shade700,
                   padding: const EdgeInsets.symmetric(vertical: 12),

@@ -21,11 +21,13 @@ class GrupoEstudoViewModel extends ChangeNotifier {
 
   Future<void> loadGrupo() async {
     try {
+
       _isLoading = true;
       notifyListeners();
 
       grupo = await repository.index(id: idGrupoEstudo);
       membros = await repository.getMembros(idGrupo: idGrupoEstudo);
+
     } catch (e) {
       debugPrint('Erro ao carregar grupo: $e');
     } finally {
@@ -36,6 +38,7 @@ class GrupoEstudoViewModel extends ChangeNotifier {
 
   Future<int?> ingressarGrupo(int idUsuario) async {
     try {
+
       final MembroModel novoMembro = await repository.ingressarMembro(
         idUsuario: idUsuario,
         idGrupoEstudo: idGrupoEstudo,
@@ -45,6 +48,7 @@ class GrupoEstudoViewModel extends ChangeNotifier {
       notifyListeners();
 
       return novoMembro.idMembro;
+
     } catch (e) {
       debugPrint('Erro ao ingressar no grupo: $e');
       return null;
@@ -56,6 +60,7 @@ class GrupoEstudoViewModel extends ChangeNotifier {
     required int idMembro,
   }) async {
     try {
+
       await repository.removerMembro(
         idMembro: idMembro,
         idUsuario: idUsuario,
@@ -65,8 +70,8 @@ class GrupoEstudoViewModel extends ChangeNotifier {
       membros.removeWhere((m) => m.idMembro == idMembro);
 
       notifyListeners();
-
       return true;
+
     } catch (e) {
       debugPrint('Erro ao sair do grupo: $e');
       return false;

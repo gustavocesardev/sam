@@ -19,6 +19,7 @@ class LoginViewModel extends ChangeNotifier {
     _setError(null);
 
     try {
+
       final data = await _api.login(email, password);
 
       final content = data['content'];
@@ -30,6 +31,7 @@ class LoginViewModel extends ChangeNotifier {
         refreshToken: token['refresh_token'],
         userJson: user,
       );
+      
     } catch (e) {
       _setError(e.toString());
     } finally {

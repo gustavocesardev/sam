@@ -38,12 +38,18 @@ class PostCreatePage extends StatelessWidget {
                           try {
                             await vm.publish(context);
                             if (context.mounted) {
-                              TopSnackBar.show(context, 'Publicação efetuada com sucesso!');
+                              TopSnackBar.show(
+                                context,
+                                'Publicação efetuada com sucesso!',
+                              );
                               Navigator.pop(context);
                             }
                           } catch (_) {
                             if (context.mounted) {
-                              TopSnackBar.show(context, 'Erro ao publicar. Tente novamente.');
+                              TopSnackBar.show(
+                                context,
+                                'Erro ao publicar. Tente novamente.',
+                              );
                             }
                           }
                         }
@@ -54,7 +60,9 @@ class PostCreatePage extends StatelessWidget {
                           height: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
                           ),
                         )
                       : const Text(
@@ -72,12 +80,16 @@ class PostCreatePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CircleAvatar(
-                        backgroundColor: Theme.of(context).colorScheme.secondary,
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.secondary,
                         radius: 18,
                         backgroundImage: vm.userImageUrl != null
                             ? NetworkImage(vm.userImageUrl!)
                             : null,
-                        child: vm.userImageUrl == null ? const Icon(Icons.person) : null,
+                        child: vm.userImageUrl == null
+                            ? const Icon(Icons.person)
+                            : null,
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -105,7 +117,9 @@ class PostCreatePage extends StatelessWidget {
                           return Stack(
                             children: [
                               Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 6),
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                ),
                                 child: Image.file(
                                   File(vm.images[index].path),
                                   width: 85,
@@ -123,7 +137,11 @@ class PostCreatePage extends StatelessWidget {
                                       color: Colors.black54,
                                       shape: BoxShape.circle,
                                     ),
-                                    child: const Icon(Icons.close, color: Colors.white, size: 18),
+                                    child: const Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
                                   ),
                                 ),
                               ),

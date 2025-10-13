@@ -48,7 +48,7 @@ class _FormulariosPageState extends State<FormulariosPage>
           ],
         ),
       ),
-      body: Center(child: tabsContent[_currentIndex])
+      body: Center(child: tabsContent[_currentIndex]),
     );
   }
 }

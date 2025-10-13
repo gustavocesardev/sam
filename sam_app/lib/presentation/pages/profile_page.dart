@@ -65,6 +65,7 @@ class _ProfilePageState extends State<ProfilePage>
   Future<void> _loadUserProfile() async {
     setState(() => isLoading = true);
     try {
+
       final UserDetailModel? currentUser = await _userService.getUserDetails(
         widget.userId,
       );
@@ -81,6 +82,7 @@ class _ProfilePageState extends State<ProfilePage>
         articlesCount = currentUser.totalArtigos;
         commentsCount = currentUser.totalComentarios;
       });
+      
     } finally {
       setState(() => isLoading = false);
     }

@@ -34,10 +34,7 @@ class CustomBottomBar extends StatelessWidget {
         SizedBox(width: 25),
         NavigationDestination(
           icon: Icon(Icons.article_outlined),
-          selectedIcon: Icon(
-            Icons.article,
-            color: Colors.white,
-          ),
+          selectedIcon: Icon(Icons.article, color: Colors.white),
           label: 'Formulários',
         ),
         NavigationDestination(

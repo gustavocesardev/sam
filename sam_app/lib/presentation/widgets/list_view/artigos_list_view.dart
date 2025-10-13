@@ -89,8 +89,7 @@ class ArtigosListView extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) =>
-                     ArtigoPage(idArtigo: artigo.id)
+                  builder: (_) => ArtigoPage(idArtigo: artigo.id),
                 ),
               );
             }

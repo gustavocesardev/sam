@@ -23,20 +23,23 @@ class PostViewmodel extends FeedViewModel {
     required this.idUsuario,
     required this.idGrupoEstudo,
     required this.idAutor,
-    required this.tipoAutorPublicacao
+    required this.tipoAutorPublicacao,
   }) : super(
-          fetchPosts: ({int? idUsuario, int page = 1}) => feedRepo.getVinculadas(
-            idPublicacao: idPublicacao,
-            idGrupoEstudo: idGrupoEstudo,
-            page: page,
-          ),
-        );
+         fetchPosts: ({int? idUsuario, int page = 1}) => feedRepo.getVinculadas(
+           idPublicacao: idPublicacao,
+           idGrupoEstudo: idGrupoEstudo,
+           page: page,
+         ),
+       );
 
   Future<void> loadPublicacao() async {
     isLoadingDetalhe = true;
     notifyListeners();
 
-    publicacao = await publicacaoRepo.getPublicacaoById(idPublicacao, idGrupoEstudo);
+    publicacao = await publicacaoRepo.getPublicacaoById(
+      idPublicacao,
+      idGrupoEstudo,
+    );
 
     isLoadingDetalhe = false;
     notifyListeners();

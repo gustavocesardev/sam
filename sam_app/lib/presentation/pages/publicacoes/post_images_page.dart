@@ -42,16 +42,26 @@ class _PostImagesPageState extends State<PostImagesPage> {
           CircleAvatar(
             radius: 24,
             backgroundColor: Colors.grey[800],
-            backgroundImage:
-                widget.avatarBytes != null ? MemoryImage(widget.avatarBytes!) : null,
+            backgroundImage: widget.avatarBytes != null
+                ? MemoryImage(widget.avatarBytes!)
+                : null,
             child: widget.avatarBytes == null ? const Icon(Icons.person) : null,
           ),
           const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(widget.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              Text(widget.cursoInfo, style: const TextStyle(fontSize: 14, color: Colors.grey)),
+              Text(
+                widget.name,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                widget.cursoInfo,
+                style: const TextStyle(fontSize: 14, color: Colors.grey),
+              ),
             ],
           ),
           const Spacer(),
@@ -65,12 +75,7 @@ class _PostImagesPageState extends State<PostImagesPage> {
   }
 
   Widget _buildImageView(Uint8List bytes) {
-    return InteractiveViewer(
-      child: Image.memory(
-        bytes,
-        fit: BoxFit.contain,
-      ),
-    );
+    return InteractiveViewer(child: Image.memory(bytes, fit: BoxFit.contain));
   }
 
   Widget _buildBottomBar() {

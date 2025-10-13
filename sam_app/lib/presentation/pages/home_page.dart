@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
         tipoAutorPublicacao: TipoAutorPublicacao.usuario,
       ),
       const GruposEstudoPage(),
-      // Apenas para ocupar o centro da BottomBar :P
+      /// Apenas para ocupar o centro da BottomBar :P
       FeedPage(
         idAutor: userModel!.id,
         tipoAutorPublicacao: TipoAutorPublicacao.usuario,
@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
     ];
   }
 
-  // Definindo os Icons e suas rotas para a bottom bar
+  /// Definindo os Icons e suas rotas para a bottom bar
   Map<int, FabConfigVO> get _fabConfigs {
     return {
       0: FabConfigVO(
@@ -74,29 +74,26 @@ class _HomePageState extends State<HomePage> {
       ),
       1: FabConfigVO(
         icon: Icon(Icons.group_add, size: 30),
-        builder: (_) => GrupoEstudoFormPage(idUsuario: userModel!.id)
+        builder: (_) => GrupoEstudoFormPage(idUsuario: userModel!.id),
       ),
       3: FabConfigVO(
         icon: Icon(Icons.article_outlined, size: 30),
-        builder: (_) => FormularioFormPage(idUsuario: userModel!.id,)
+        builder: (_) => FormularioFormPage(idUsuario: userModel!.id),
       ),
       4: FabConfigVO(
         icon: Icon(Icons.note_add_outlined, size: 30),
-        builder: (_) => ArtigoFormPage(idUsuario: userModel!.id,)
+        builder: (_) => ArtigoFormPage(idUsuario: userModel!.id),
       ),
     };
   }
 
   void _onFabPressed() {
-  final config = _fabConfigs[_currentIndex];
+    final config = _fabConfigs[_currentIndex];
     if (config != null) {
       if (config.route != null) {
         Navigator.pushNamed(context, config.route!);
       } else if (config.builder != null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: config.builder!),
-        );
+        Navigator.push(context, MaterialPageRoute(builder: config.builder!));
       }
     }
   }
@@ -108,11 +105,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (userModel == null) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(

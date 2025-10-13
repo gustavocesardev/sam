@@ -38,7 +38,11 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
                 },
                 errorBuilder: (context, error, stackTrace) {
                   return const Center(
-                    child: Icon(Icons.broken_image, color: Colors.white70, size: 48),
+                    child: Icon(
+                      Icons.broken_image,
+                      color: Colors.white70,
+                      size: 48,
+                    ),
                   );
                 },
               ),

@@ -4,7 +4,6 @@ import 'package:sam_app/core/exceptions/api_exception.dart';
 import 'package:sam_app/shared/constants.dart';
 
 class RegisterService {
-
   Future<void> register({
     required String name,
     required String email,
@@ -15,7 +14,6 @@ class RegisterService {
     required int anoFim,
     required int instituicaoId,
   }) async {
-    
     try {
 
       await http.post(
@@ -32,7 +30,7 @@ class RegisterService {
           'id_instituicao': instituicaoId,
         }),
       );
-
+      
     } catch (e) {
       if (e is ApiException) rethrow;
       throw Exception('Erro ao efetuar o registrar');

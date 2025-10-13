@@ -130,10 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            AppRoutes.instituicoes,
-                          );
+                          Navigator.pushNamed(context, AppRoutes.instituicoes);
                         },
                         child: const Text('Cadastre-se agora'),
                       ),

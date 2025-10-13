@@ -68,12 +68,11 @@ class FormulariosViewmodel extends ChangeNotifier {
   bool get hasMore => _hasMore;
 
   bool get isLoading => _isLoadingInitial || _isLoadingMore;
-  
+
   void resetPagination() {
     _forms = [];
     _filters = {};
     _page = 1;
     _hasMore = true;
   }
-
 }

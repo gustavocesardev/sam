@@ -12,8 +12,8 @@ class GruposEstudoPage extends StatefulWidget {
   State<GruposEstudoPage> createState() => _GruposEstudoPageState();
 }
 
-class _GruposEstudoPageState extends State<GruposEstudoPage> with SingleTickerProviderStateMixin {
-
+class _GruposEstudoPageState extends State<GruposEstudoPage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int _currentIndex = 0;
 
@@ -42,7 +42,7 @@ class _GruposEstudoPageState extends State<GruposEstudoPage> with SingleTickerPr
     final List<Widget> tabsContent = [
       GruposCriadosPage(),
       GruposIngressadosPage(),
-      GruposPopularesPage()
+      GruposPopularesPage(),
     ];
 
     return Scaffold(
@@ -57,7 +57,7 @@ class _GruposEstudoPageState extends State<GruposEstudoPage> with SingleTickerPr
           ],
         ),
       ),
-      body: Center(child: tabsContent[_currentIndex])
+      body: Center(child: tabsContent[_currentIndex]),
     );
   }
 }

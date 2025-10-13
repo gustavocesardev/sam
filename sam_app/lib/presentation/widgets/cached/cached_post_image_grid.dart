@@ -38,21 +38,21 @@ class CachedPostImagesGrid extends StatelessWidget {
         height: height,
         child: Row(
           children: images
-            .map(
-              (url) => Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 2),
-                  child: CachedPostImage(
-                    url: url,
-                    height: height,
-                    borderRadius: borderRadius,
-                    onTap: onImageTap,
-                    imageCacheService: imageCacheService,
+              .map(
+                (url) => Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    child: CachedPostImage(
+                      url: url,
+                      height: height,
+                      borderRadius: borderRadius,
+                      onTap: onImageTap,
+                      imageCacheService: imageCacheService,
+                    ),
                   ),
                 ),
-              ),
-            )
-            .toList(),
+              )
+              .toList(),
         ),
       );
     }
@@ -104,7 +104,6 @@ class CachedPostImagesGrid extends StatelessWidget {
       );
     }
 
-    /// 4 ou mais imagens (exibe 4)
     return Column(
       children: [
         SizedBox(

@@ -22,9 +22,12 @@ class _UserEditPageState extends State<UserEditPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() =>
-        Provider.of<UserEditViewmodel>(context, listen: false)
-            .loadUser(widget.userId));
+    Future.microtask(
+      () => Provider.of<UserEditViewmodel>(
+        context,
+        listen: false,
+      ).loadUser(widget.userId),
+    );
   }
 
   @override
@@ -38,8 +41,10 @@ class _UserEditPageState extends State<UserEditPage> {
           vm.isLoading
               ? const Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 28,
+                    vertical: 20,
+                  ),
                   child: Form(
                     key: _userKey,
                     child: Column(
@@ -57,7 +62,9 @@ class _UserEditPageState extends State<UserEditPage> {
                                   shape: BoxShape.circle,
                                   image: vm.avatarImageData != null
                                       ? DecorationImage(
-                                          image: MemoryImage(vm.avatarImageData!),
+                                          image: MemoryImage(
+                                            vm.avatarImageData!,
+                                          ),
                                           fit: BoxFit.cover,
                                         )
                                       : null,
@@ -90,8 +97,9 @@ class _UserEditPageState extends State<UserEditPage> {
                                   onTap: vm.clearAvatarImage,
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor,
+                                      color: Theme.of(
+                                        context,
+                                      ).scaffoldBackgroundColor,
                                       shape: BoxShape.circle,
                                       border: Border.all(width: 0.5),
                                     ),
@@ -133,8 +141,9 @@ class _UserEditPageState extends State<UserEditPage> {
                                 ? const LoadingButtonSimple()
                                 : CustomIconButton(
                                     label: "Finalizar",
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
                                     icon: Icons.arrow_forward,
                                     onPressed: () async {
                                       if (_userKey.currentState!.validate()) {

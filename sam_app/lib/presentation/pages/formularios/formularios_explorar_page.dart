@@ -157,7 +157,7 @@ class _FormulariosExplorarPageState extends State<FormulariosExplorarPage> {
                 Expanded(
                   child: FormulariosListView(
                     vm: vm,
-                    controller: _scrollController
+                    controller: _scrollController,
                   ),
                 ),
             ],

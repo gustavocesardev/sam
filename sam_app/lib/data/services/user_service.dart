@@ -22,7 +22,7 @@ class UserService {
   }
 
   Future<void> updateUser({
-  required int id,
+    required int id,
     required String name,
     required String biografia,
     required int anoInicio,

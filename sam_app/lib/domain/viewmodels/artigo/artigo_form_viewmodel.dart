@@ -17,7 +17,8 @@ class ArtigoFormViewModel extends ChangeNotifier {
 
   final TextEditingController tituloController = TextEditingController();
   final TextEditingController hashtagsController = TextEditingController();
-  final quill.QuillController conteudoController = quill.QuillController.basic();
+  final quill.QuillController conteudoController =
+      quill.QuillController.basic();
 
   File? pdfSelecionado;
   String? pdfUrl;

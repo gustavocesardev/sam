@@ -11,7 +11,7 @@ class FeedCursoPage extends StatefulWidget {
   const FeedCursoPage({
     super.key,
     required this.idAutor,
-    required this.tipoAutorPublicacao
+    required this.tipoAutorPublicacao,
   });
 
   @override
@@ -46,7 +46,6 @@ class _FeedCursoPageState extends State<FeedCursoPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Consumer<FeedCursoViewmodel>(
       builder: (context, vm, _) {
         return RefreshIndicator(

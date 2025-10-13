@@ -71,7 +71,6 @@ class _GrupoEstudoFormPageState extends State<GrupoEstudoFormPage> {
                           child: Stack(
                             clipBehavior: Clip.none,
                             children: [
-                              // HEADER
                               GestureDetector(
                                 onTap: vm.pickImageAsHeader,
                                 child: Container(
@@ -99,8 +98,8 @@ class _GrupoEstudoFormPageState extends State<GrupoEstudoFormPage> {
                                             12,
                                           ),
                                           color: vm.headerImageData != null
-                                          ?  Colors.black26
-                                          : null,
+                                              ? Colors.black26
+                                              : null,
                                         ),
                                       ),
                                       const Center(
@@ -163,8 +162,8 @@ class _GrupoEstudoFormPageState extends State<GrupoEstudoFormPage> {
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: vm.avatarImageData != null
-                                          ?Colors.black26
-                                          : null,
+                                              ? Colors.black26
+                                              : null,
                                           border: Border.all(
                                             color: Theme.of(
                                               context,
@@ -325,7 +324,6 @@ class _GrupoEstudoFormPageState extends State<GrupoEstudoFormPage> {
                   ),
                 ),
 
-                // CROPPER
                 if (vm.showCropper && vm.imageToCrop != null)
                   Container(
                     color: Colors.black,

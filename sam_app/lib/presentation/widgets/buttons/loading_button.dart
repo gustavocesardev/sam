@@ -29,10 +29,7 @@ class _LoadingButtonSimpleState extends State<LoadingButtonSimple> {
       child: const SizedBox(
         height: 16,
         width: 16,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          color: Colors.white,
-        ),
+        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
       ),
     );
   }

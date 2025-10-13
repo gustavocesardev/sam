@@ -132,7 +132,7 @@ class GrupoEstudoFormViewModel extends ChangeNotifier {
       );
 
       await repository.store(request: request);
-      
+
     } finally {
       isSaving = false;
       notifyListeners();
@@ -145,7 +145,9 @@ class GrupoEstudoFormViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
+
       await repository.delete(id: idGrupoEstudo!);
+      
     } finally {
       isDeleting = false;
       notifyListeners();

@@ -6,7 +6,7 @@ class StorageUtils {
     if (user == null) return null;
     return user.id;
   }
-  
+
   static Future<int?> getIdCurso() async {
     final user = await AuthStorageService.getStoredUser();
     if (user == null) return null;

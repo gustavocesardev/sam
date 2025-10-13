@@ -102,9 +102,11 @@ class _PostListViewState extends State<PostListView>
               vm.posts.removeAt(index);
             });
           },
-          moreActions: (widget.tipoAutorPublicacao.atributo == TipoAutorPublicacao.membro.atributo)
-            ? (post.idMembro == widget.idAutor)
-            : (post.idUsuario == widget.idAutor)
+          moreActions:
+              (widget.tipoAutorPublicacao.atributo ==
+                  TipoAutorPublicacao.membro.atributo)
+              ? (post.idMembro == widget.idAutor)
+              : (post.idUsuario == widget.idAutor),
         );
       },
     );

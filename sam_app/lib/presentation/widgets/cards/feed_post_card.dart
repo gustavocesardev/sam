@@ -56,7 +56,7 @@ class FeedPostCard extends StatefulWidget {
     this.openDetails = true,
     this.moreActions = false,
     this.avatarHash,
-    this.onDelete
+    this.onDelete,
   });
 
   String imageUrlFromHash(String hash) => '$baseUrl/file/image/$hash';
@@ -116,13 +116,11 @@ class _FeedPostCardState extends State<FeedPostCard> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => const Center(
-        child: CircularProgressIndicator(),
-      ),
+      builder: (_) => const Center(child: CircularProgressIndicator()),
     );
 
     try {
-      // Chama o método de exclusão
+
       await service.excluirPublicacao(
         chaveAutor: widget.tipoAutorPublicacao.atributo,
         idPublicacao: widget.idPublicacao,
@@ -136,7 +134,7 @@ class _FeedPostCardState extends State<FeedPostCard> {
         'Publicação excluída com sucesso!',
         color: Colors.orange[800],
       );
-
+      
     } catch (e) {
       Navigator.of(context).pop();
       TopSnackBar.show(
@@ -173,7 +171,8 @@ class _FeedPostCardState extends State<FeedPostCard> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => ProfilePage(userId: widget.idUsuario),
+                              builder: (_) =>
+                                  ProfilePage(userId: widget.idUsuario),
                             ),
                           );
                         },
@@ -194,7 +193,8 @@ class _FeedPostCardState extends State<FeedPostCard> {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         widget.name,
@@ -218,7 +218,9 @@ class _FeedPostCardState extends State<FeedPostCard> {
                                     onTap: () {
                                       showModalBottomSheet(
                                         context: context,
-                                        backgroundColor: Theme.of(context).colorScheme.primary,
+                                        backgroundColor: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
                                         shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.vertical(
                                             top: Radius.circular(16),
@@ -226,15 +228,22 @@ class _FeedPostCardState extends State<FeedPostCard> {
                                         ),
                                         builder: (_) {
                                           return Padding(
-                                            padding: const EdgeInsets.only(bottom: 20.0),
+                                            padding: const EdgeInsets.only(
+                                              bottom: 20.0,
+                                            ),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 ListTile(
-                                                  leading: const Icon(Icons.delete, color: Colors.white),
+                                                  leading: const Icon(
+                                                    Icons.delete,
+                                                    color: Colors.white,
+                                                  ),
                                                   title: const Text(
                                                     'Excluir publicação',
-                                                    style: TextStyle(color: Colors.white),
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
                                                   ),
                                                   onTap: () {
                                                     Navigator.pop(context);
@@ -278,7 +287,11 @@ class _FeedPostCardState extends State<FeedPostCard> {
                                 )
                               else
                                 CachedPostImagesGrid(
-                                  urls: images.map((hash) => widget.imageUrlFromHash(hash)).toList(),
+                                  urls: images
+                                      .map(
+                                        (hash) => widget.imageUrlFromHash(hash),
+                                      )
+                                      .toList(),
                                   onImageTap: _openPostImages,
                                   imageCacheService: _imageCacheService,
                                   height: 180,
@@ -309,7 +322,8 @@ class _FeedPostCardState extends State<FeedPostCard> {
                                 _LikeButton(
                                   liked: widget.liked,
                                   idPublicacao: widget.idPublicacao,
-                                  tipoAutorPublicacao: widget.tipoAutorPublicacao,
+                                  tipoAutorPublicacao:
+                                      widget.tipoAutorPublicacao,
                                 ),
                               ],
                             ),
